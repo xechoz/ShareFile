@@ -53,8 +53,7 @@ class NanoHttpdFileServer(
     }
 
     private fun bind(mode: Mode): NanoHttpdServer? {
-        val candidates = listOf(port) + List(FALLBACK_ATTEMPTS) { randomFreePort() }
-        for (candidate in candidates) {
+        for (candidate in ServerPorts.candidates(port)) {
             val srv = NanoHttpdServer(candidate, mode)
             try {
                 srv.start(NanoHTTPD.SOCKET_READ_TIMEOUT, false)
@@ -65,9 +64,6 @@ class NanoHttpdFileServer(
         }
         return null
     }
-
-    private fun randomFreePort(): Int =
-        java.net.ServerSocket(0).use { it.localPort }
 
     private fun fail(message: String): ServerState =
         ServerState.Error(message).also { _state.value = it }
@@ -206,9 +202,8 @@ class NanoHttpdFileServer(
     }
 
     companion object {
-        const val DEFAULT_PORT = 8080
+        const val DEFAULT_PORT = ServerPorts.PRIMARY_PORT
         const val SHARE_PATH = "/share"
         const val RECEIVE_PATH = "/receive"
-        private const val FALLBACK_ATTEMPTS = 5
     }
 }

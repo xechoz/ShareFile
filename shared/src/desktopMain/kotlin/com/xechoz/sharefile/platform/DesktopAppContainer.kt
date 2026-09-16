@@ -11,6 +11,7 @@ object DesktopAppContainer {
         val content = DesktopContentSource()
         return AppContainer(
             platform = DesktopPlatformServices(),
+            firewall = DesktopFirewallService(),
             newFileServer = { NanoHttpdFileServer(assets, downloads, content) },
             newFileDownloader = { HttpFileDownloader(downloads) },
         )

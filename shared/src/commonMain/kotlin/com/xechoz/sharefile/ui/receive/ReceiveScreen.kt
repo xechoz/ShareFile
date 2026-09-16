@@ -40,12 +40,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xechoz.sharefile.model.ReceivedFile
+import com.xechoz.sharefile.platform.FirewallStatus
 import com.xechoz.sharefile.platform.LocalAppContainer
 import com.xechoz.sharefile.server.ServerState
 import com.xechoz.sharefile.ui.components.DoubleBackHandler
 import com.xechoz.sharefile.ui.components.EmptyFileHint
 import com.xechoz.sharefile.ui.components.FileListHeader
 import com.xechoz.sharefile.ui.components.FileRow
+import com.xechoz.sharefile.ui.components.FirewallCard
 import com.xechoz.sharefile.ui.components.QrCard
 import com.xechoz.sharefile.ui.components.ServerErrorCard
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
@@ -57,9 +59,14 @@ fun ReceiveScreen(
     onBack: () -> Unit,
 ) {
     val container = LocalAppContainer.current
-    val viewModel: ReceiveViewModel = viewModel { ReceiveViewModel(container.newFileServer()) }
+    val viewModel: ReceiveViewModel = viewModel {
+        ReceiveViewModel(container.newFileServer(), container.firewall)
+    }
     val serverState by viewModel.serverState.collectAsStateWithLifecycle()
     val received by viewModel.received.collectAsStateWithLifecycle()
+    val firewallStatus by viewModel.firewallStatus.collectAsStateWithLifecycle()
+    val isAllowingFirewall by viewModel.allowingFirewall.collectAsStateWithLifecycle()
+    val firewallCommand by viewModel.firewallCommand.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -81,11 +88,15 @@ fun ReceiveScreen(
     ReceiveContent(
         serverState = serverState,
         received = received,
+        firewallStatus = firewallStatus,
+        isAllowingFirewall = isAllowingFirewall,
+        firewallCommand = firewallCommand,
         snackbarHostState = snackbarHostState,
         onBack = onBack,
         onOpen = open,
         onShare = share,
         onRetry = viewModel::retry,
+        onAllowFirewall = viewModel::allowFirewall,
     )
 }
 
@@ -94,11 +105,15 @@ fun ReceiveScreen(
 private fun ReceiveContent(
     serverState: ServerState,
     received: List<ReceivedFile>,
+    firewallStatus: FirewallStatus,
+    isAllowingFirewall: Boolean,
+    firewallCommand: String?,
     snackbarHostState: SnackbarHostState,
     onBack: () -> Unit,
     onOpen: (ReceivedFile) -> Unit,
     onShare: (ReceivedFile) -> Unit,
     onRetry: () -> Unit,
+    onAllowFirewall: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     var sheetFile by remember { mutableStateOf<ReceivedFile?>(null) }
@@ -146,6 +161,18 @@ private fun ReceiveContent(
             ServerStatus(serverState = serverState, onRetry = onRetry, onCopied = {
                 scope.launch { snackbarHostState.showSnackbar("Link copied") }
             })
+            if (firewallStatus !is FirewallStatus.Allowed) {
+                Spacer(Modifier.height(8.dp))
+                FirewallCard(
+                    status = firewallStatus,
+                    isAllowing = isAllowingFirewall,
+                    command = firewallCommand,
+                    onAllow = onAllowFirewall,
+                    onCopied = {
+                        scope.launch { snackbarHostState.showSnackbar("Command copied") }
+                    },
+                )
+            }
             Spacer(Modifier.height(8.dp))
             if (received.isEmpty()) {
                 EmptyFileHint(
@@ -267,11 +294,15 @@ private fun ReceiveScreenPreview() {
                     savedPath = "content://media/external/downloads/2",
                 ),
             ),
+            firewallStatus = FirewallStatus.Allowed,
+            isAllowingFirewall = false,
+            firewallCommand = null,
             snackbarHostState = remember { SnackbarHostState() },
             onBack = {},
             onOpen = {},
             onShare = {},
             onRetry = {},
+            onAllowFirewall = {},
         )
     }
 }
@@ -283,11 +314,35 @@ private fun ReceiveScreenEmptyPreview() {
         ReceiveContent(
             serverState = ServerState.Stopped,
             received = emptyList(),
+            firewallStatus = FirewallStatus.Allowed,
+            isAllowingFirewall = false,
+            firewallCommand = null,
             snackbarHostState = remember { SnackbarHostState() },
             onBack = {},
             onOpen = {},
             onShare = {},
             onRetry = {},
+            onAllowFirewall = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ReceiveScreenFirewallPreview() {
+    ShareFileTheme {
+        ReceiveContent(
+            serverState = ServerState.Running(url = "http://192.168.1.42:8080", port = 8080),
+            received = emptyList(),
+            firewallStatus = FirewallStatus.Blocked,
+            isAllowingFirewall = false,
+            firewallCommand = "sudo ufw allow from 192.168.1.0/24 to any port 8080 proto tcp",
+            snackbarHostState = remember { SnackbarHostState() },
+            onBack = {},
+            onOpen = {},
+            onShare = {},
+            onRetry = {},
+            onAllowFirewall = {},
         )
     }
 }

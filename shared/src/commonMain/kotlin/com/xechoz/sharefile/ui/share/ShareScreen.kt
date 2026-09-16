@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xechoz.sharefile.model.SharedFile
+import com.xechoz.sharefile.platform.FirewallStatus
 import com.xechoz.sharefile.platform.LocalAppContainer
 import com.xechoz.sharefile.platform.rememberFilePicker
 import com.xechoz.sharefile.server.ServerState
@@ -42,6 +43,7 @@ import com.xechoz.sharefile.ui.components.DoubleBackHandler
 import com.xechoz.sharefile.ui.components.EmptyFileHint
 import com.xechoz.sharefile.ui.components.FileListHeader
 import com.xechoz.sharefile.ui.components.FileRow
+import com.xechoz.sharefile.ui.components.FirewallCard
 import com.xechoz.sharefile.ui.components.QrCard
 import com.xechoz.sharefile.ui.components.ServerErrorCard
 import com.xechoz.sharefile.ui.theme.PillShape
@@ -55,20 +57,29 @@ fun ShareScreen(
     onBack: () -> Unit,
 ) {
     val container = LocalAppContainer.current
-    val viewModel: ShareViewModel = viewModel { ShareViewModel(container.newFileServer()) }
+    val viewModel: ShareViewModel = viewModel {
+        ShareViewModel(container.newFileServer(), container.firewall)
+    }
     val files by viewModel.files.collectAsStateWithLifecycle()
     val serverState by viewModel.serverState.collectAsStateWithLifecycle()
+    val firewallStatus by viewModel.firewallStatus.collectAsStateWithLifecycle()
+    val isAllowingFirewall by viewModel.allowingFirewall.collectAsStateWithLifecycle()
+    val firewallCommand by viewModel.firewallCommand.collectAsStateWithLifecycle()
 
     val pickFiles = rememberFilePicker(viewModel::addFiles)
 
     ShareContent(
         files = files,
         serverState = serverState,
+        firewallStatus = firewallStatus,
+        isAllowingFirewall = isAllowingFirewall,
+        firewallCommand = firewallCommand,
         onBack = onBack,
         onPickFiles = pickFiles,
         onRemoveFile = viewModel::removeFile,
         onRestoreFile = viewModel::restoreFile,
         onRetry = viewModel::retry,
+        onAllowFirewall = viewModel::allowFirewall,
     )
 }
 
@@ -77,11 +88,15 @@ fun ShareScreen(
 private fun ShareContent(
     files: List<SharedFile>,
     serverState: ServerState,
+    firewallStatus: FirewallStatus,
+    isAllowingFirewall: Boolean,
+    firewallCommand: String?,
     onBack: () -> Unit,
     onPickFiles: () -> Unit,
     onRemoveFile: (String) -> Unit,
     onRestoreFile: (SharedFile, Int) -> Unit,
     onRetry: () -> Unit,
+    onAllowFirewall: () -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -115,6 +130,18 @@ private fun ShareContent(
                 ServerStatus(serverState = serverState, onRetry = onRetry, onCopied = {
                     scope.launch { snackbarHostState.showSnackbar("Link copied") }
                 })
+                if (firewallStatus !is FirewallStatus.Allowed) {
+                    Spacer(Modifier.height(8.dp))
+                    FirewallCard(
+                        status = firewallStatus,
+                        isAllowing = isAllowingFirewall,
+                        command = firewallCommand,
+                        onAllow = onAllowFirewall,
+                        onCopied = {
+                            scope.launch { snackbarHostState.showSnackbar("Command copied") }
+                        },
+                    )
+                }
                 Spacer(Modifier.height(8.dp))
                 LazyColumn(
                     modifier = Modifier.weight(1f),
@@ -222,11 +249,15 @@ private fun ShareScreenPreview() {
                 ),
             ),
             serverState = ServerState.Stopped,
+            firewallStatus = FirewallStatus.Allowed,
+            isAllowingFirewall = false,
+            firewallCommand = null,
             onBack = {},
             onPickFiles = {},
             onRemoveFile = {},
             onRestoreFile = { _, _ -> },
             onRetry = {},
+            onAllowFirewall = {},
         )
     }
 }
@@ -238,11 +269,15 @@ private fun ShareScreenRunningPreview() {
         ShareContent(
             files = emptyList(),
             serverState = ServerState.Running(url = "http://192.168.1.42:8080", port = 8080),
+            firewallStatus = FirewallStatus.Blocked,
+            isAllowingFirewall = false,
+            firewallCommand = "sudo ufw allow from 192.168.1.0/24 to any port 8080 proto tcp",
             onBack = {},
             onPickFiles = {},
             onRemoveFile = {},
             onRestoreFile = { _, _ -> },
             onRetry = {},
+            onAllowFirewall = {},
         )
     }
 }

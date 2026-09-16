@@ -13,6 +13,7 @@ object AndroidAppContainer {
         val content = AndroidContentSource(app.contentResolver)
         return AppContainer(
             platform = AndroidPlatformServices(activity),
+            firewall = AndroidFirewallService(),
             newFileServer = { NanoHttpdFileServer(assets, downloads, content) },
             newFileDownloader = { HttpFileDownloader(downloads) },
         )

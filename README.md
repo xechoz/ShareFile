@@ -28,9 +28,26 @@ The app embeds a lightweight HTTP server ([NanoHTTPD](https://github.com/NanoHtt
 | API | `http://<ip>:<port>/api/files` | JSON file list (used by the in-app scanner) |
 | Download | `http://<ip>:<port>/download/<id>` | File stream |
 
-The server prefers port `8080` and falls back to a random free port if it is taken.
+The server prefers port `8080` and falls back to `8081`–`8088` if it is taken, so a firewall
+rule can target a known range.
 
 QR codes are generated with [ZXing](https://github.com/zxing/zxing); scanning uses CameraX + ML Kit on Android.
+
+### Firewall
+
+Desktop firewalls block incoming connections by default, so the other device may not be able to
+open the link. When that is detected, the Share/Receive screen shows a card with an
+**Allow through firewall** button. The rule is scoped to the local subnet, and the exact command
+is also shown so it can be run manually.
+
+| Platform | How it is handled |
+|----------|-------------------|
+| Linux / ufw | `pkexec ufw allow from <subnet> to any port <port> proto tcp` |
+| Linux / firewalld | `pkexec firewall-cmd --permanent --add-rich-rule=...` scoped to the subnet |
+| Windows | UAC-elevated `netsh advfirewall` rule scoped to the subnet |
+| macOS | the system's "accept incoming connections" prompt; best-effort unblock via `socketfilterfw` |
+
+Android has no host firewall, so the card is never shown there.
 
 ## Project structure
 
