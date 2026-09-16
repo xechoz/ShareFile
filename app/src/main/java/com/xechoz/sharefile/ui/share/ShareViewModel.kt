@@ -35,7 +35,7 @@ class ShareViewModel(app: Application) : AndroidViewModel(app) {
                     .mapNotNull { toSharedFile(it) }
             }
             if (added.isEmpty()) return@launch
-            val updated = _files.value + added
+            val updated = added + _files.value
             _files.value = updated
             server.startShare(updated)
         }

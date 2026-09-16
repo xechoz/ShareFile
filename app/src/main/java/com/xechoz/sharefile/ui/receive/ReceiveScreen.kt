@@ -1,6 +1,5 @@
 package com.xechoz.sharefile.ui.receive
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,12 +8,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -96,37 +96,16 @@ private fun ReceiveContent(
                 .padding(padding)
                 .padding(16.dp),
         ) {
-            when (serverState) {
-                is ServerState.Running -> {
-                    QrCard(
-                        title = "Scan to send files",
-                        url = serverState.url,
-                        onCopied = {
-                            scope.launch { snackbarHostState.showSnackbar("Link copied") }
-                        },
-                    )
-                    Spacer(Modifier.height(16.dp))
-                }
-
-                is ServerState.Error -> {
-                    ServerErrorCard(message = serverState.message, onRetry = onRetry)
-                    Spacer(Modifier.height(16.dp))
-                }
-
-                ServerState.Stopped -> Unit
-            }
-
-            Text(
-                text = if (received.isEmpty()) {
-                    "Received files"
-                } else {
-                    "Received files · ${received.size}"
-                },
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Spacer(Modifier.height(8.dp))
-
             if (received.isEmpty()) {
+                ServerStatus(serverState = serverState, onRetry = onRetry, onCopied = {
+                    scope.launch { snackbarHostState.showSnackbar("Link copied") }
+                })
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = "Received files",
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Spacer(Modifier.height(8.dp))
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center,
@@ -158,9 +137,19 @@ private fun ReceiveContent(
             } else {
                 LazyColumn(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    items(received, key = { it.savedPath }) { file ->
+                    item {
+                        ServerStatus(serverState = serverState, onRetry = onRetry, onCopied = {
+                            scope.launch { snackbarHostState.showSnackbar("Link copied") }
+                        })
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = "Received files · ${received.size}",
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        Spacer(Modifier.height(8.dp))
+                    }
+                    itemsIndexed(received, key = { _, file -> file.savedPath }) { index, file ->
                         FileRow(
                             name = file.name,
                             size = file.size,
@@ -173,10 +162,35 @@ private fun ReceiveContent(
                                 )
                             },
                         )
+                        if (index < received.lastIndex) {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(start = 68.dp),
+                                color = MaterialTheme.colorScheme.outlineVariant,
+                            )
+                        }
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun ServerStatus(
+    serverState: ServerState,
+    onRetry: () -> Unit,
+    onCopied: () -> Unit,
+) {
+    when (serverState) {
+        is ServerState.Running -> QrCard(
+            title = "Scan to send files",
+            url = serverState.url,
+            onCopied = onCopied,
+        )
+
+        is ServerState.Error -> ServerErrorCard(message = serverState.message, onRetry = onRetry)
+
+        ServerState.Stopped -> Unit
     }
 }
 

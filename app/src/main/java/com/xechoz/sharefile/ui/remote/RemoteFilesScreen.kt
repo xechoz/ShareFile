@@ -1,7 +1,6 @@
 package com.xechoz.sharefile.ui.remote
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
@@ -19,6 +18,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -123,9 +123,8 @@ private fun LoadedContent(
         }
         LazyColumn(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(state.files, key = { it.id }) { file ->
+            itemsIndexed(state.files, key = { _, file -> file.id }) { index, file ->
                 FileRow(
                     name = file.name,
                     size = file.size,
@@ -134,6 +133,12 @@ private fun LoadedContent(
                         Checkbox(checked = file.id in state.selected, onCheckedChange = { onToggle(file.id) })
                     },
                 )
+                if (index < state.files.lastIndex) {
+                    HorizontalDivider(
+                        modifier = Modifier.padding(start = 68.dp),
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                    )
+                }
             }
         }
         Spacer(Modifier.height(16.dp))

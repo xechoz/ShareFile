@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
 
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.coil.compose)
 
     implementation(libs.nanohttpd)
     implementation(libs.zxing.core)

@@ -2,6 +2,8 @@ package com.xechoz.sharefile.server
 
 import com.xechoz.sharefile.model.ReceivedFile
 import com.xechoz.sharefile.model.SharedFile
+import com.xechoz.sharefile.ui.components.fileEmoji
+import com.xechoz.sharefile.ui.components.isImage
 
 internal fun uploadPage(): String = """
 <!DOCTYPE html>
@@ -151,28 +153,6 @@ internal fun sharePage(files: List<SharedFile>): String {
 </body>
 </html>
 """.trimIndent()
-}
-
-private fun isImage(name: String): Boolean {
-    val ext = name.substringAfterLast('.', "").lowercase()
-    return ext in setOf("jpg", "jpeg", "png", "gif", "webp", "heic", "bmp", "svg")
-}
-
-private fun fileEmoji(name: String): String {
-    val ext = name.substringAfterLast('.', "").lowercase()
-    return when (ext) {
-        "jpg", "jpeg", "png", "gif", "webp", "heic", "bmp", "svg" -> "🖼️"
-        "mp4", "mov", "mkv", "avi", "webm" -> "🎬"
-        "mp3", "wav", "flac", "aac", "ogg", "m4a" -> "🎵"
-        "zip", "rar", "7z", "tar", "gz" -> "📦"
-        "pdf" -> "📕"
-        "doc", "docx" -> "📘"
-        "xls", "xlsx", "csv" -> "📗"
-        "ppt", "pptx" -> "📙"
-        "apk" -> "🤖"
-        "txt", "md", "log" -> "📄"
-        else -> "📄"
-    }
 }
 
 private fun escapeHtml(value: String): String =

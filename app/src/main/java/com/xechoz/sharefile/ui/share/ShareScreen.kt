@@ -1,8 +1,8 @@
 package com.xechoz.sharefile.ui.share
 
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,10 +21,10 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -119,43 +119,27 @@ private fun ShareContent(
                 .padding(padding)
                 .padding(16.dp),
         ) {
-            when (serverState) {
-                is ServerState.Running -> {
-                    QrCard(
-                        title = "Scan to download",
-                        url = serverState.url,
-                        onCopied = {
-                            scope.launch { snackbarHostState.showSnackbar("Link copied") }
-                        },
-                    )
-                    Spacer(Modifier.height(16.dp))
-                }
-
-                is ServerState.Error -> {
-                    ServerErrorCard(message = serverState.message, onRetry = onRetry)
-                    Spacer(Modifier.height(16.dp))
-                }
-
-                ServerState.Stopped -> Unit
-            }
-
-            if (files.isEmpty()) {
-                EmptyHint(onPickFiles = onPickFiles)
-            } else {
-                FileListHeader(
-                    count = files.size,
-                    totalSize = files.sumOf { it.size },
-                    onClearAll = onClearAll,
-                )
+            if (files.isNotEmpty()) {
+                ServerStatus(serverState = serverState, onRetry = onRetry, onCopied = {
+                    scope.launch { snackbarHostState.showSnackbar("Link copied") }
+                })
                 Spacer(Modifier.height(8.dp))
                 LazyColumn(
                     modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
+                    item {
+                        FileListHeader(
+                            count = files.size,
+                            totalSize = files.sumOf { it.size },
+                            onClearAll = onClearAll,
+                        )
+                        Spacer(Modifier.height(4.dp))
+                    }
                     itemsIndexed(files) { index, file ->
                         FileRow(
                             name = file.name,
                             size = file.size,
+                            uri = file.uri,
                             trailing = {
                                 IconButton(onClick = {
                                     onRemoveFile(file.id)
@@ -173,22 +157,52 @@ private fun ShareContent(
                                 }
                             },
                         )
+                        if (index < files.lastIndex) {
+                            HorizontalDivider(
+                                modifier = Modifier.padding(start = 68.dp),
+                                color = MaterialTheme.colorScheme.outlineVariant,
+                            )
+                        }
                     }
                 }
-                Spacer(Modifier.height(12.dp))
-                OutlinedButton(
-                    onClick = onPickFiles,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = PillShape,
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = null)
-                    Spacer(Modifier.size(8.dp))
-                    Text("Add more files", style = MaterialTheme.typography.titleMedium)
-                }
+            } else {
+                EmptyHint(modifier = Modifier.weight(1f))
+            }
+            Spacer(Modifier.height(8.dp))
+            Button(
+                onClick = onPickFiles,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = PillShape,
+            ) {
+                Icon(Icons.Default.Add, contentDescription = null)
+                Spacer(Modifier.size(8.dp))
+                Text(
+                    text = if (files.isEmpty()) "Select files" else "Add more files",
+                    style = MaterialTheme.typography.titleMedium,
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun ServerStatus(
+    serverState: ServerState,
+    onRetry: () -> Unit,
+    onCopied: () -> Unit,
+) {
+    when (serverState) {
+        is ServerState.Running -> QrCard(
+            title = "Scan to download",
+            url = serverState.url,
+            onCopied = onCopied,
+        )
+
+        is ServerState.Error -> ServerErrorCard(message = serverState.message, onRetry = onRetry)
+
+        ServerState.Stopped -> Unit
     }
 }
 
@@ -215,9 +229,9 @@ private fun FileListHeader(
 }
 
 @Composable
-private fun EmptyHint(onPickFiles: () -> Unit) {
+private fun EmptyHint(modifier: Modifier = Modifier) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -242,18 +256,6 @@ private fun EmptyHint(onPickFiles: () -> Unit) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
             )
-            Spacer(Modifier.height(24.dp))
-            Button(
-                onClick = onPickFiles,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = PillShape,
-            ) {
-                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(24.dp))
-                Spacer(Modifier.size(8.dp))
-                Text("Select files", style = MaterialTheme.typography.titleMedium)
-            }
         }
     }
 }
@@ -263,8 +265,38 @@ private fun EmptyHint(onPickFiles: () -> Unit) {
 private fun ShareScreenPreview() {
     ShareFileTheme {
         ShareContent(
-            files = emptyList(),
+            files = listOf(
+                SharedFile(
+                    id = "1",
+                    uri = Uri.parse("content://preview/photo.jpg"),
+                    name = "photo.jpg",
+                    size = 2_400_000,
+                ),
+                SharedFile(
+                    id = "2",
+                    uri = Uri.parse("content://preview/report.pdf"),
+                    name = "report.pdf",
+                    size = 512_000,
+                ),
+            ),
             serverState = ServerState.Stopped,
+            onBack = {},
+            onPickFiles = {},
+            onRemoveFile = {},
+            onRestoreFile = { _, _ -> },
+            onClearAll = {},
+            onRetry = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ShareScreenRunningPreview() {
+    ShareFileTheme {
+        ShareContent(
+            files = emptyList(),
+            serverState = ServerState.Running(url = "http://192.168.1.42:8080", port = 8080),
             onBack = {},
             onPickFiles = {},
             onRemoveFile = {},

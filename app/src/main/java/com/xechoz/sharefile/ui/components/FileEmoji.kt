@@ -1,5 +1,10 @@
 package com.xechoz.sharefile.ui.components
 
+fun isImage(name: String): Boolean {
+    val ext = name.substringAfterLast('.', "").lowercase()
+    return ext in setOf("jpg", "jpeg", "png", "gif", "webp", "heic", "bmp", "svg")
+}
+
 fun fileEmoji(name: String): String {
     val ext = name.substringAfterLast('.', "").lowercase()
     return when (ext) {
