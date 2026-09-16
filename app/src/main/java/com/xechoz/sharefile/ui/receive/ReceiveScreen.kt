@@ -1,6 +1,10 @@
 package com.xechoz.sharefile.ui.receive
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,27 +15,38 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.OpenInNew
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xechoz.sharefile.model.ReceivedFile
 import com.xechoz.sharefile.server.ServerState
+import com.xechoz.sharefile.storage.ReceivedFiles
 import com.xechoz.sharefile.ui.components.DoubleBackHandler
 import com.xechoz.sharefile.ui.components.EmptyFileHint
 import com.xechoz.sharefile.ui.components.FileListHeader
@@ -41,7 +56,6 @@ import com.xechoz.sharefile.ui.components.ServerErrorCard
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiveScreen(
     onBack: () -> Unit,
@@ -50,10 +64,40 @@ fun ReceiveScreen(
     val serverState by viewModel.serverState.collectAsStateWithLifecycle()
     val received by viewModel.received.collectAsStateWithLifecycle()
 
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    val share: (ReceivedFile) -> Unit = { file ->
+        context.startActivity(
+            Intent.createChooser(
+                ReceivedFiles.shareIntent(context, file),
+                "Share ${file.name}",
+            )
+        )
+    }
+
+    val open: (ReceivedFile) -> Unit = { file ->
+        try {
+            context.startActivity(ReceivedFiles.viewIntent(context, file))
+        } catch (e: ActivityNotFoundException) {
+            scope.launch {
+                val result = snackbarHostState.showSnackbar(
+                    message = "No app can open ${file.name}",
+                    actionLabel = "Share",
+                )
+                if (result == SnackbarResult.ActionPerformed) share(file)
+            }
+        }
+    }
+
     ReceiveContent(
         serverState = serverState,
         received = received,
+        snackbarHostState = snackbarHostState,
         onBack = onBack,
+        onOpen = open,
+        onShare = share,
         onRetry = viewModel::retry,
     )
 }
@@ -63,17 +107,35 @@ fun ReceiveScreen(
 private fun ReceiveContent(
     serverState: ServerState,
     received: List<ReceivedFile>,
+    snackbarHostState: SnackbarHostState,
     onBack: () -> Unit,
+    onOpen: (ReceivedFile) -> Unit,
+    onShare: (ReceivedFile) -> Unit,
     onRetry: () -> Unit,
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    var sheetFile by remember { mutableStateOf<ReceivedFile?>(null) }
 
     DoubleBackHandler(
         message = "Tap again to exit receiving",
         onBack = onBack,
         showMessage = { snackbarHostState.showSnackbar(it) },
     )
+
+    val seen = remember { received.mapTo(mutableSetOf()) { it.savedPath } }
+    LaunchedEffect(received) {
+        val fresh = received.filter { seen.add(it.savedPath) }
+        if (fresh.isEmpty()) return@LaunchedEffect
+        val result = snackbarHostState.showSnackbar(
+            message = if (fresh.size == 1) {
+                "${fresh.first().name} saved to Downloads"
+            } else {
+                "${fresh.size} files saved to Downloads"
+            },
+            actionLabel = if (fresh.size == 1) "Open" else null,
+        )
+        if (result == SnackbarResult.ActionPerformed) onOpen(fresh.first())
+    }
 
     Scaffold(
         topBar = {
@@ -120,7 +182,18 @@ private fun ReceiveContent(
                         FileRow(
                             name = file.name,
                             size = file.size,
+                            modifier = Modifier.combinedClickable(
+                                onClick = { onOpen(file) },
+                                onLongClick = { sheetFile = file },
+                            ),
                             uri = Uri.parse(file.savedPath),
+                            trailing = {
+                                Icon(
+                                    Icons.Default.OpenInNew,
+                                    contentDescription = "Open",
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            },
                         )
                         if (index < received.lastIndex) {
                             HorizontalDivider(
@@ -133,6 +206,41 @@ private fun ReceiveContent(
             }
         }
     }
+
+    sheetFile?.let { file ->
+        ModalBottomSheet(onDismissRequest = { sheetFile = null }) {
+            FileActionRow(
+                icon = Icons.Default.OpenInNew,
+                label = "Open",
+                onClick = {
+                    sheetFile = null
+                    onOpen(file)
+                },
+            )
+            FileActionRow(
+                icon = Icons.Default.Share,
+                label = "Share",
+                onClick = {
+                    sheetFile = null
+                    onShare(file)
+                },
+            )
+            Spacer(Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+private fun FileActionRow(
+    icon: ImageVector,
+    label: String,
+    onClick: () -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(label) },
+        leadingContent = { Icon(icon, contentDescription = null) },
+        modifier = Modifier.clickable(onClick = onClick),
+    )
 }
 
 @Composable
@@ -172,7 +280,10 @@ private fun ReceiveScreenPreview() {
                     savedPath = "content://media/external/downloads/2",
                 ),
             ),
+            snackbarHostState = remember { SnackbarHostState() },
             onBack = {},
+            onOpen = {},
+            onShare = {},
             onRetry = {},
         )
     }
@@ -185,7 +296,10 @@ private fun ReceiveScreenEmptyPreview() {
         ReceiveContent(
             serverState = ServerState.Stopped,
             received = emptyList(),
+            snackbarHostState = remember { SnackbarHostState() },
             onBack = {},
+            onOpen = {},
+            onShare = {},
             onRetry = {},
         )
     }

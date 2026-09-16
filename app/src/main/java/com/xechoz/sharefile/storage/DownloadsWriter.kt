@@ -34,7 +34,7 @@ object DownloadsWriter {
         return target.absolutePath
     }
 
-    private fun mimeTypeFor(name: String): String {
+    internal fun mimeTypeFor(name: String): String {
         val ext = name.substringAfterLast('.', "").lowercase()
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext)
             ?: "application/octet-stream"
