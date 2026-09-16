@@ -137,7 +137,7 @@ class FileServer(
                     contentType = session.headers["content-type"].orEmpty(),
                     onFile = { name, stream -> DownloadsWriter.write(context, name, stream) },
                 )
-                _received.value = _received.value + saved
+                _received.value = saved + _received.value
                 newFixedLengthResponse(
                     Response.Status.OK, "text/html; charset=utf-8", pages.successPage(saved)
                 )

@@ -10,10 +10,35 @@
   <div class="card">
     <h1>Send files</h1>
     <p>Choose one or more files to upload to the device.</p>
-    <form method="post" action="/upload" enctype="multipart/form-data">
-      <input type="file" name="file" multiple required>
-      <button type="submit">Upload</button>
+    <form id="upload-form" method="post" action="/upload" enctype="multipart/form-data">
+      <input id="file-input" type="file" name="file" multiple>
+      <noscript>
+        <div class="actions">
+          <button class="btn" type="submit">Upload</button>
+        </div>
+      </noscript>
+      <div id="picker" hidden>
+        <div id="list-header" class="list-header" hidden>
+          <span id="summary" class="summary"></span>
+          <button id="clear-all" class="btn btn-text" type="button">Clear all</button>
+        </div>
+        <ul id="file-list" class="file-list"></ul>
+        <div id="empty" class="empty">
+          <span class="empty-icon">⬆️</span>
+          <span class="empty-title">No files yet</span>
+          <span class="empty-text">Select files, then upload them to the device.</span>
+        </div>
+        <div class="actions">
+          <button id="upload-btn" class="btn" type="submit" disabled>Upload</button>
+          <label id="pick-btn" class="btn btn-outlined" for="file-input">Select files</label>
+        </div>
+      </div>
     </form>
   </div>
+  <div id="toast" class="toast">
+    <span id="toast-text"></span>
+    <button id="toast-action" class="toast-action" type="button" hidden>Undo</button>
+  </div>
+  <script src="/assets/upload.js" defer></script>
 </body>
 </html>

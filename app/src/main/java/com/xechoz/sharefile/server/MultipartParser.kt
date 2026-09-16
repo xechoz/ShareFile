@@ -3,6 +3,7 @@ package com.xechoz.sharefile.server
 import com.xechoz.sharefile.model.ReceivedFile
 import java.io.BufferedInputStream
 import java.io.InputStream
+import java.io.PushbackInputStream
 
 internal object MultipartParser {
 
@@ -16,25 +17,42 @@ internal object MultipartParser {
     ): List<ReceivedFile> {
         val boundary = boundaryOf(contentType) ?: return emptyList()
         val delimiter = "--$boundary"
-        val stream = BufferedInputStream(input, BUFFER_SIZE)
+        val marker = "$CRLF$delimiter".toByteArray(Charsets.ISO_8859_1)
+        val stream = PushbackInputStream(BufferedInputStream(input, BUFFER_SIZE), BUFFER_SIZE + marker.size)
         val results = mutableListOf<ReceivedFile>()
 
-        while (true) {
-            val line = readLine(stream) ?: break
-            if (!line.startsWith(delimiter)) continue
-            if (line.endsWith("--")) break
+        if (!seekFirstBoundary(stream, delimiter)) return emptyList()
 
+        while (true) {
             val headers = readHeaders(stream)
             val filename = filenameOf(headers)
-            val part = PartInputStream(stream, "$CRLF$delimiter".toByteArray(Charsets.ISO_8859_1))
+            val part = PartInputStream(stream, marker)
+            var savedPath: String? = null
+            var failure: Exception? = null
             if (filename != null) {
-                val savedPath = onFile(filename, part)
-                results += ReceivedFile(filename, part.bytesRead, savedPath)
+                try {
+                    savedPath = onFile(filename, part)
+                } catch (e: Exception) {
+                    failure = e
+                }
             }
             part.drain()
-            if (part.reachedEnd) break
+            failure?.let { throw it }
+            if (filename != null) {
+                results += ReceivedFile(filename, part.bytesRead, savedPath.orEmpty())
+            }
+            if (!part.reachedEnd) break
+            val tail = readLine(stream) ?: break
+            if (tail.startsWith("--")) break
         }
         return results
+    }
+
+    private fun seekFirstBoundary(stream: InputStream, delimiter: String): Boolean {
+        while (true) {
+            val line = readLine(stream) ?: return false
+            if (line.startsWith(delimiter)) return true
+        }
     }
 
     private fun boundaryOf(contentType: String): String? =
@@ -73,7 +91,7 @@ internal object MultipartParser {
     }
 
     private class PartInputStream(
-        private val source: InputStream,
+        private val source: PushbackInputStream,
         private val marker: ByteArray,
     ) : InputStream() {
 
@@ -83,65 +101,98 @@ internal object MultipartParser {
         var reachedEnd: Boolean = false
             private set
 
-        private val window = IntArray(marker.size)
-        private var windowSize = 0
-        private var finished = false
+        private val carry = ByteArray(marker.size - 1)
+        private var carrySize = 0
+        private var pending: ByteArray? = null
+        private var pendingOffset = 0
+        private var sourceEnded = false
+        private var done = false
 
         override fun read(): Int {
-            if (finished) return -1
+            val one = ByteArray(1)
+            val count = read(one, 0, 1)
+            return if (count == -1) -1 else one[0].toInt() and 0xFF
+        }
+
+        override fun read(b: ByteArray, off: Int, len: Int): Int {
+            if (len == 0) return 0
+            if (done) return -1
             while (true) {
-                val b = source.read()
-                if (b == -1) {
-                    finished = true
-                    return if (windowSize > 0) shift() else -1
+                val buffered = pending
+                if (buffered != null) {
+                    val count = minOf(buffered.size - pendingOffset, len)
+                    System.arraycopy(buffered, pendingOffset, b, off, count)
+                    pendingOffset += count
+                    bytesRead += count
+                    if (pendingOffset == buffered.size) {
+                        pending = null
+                        pendingOffset = 0
+                        if (reachedEnd) done = true
+                    }
+                    return count
                 }
-                if (windowSize < marker.size) {
-                    window[windowSize++] = b
-                    if (windowSize == marker.size && isMarker()) {
-                        finished = true
-                        reachedEnd = true
+                if (sourceEnded) {
+                    if (carrySize == 0) {
+                        done = true
                         return -1
                     }
-                    if (windowSize == marker.size) return shift()
+                    val count = minOf(carrySize, len)
+                    System.arraycopy(carry, 0, b, off, count)
+                    System.arraycopy(carry, count, carry, 0, carrySize - count)
+                    carrySize -= count
+                    bytesRead += count
+                    return count
+                }
+                val chunk = ByteArray(BUFFER_SIZE)
+                val read = source.read(chunk)
+                if (read == -1) {
+                    sourceEnded = true
                     continue
                 }
-                return shift()
+                val data = ByteArray(carrySize + read)
+                System.arraycopy(carry, 0, data, 0, carrySize)
+                System.arraycopy(chunk, 0, data, carrySize, read)
+                val index = indexOf(data, marker)
+                if (index >= 0) {
+                    reachedEnd = true
+                    carrySize = 0
+                    source.unread(data, index + marker.size, data.size - index - marker.size)
+                    if (index == 0) {
+                        done = true
+                        return -1
+                    }
+                    pending = data.copyOf(index)
+                    pendingOffset = 0
+                    continue
+                }
+                val keep = minOf(marker.size - 1, data.size)
+                val available = data.size - keep
+                System.arraycopy(data, data.size - keep, carry, 0, keep)
+                carrySize = keep
+                if (available == 0) continue
+                pending = data.copyOf(available)
+                pendingOffset = 0
             }
         }
 
-        private fun shift(): Int {
-            val out = window[0]
-            System.arraycopy(window, 1, window, 0, windowSize - 1)
-            windowSize--
-            bytesRead++
-            return out
-        }
-
-        private fun isMarker(): Boolean {
-            for (i in window.indices) {
-                if (window[i] != (marker[i].toInt() and 0xFF)) return false
+        private fun indexOf(data: ByteArray, pattern: ByteArray): Int {
+            val limit = data.size - pattern.size
+            for (start in 0..limit) {
+                var matched = true
+                for (i in pattern.indices) {
+                    if (data[start + i] != pattern[i]) {
+                        matched = false
+                        break
+                    }
+                }
+                if (matched) return start
             }
-            return true
+            return -1
         }
 
         fun drain() {
             val buffer = ByteArray(BUFFER_SIZE)
             while (read(buffer) != -1) { /* discard */ }
-        }
-
-        override fun read(b: ByteArray, off: Int, len: Int): Int {
-            if (len == 0) return 0
-            val first = read()
-            if (first == -1) return -1
-            b[off] = first.toByte()
-            var count = 1
-            while (count < len) {
-                val next = read()
-                if (next == -1) break
-                b[off + count] = next.toByte()
-                count++
-            }
-            return count
         }
     }
 }
