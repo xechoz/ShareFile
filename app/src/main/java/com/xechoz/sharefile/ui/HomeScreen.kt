@@ -2,6 +2,7 @@ package com.xechoz.sharefile.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +37,8 @@ fun HomeScreen(
     onShare: () -> Unit,
     onReceive: () -> Unit,
     onScan: () -> Unit,
+    onAbout: () -> Unit,
+    onFeedback: () -> Unit,
 ) {
     Scaffold { padding ->
         Column(
@@ -88,6 +92,15 @@ fun HomeScreen(
                 Spacer(Modifier.size(12.dp))
                 Text("Scan QR code", style = MaterialTheme.typography.titleMedium)
             }
+            Spacer(Modifier.height(24.dp))
+            Row(horizontalArrangement = Arrangement.Center) {
+                TextButton(onClick = onAbout) {
+                    Text("About me")
+                }
+                TextButton(onClick = onFeedback) {
+                    Text("Feedback")
+                }
+            }
         }
     }
 }
@@ -121,6 +134,6 @@ private fun ActionButton(
 @Composable
 private fun HomeScreenPreview() {
     ShareFileTheme {
-        HomeScreen(onShare = {}, onReceive = {}, onScan = {})
+        HomeScreen(onShare = {}, onReceive = {}, onScan = {}, onAbout = {}, onFeedback = {})
     }
 }
