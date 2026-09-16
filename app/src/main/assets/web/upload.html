@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShareFile - Upload</title>
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <div class="card">
+    <h1>Send files</h1>
+    <p>Choose one or more files to upload to the device.</p>
+    <form method="post" action="/upload" enctype="multipart/form-data">
+      <input type="file" name="file" multiple required>
+      <button type="submit">Upload</button>
+    </form>
+  </div>
+</body>
+</html>

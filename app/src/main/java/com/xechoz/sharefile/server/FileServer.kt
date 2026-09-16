@@ -17,6 +17,8 @@ class FileServer(
 
     private var server: NanoHttpdServer? = null
 
+    private val pages = Pages(context.assets)
+
     private val _state = MutableStateFlow<ServerState>(ServerState.Stopped)
     val state: StateFlow<ServerState> = _state.asStateFlow()
 
@@ -72,6 +74,9 @@ class FileServer(
     ) : NanoHTTPD(port) {
 
         override fun serve(session: IHTTPSession): Response = when {
+            session.uri.startsWith("/assets/") ->
+                serveAsset(session)
+
             mode is Mode.Share && session.uri.startsWith("/download/") ->
                 serveDownload(session)
 
@@ -134,7 +139,7 @@ class FileServer(
                 )
                 _received.value = _received.value + saved
                 newFixedLengthResponse(
-                    Response.Status.OK, "text/html; charset=utf-8", successPage(saved)
+                    Response.Status.OK, "text/html; charset=utf-8", pages.successPage(saved)
                 )
             } catch (e: Exception) {
                 newFixedLengthResponse(
@@ -159,12 +164,32 @@ class FileServer(
         }
 
         private fun serveUploadPage(): Response =
-            newFixedLengthResponse(Response.Status.OK, "text/html; charset=utf-8", uploadPage())
+            newFixedLengthResponse(Response.Status.OK, "text/html; charset=utf-8", pages.uploadPage())
 
         private fun serveSharePage(share: Mode.Share): Response =
             newFixedLengthResponse(
-                Response.Status.OK, "text/html; charset=utf-8", sharePage(share.files)
+                Response.Status.OK, "text/html; charset=utf-8", pages.sharePage(share.files)
             )
+
+        private fun serveAsset(session: IHTTPSession): Response {
+            val name = session.uri.removePrefix("/assets/")
+            if (name.isEmpty() || name.contains("..")) {
+                return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not found")
+            }
+            val bytes = try {
+                context.assets.open("web/$name").use { it.readBytes() }
+            } catch (e: Exception) {
+                return newFixedLengthResponse(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Not found")
+            }
+            return newFixedLengthResponse(Response.Status.OK, assetMime(name), bytes.inputStream(), bytes.size.toLong())
+        }
+
+        private fun assetMime(name: String): String = when {
+            name.endsWith(".html") -> "text/html; charset=utf-8"
+            name.endsWith(".css") -> "text/css; charset=utf-8"
+            name.endsWith(".js") -> "application/javascript; charset=utf-8"
+            else -> "application/octet-stream"
+        }
     }
 
     private fun encode(value: String): String =
