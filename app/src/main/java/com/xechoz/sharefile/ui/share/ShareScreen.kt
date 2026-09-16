@@ -178,12 +178,14 @@ private fun ShareContent(
                 Spacer(Modifier.height(12.dp))
                 OutlinedButton(
                     onClick = onPickFiles,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
                     shape = PillShape,
                 ) {
                     Icon(Icons.Default.Add, contentDescription = null)
                     Spacer(Modifier.size(8.dp))
-                    Text("Add more files")
+                    Text("Add more files", style = MaterialTheme.typography.titleMedium)
                 }
             }
         }
@@ -241,10 +243,16 @@ private fun EmptyHint(onPickFiles: () -> Unit) {
                 textAlign = TextAlign.Center,
             )
             Spacer(Modifier.height(24.dp))
-            Button(onClick = onPickFiles, shape = PillShape) {
-                Icon(Icons.Default.Add, contentDescription = null)
+            Button(
+                onClick = onPickFiles,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = PillShape,
+            ) {
+                Icon(Icons.Default.Add, contentDescription = null, modifier = Modifier.size(24.dp))
                 Spacer(Modifier.size(8.dp))
-                Text("Select files")
+                Text("Select files", style = MaterialTheme.typography.titleMedium)
             }
         }
     }

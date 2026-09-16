@@ -28,7 +28,13 @@ class ShareViewModel(app: Application) : AndroidViewModel(app) {
     fun addFiles(uris: List<Uri>) {
         if (uris.isEmpty()) return
         viewModelScope.launch {
-            val added = withContext(Dispatchers.IO) { uris.mapNotNull { toSharedFile(it) } }
+            val existingUris = _files.value.mapTo(mutableSetOf()) { it.uri }
+            val added = withContext(Dispatchers.IO) {
+                uris.distinct()
+                    .filterNot { it in existingUris }
+                    .mapNotNull { toSharedFile(it) }
+            }
+            if (added.isEmpty()) return@launch
             val updated = _files.value + added
             _files.value = updated
             server.startShare(updated)
