@@ -47,57 +47,73 @@ fun HomeScreen(
                 .padding(padding)
                 .padding(32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
         ) {
-            Text(
-                text = "ShareFile",
-                style = MaterialTheme.typography.headlineMedium,
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = "Share and receive files over your local network",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-            )
-            Spacer(Modifier.height(48.dp))
-            ActionButton(
-                label = "Share",
-                icon = Icons.Default.Upload,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                onClick = onShare,
-            )
-            Spacer(Modifier.height(16.dp))
-            ActionButton(
-                label = "Receive",
-                icon = Icons.Default.Download,
-                containerColor = MaterialTheme.colorScheme.secondary,
-                contentColor = MaterialTheme.colorScheme.onSecondary,
-                onClick = onReceive,
-            )
-            Spacer(Modifier.height(24.dp))
-            OutlinedButton(
-                onClick = onScan,
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
-                shape = PillShape,
+                    .weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
             ) {
-                Icon(
-                    Icons.Default.QrCodeScanner,
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
+                Text(
+                    text = "ShareFile",
+                    style = MaterialTheme.typography.headlineMedium,
                 )
-                Spacer(Modifier.size(12.dp))
-                Text("Scan QR code", style = MaterialTheme.typography.titleMedium)
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = "Share and receive files over your local network",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(Modifier.height(48.dp))
+                ActionButton(
+                    label = "Share",
+                    icon = Icons.Default.Upload,
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    onClick = onShare,
+                )
+                Spacer(Modifier.height(16.dp))
+                ActionButton(
+                    label = "Receive",
+                    icon = Icons.Default.Download,
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary,
+                    onClick = onReceive,
+                )
+                Spacer(Modifier.height(24.dp))
+                OutlinedButton(
+                    onClick = onScan,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = PillShape,
+                ) {
+                    Icon(
+                        Icons.Default.QrCodeScanner,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                    )
+                    Spacer(Modifier.size(12.dp))
+                    Text("Scan QR code", style = MaterialTheme.typography.titleMedium)
+                }
             }
-            Spacer(Modifier.height(24.dp))
             Row(horizontalArrangement = Arrangement.Center) {
-                TextButton(onClick = onAbout) {
+                TextButton(
+                    onClick = onAbout,
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    ),
+                ) {
                     Text("About me")
                 }
-                TextButton(onClick = onFeedback) {
+                TextButton(
+                    onClick = onFeedback,
+                    colors = ButtonDefaults.textButtonColors(
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    ),
+                ) {
                     Text("Feedback")
                 }
             }
