@@ -75,6 +75,9 @@ class FileServer(
             mode is Mode.Share && session.uri.startsWith("/download/") ->
                 serveDownload(session)
 
+            mode is Mode.Share && session.uri.startsWith("/thumb/") ->
+                serveThumb(session)
+
             mode is Mode.Share && session.uri == "/api/files" ->
                 serveApiFiles()
 
@@ -109,8 +112,21 @@ class FileServer(
             return response
         }
 
-        private fun serveUpload(session: IHTTPSession): Response {
-            return try {
+        private fun serveThumb(session: IHTTPSession): Response {
+            val id = session.uri.removePrefix("/thumb/")
+            val file = (mode as Mode.Share).files.firstOrNull { it.id == id }
+                ?: return newFixedLengthResponse(
+                    Response.Status.NOT_FOUND, MIME_PLAINTEXT, "File not found"
+                )
+            val stream = context.contentResolver.openInputStream(file.uri)
+                ?: return newFixedLengthResponse(
+                    Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Cannot open file"
+                )
+            val mime = context.contentResolver.getType(file.uri) ?: "image/*"
+            return newChunkedResponse(Response.Status.OK, mime, stream)
+        }
+
+        private fun serveUpload(session: IHTTPSession): Response {            return try {
                 val saved = MultipartParser.parse(
                     input = session.inputStream,
                     contentType = session.headers["content-type"].orEmpty(),

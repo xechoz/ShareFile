@@ -41,6 +41,25 @@ class ShareViewModel(app: Application) : AndroidViewModel(app) {
         if (updated.isEmpty()) server.stop() else server.startShare(updated)
     }
 
+    fun restoreFile(file: SharedFile, index: Int) {
+        val current = _files.value
+        val updated = current.toMutableList().apply {
+            add(index.coerceIn(0, size), file)
+        }
+        _files.value = updated
+        server.startShare(updated)
+    }
+
+    fun clearAll() {
+        _files.value = emptyList()
+        server.stop()
+    }
+
+    fun retry() {
+        val current = _files.value
+        if (current.isNotEmpty()) server.startShare(current)
+    }
+
     private fun toSharedFile(uri: Uri): SharedFile? {
         val resolver = getApplication<Application>().contentResolver
         val name = resolver.query(uri, null, null, null, null)?.use { cursor ->

@@ -18,6 +18,10 @@ class ReceiveViewModel(app: Application) : AndroidViewModel(app) {
         server.startReceive()
     }
 
+    fun retry() {
+        server.startReceive()
+    }
+
     override fun onCleared() {
         server.stop()
     }

@@ -5,20 +5,69 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 
 private val LightColors = lightColorScheme(
-    primary = Color(0xFF1565C0),
-    onPrimary = Color.White,
-    secondary = Color(0xFF00897B),
-    onSecondary = Color.White,
+    primary = BluePrimary,
+    onPrimary = BlueOnPrimary,
+    primaryContainer = BluePrimaryContainer,
+    onPrimaryContainer = BlueOnPrimaryContainer,
+    secondary = MintSecondary,
+    onSecondary = MintOnSecondary,
+    secondaryContainer = MintSecondaryContainer,
+    onSecondaryContainer = MintOnSecondaryContainer,
+    tertiary = CoralTertiary,
+    onTertiary = CoralOnTertiary,
+    tertiaryContainer = CoralTertiaryContainer,
+    onTertiaryContainer = CoralOnTertiaryContainer,
+    error = ErrorRed,
+    onError = OnErrorRed,
+    errorContainer = ErrorContainerRed,
+    onErrorContainer = OnErrorContainerRed,
+    background = LightBackground,
+    onBackground = LightOnBackground,
+    surface = LightSurface,
+    onSurface = LightOnSurface,
+    surfaceVariant = LightSurfaceVariant,
+    onSurfaceVariant = LightOnSurfaceVariant,
+    outline = LightOutline,
+    outlineVariant = LightOutlineVariant,
+    surfaceContainerLowest = LightSurfaceContainerLowest,
+    surfaceContainerLow = LightSurfaceContainerLow,
+    surfaceContainer = LightSurfaceContainer,
+    surfaceContainerHigh = LightSurfaceContainerHigh,
+    surfaceContainerHighest = LightSurfaceContainerHighest,
 )
 
 private val DarkColors = darkColorScheme(
-    primary = Color(0xFF90CAF9),
-    onPrimary = Color(0xFF0D47A1),
-    secondary = Color(0xFF80CBC4),
-    onSecondary = Color(0xFF00332E),
+    primary = DarkPrimary,
+    onPrimary = DarkOnPrimary,
+    primaryContainer = DarkPrimaryContainer,
+    onPrimaryContainer = DarkOnPrimaryContainer,
+    secondary = DarkSecondary,
+    onSecondary = DarkOnSecondary,
+    secondaryContainer = DarkSecondaryContainer,
+    onSecondaryContainer = DarkOnSecondaryContainer,
+    tertiary = DarkTertiary,
+    onTertiary = DarkOnTertiary,
+    tertiaryContainer = DarkTertiaryContainer,
+    onTertiaryContainer = DarkOnTertiaryContainer,
+    error = DarkError,
+    onError = DarkOnError,
+    errorContainer = DarkErrorContainer,
+    onErrorContainer = DarkOnErrorContainer,
+    background = DarkBackground,
+    onBackground = DarkOnBackground,
+    surface = DarkSurface,
+    onSurface = DarkOnSurface,
+    surfaceVariant = DarkSurfaceVariant,
+    onSurfaceVariant = DarkOnSurfaceVariant,
+    outline = DarkOutline,
+    outlineVariant = DarkOutlineVariant,
+    surfaceContainerLowest = DarkSurfaceContainerLowest,
+    surfaceContainerLow = DarkSurfaceContainerLow,
+    surfaceContainer = DarkSurfaceContainer,
+    surfaceContainerHigh = DarkSurfaceContainerHigh,
+    surfaceContainerHighest = DarkSurfaceContainerHighest,
 )
 
 @Composable
@@ -28,6 +77,8 @@ fun ShareFileTheme(
 ) {
     MaterialTheme(
         colorScheme = if (darkTheme) DarkColors else LightColors,
+        shapes = AppShapes,
+        typography = AppTypography,
         content = content,
     )
 }
