@@ -49,7 +49,10 @@ jobs:
           EOF
 
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest --console=plain
+        run: ./gradlew :shared:desktopTest :shared:testAndroidHostTest --console=plain
+
+      - name: Compile desktop app
+        run: ./gradlew :desktop:compileKotlin --console=plain
 
       - name: Build debug APK
         run: ./gradlew assembleDebug --console=plain

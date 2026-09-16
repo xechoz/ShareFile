@@ -1,0 +1,16 @@
+body { padding: 16px; }
+.card { margin: 16px auto; padding: 20px; }
+h1 { margin: 0 0 4px; }
+.hint { color: var(--on-surface-variant); font-size: 13px; margin: 0 0 8px; }
+ul { list-style: none; padding: 0; margin: 0; }
+.row { display: flex; align-items: center; gap: 12px; min-height: 56px;
+       padding: 14px 0; border-bottom: 1px solid var(--outline-variant);
+       text-decoration: none; color: inherit; }
+.row:active { background: var(--surface-container); }
+.name { color: var(--primary); font-weight: 500;
+        overflow-wrap: anywhere; word-break: break-word; }
+.dl { flex-shrink: 0; color: var(--primary); font-size: 18px; }
+@media (max-width: 480px) {
+  body { padding: 12px; }
+  .card { margin: 8px auto; padding: 16px; }
+}

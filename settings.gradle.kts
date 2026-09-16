@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "ShareFile"
-include(":app")
+include(":app", ":shared", ":desktop")
