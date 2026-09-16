@@ -56,11 +56,6 @@ class ShareViewModel(app: Application) : AndroidViewModel(app) {
         server.startShare(updated)
     }
 
-    fun clearAll() {
-        _files.value = emptyList()
-        server.stop()
-    }
-
     fun retry() {
         val current = _files.value
         if (current.isNotEmpty()) server.startShare(current)

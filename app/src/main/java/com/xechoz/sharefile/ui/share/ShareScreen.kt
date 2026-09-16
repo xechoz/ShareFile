@@ -3,9 +3,7 @@ package com.xechoz.sharefile.ui.share
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,23 +28,21 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xechoz.sharefile.model.SharedFile
 import com.xechoz.sharefile.server.ServerState
-import com.xechoz.sharefile.server.formatSize
 import com.xechoz.sharefile.ui.components.DoubleBackHandler
+import com.xechoz.sharefile.ui.components.EmptyFileHint
+import com.xechoz.sharefile.ui.components.FileListHeader
 import com.xechoz.sharefile.ui.components.FileRow
 import com.xechoz.sharefile.ui.components.QrCard
 import com.xechoz.sharefile.ui.components.ServerErrorCard
@@ -74,7 +70,6 @@ fun ShareScreen(
         onPickFiles = { picker.launch(arrayOf("*/*")) },
         onRemoveFile = viewModel::removeFile,
         onRestoreFile = viewModel::restoreFile,
-        onClearAll = viewModel::clearAll,
         onRetry = viewModel::retry,
     )
 }
@@ -88,7 +83,6 @@ private fun ShareContent(
     onPickFiles: () -> Unit,
     onRemoveFile: (String) -> Unit,
     onRestoreFile: (SharedFile, Int) -> Unit,
-    onClearAll: () -> Unit,
     onRetry: () -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -131,7 +125,6 @@ private fun ShareContent(
                         FileListHeader(
                             count = files.size,
                             totalSize = files.sumOf { it.size },
-                            onClearAll = onClearAll,
                         )
                         Spacer(Modifier.height(4.dp))
                     }
@@ -166,7 +159,12 @@ private fun ShareContent(
                     }
                 }
             } else {
-                EmptyHint(modifier = Modifier.weight(1f))
+                EmptyFileHint(
+                    icon = Icons.Default.Upload,
+                    title = "No files yet",
+                    description = "Select files, then let the other device scan the QR code or open the link to download.",
+                    modifier = Modifier.weight(1f),
+                )
             }
             Spacer(Modifier.height(8.dp))
             Button(
@@ -206,60 +204,6 @@ private fun ServerStatus(
     }
 }
 
-@Composable
-private fun FileListHeader(
-    count: Int,
-    totalSize: Long,
-    onClearAll: () -> Unit,
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = "$count ${if (count == 1) "file" else "files"} · ${formatSize(totalSize)}",
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.weight(1f),
-        )
-        TextButton(onClick = onClearAll, shape = PillShape) {
-            Text("Clear all")
-        }
-    }
-}
-
-@Composable
-private fun EmptyHint(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(32.dp),
-        ) {
-            Icon(
-                Icons.Default.Upload,
-                contentDescription = null,
-                modifier = Modifier.size(56.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Spacer(Modifier.height(16.dp))
-            Text(
-                text = "No files yet",
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = "Select files, then let the other device scan the QR code or open the link to download.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-            )
-        }
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun ShareScreenPreview() {
@@ -284,7 +228,6 @@ private fun ShareScreenPreview() {
             onPickFiles = {},
             onRemoveFile = {},
             onRestoreFile = { _, _ -> },
-            onClearAll = {},
             onRetry = {},
         )
     }
@@ -301,7 +244,6 @@ private fun ShareScreenRunningPreview() {
             onPickFiles = {},
             onRemoveFile = {},
             onRestoreFile = { _, _ -> },
-            onClearAll = {},
             onRetry = {},
         )
     }

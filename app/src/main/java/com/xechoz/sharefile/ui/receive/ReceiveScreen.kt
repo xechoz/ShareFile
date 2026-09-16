@@ -1,17 +1,15 @@
 package com.xechoz.sharefile.ui.receive
 
-import androidx.compose.foundation.layout.Box
+import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -27,9 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -37,6 +33,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xechoz.sharefile.model.ReceivedFile
 import com.xechoz.sharefile.server.ServerState
 import com.xechoz.sharefile.ui.components.DoubleBackHandler
+import com.xechoz.sharefile.ui.components.EmptyFileHint
+import com.xechoz.sharefile.ui.components.FileListHeader
 import com.xechoz.sharefile.ui.components.FileRow
 import com.xechoz.sharefile.ui.components.QrCard
 import com.xechoz.sharefile.ui.components.ServerErrorCard
@@ -96,71 +94,33 @@ private fun ReceiveContent(
                 .padding(padding)
                 .padding(16.dp),
         ) {
+            ServerStatus(serverState = serverState, onRetry = onRetry, onCopied = {
+                scope.launch { snackbarHostState.showSnackbar("Link copied") }
+            })
+            Spacer(Modifier.height(8.dp))
             if (received.isEmpty()) {
-                ServerStatus(serverState = serverState, onRetry = onRetry, onCopied = {
-                    scope.launch { snackbarHostState.showSnackbar("Link copied") }
-                })
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = "Received files",
-                    style = MaterialTheme.typography.titleMedium,
+                EmptyFileHint(
+                    icon = Icons.Default.Download,
+                    title = "Waiting for uploads…",
+                    description = "Files sent from the other device will appear here.",
+                    modifier = Modifier.weight(1f),
                 )
-                Spacer(Modifier.height(8.dp))
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(32.dp),
-                    ) {
-                        Icon(
-                            Icons.Default.Download,
-                            contentDescription = null,
-                            modifier = Modifier.size(56.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                        Spacer(Modifier.height(16.dp))
-                        Text(
-                            text = "Waiting for uploads…",
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            text = "Files sent from the other device will appear here.",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                }
             } else {
                 LazyColumn(
                     modifier = Modifier.weight(1f),
                 ) {
                     item {
-                        ServerStatus(serverState = serverState, onRetry = onRetry, onCopied = {
-                            scope.launch { snackbarHostState.showSnackbar("Link copied") }
-                        })
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            text = "Received files · ${received.size}",
-                            style = MaterialTheme.typography.titleMedium,
+                        FileListHeader(
+                            count = received.size,
+                            totalSize = received.sumOf { it.size },
                         )
-                        Spacer(Modifier.height(8.dp))
+                        Spacer(Modifier.height(4.dp))
                     }
                     itemsIndexed(received, key = { _, file -> file.savedPath }) { index, file ->
                         FileRow(
                             name = file.name,
                             size = file.size,
-                            leading = {
-                                Icon(
-                                    Icons.Default.CheckCircle,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.secondary,
-                                    modifier = Modifier.size(24.dp),
-                                )
-                            },
+                            uri = Uri.parse(file.savedPath),
                         )
                         if (index < received.lastIndex) {
                             HorizontalDivider(
@@ -197,6 +157,30 @@ private fun ServerStatus(
 @Preview(showBackground = true)
 @Composable
 private fun ReceiveScreenPreview() {
+    ShareFileTheme {
+        ReceiveContent(
+            serverState = ServerState.Running(url = "http://192.168.1.42:8080", port = 8080),
+            received = listOf(
+                ReceivedFile(
+                    name = "vacation.jpg",
+                    size = 3_200_000,
+                    savedPath = "content://media/external/downloads/1",
+                ),
+                ReceivedFile(
+                    name = "notes.pdf",
+                    size = 128_000,
+                    savedPath = "content://media/external/downloads/2",
+                ),
+            ),
+            onBack = {},
+            onRetry = {},
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ReceiveScreenEmptyPreview() {
     ShareFileTheme {
         ReceiveContent(
             serverState = ServerState.Stopped,
