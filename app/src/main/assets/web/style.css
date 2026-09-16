@@ -180,6 +180,37 @@ a { color: var(--primary); text-decoration: none; }
 }
 
 .remove:active { background: var(--surface-container); }
+.remove:disabled { opacity: .38; cursor: default; }
+
+.progress {
+  display: none;
+  height: 3px;
+  margin-top: 6px;
+  border-radius: 2px;
+  background: var(--surface-variant);
+  overflow: hidden;
+}
+
+.progress.show { display: block; }
+
+.progress-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  transition: width .15s linear;
+}
+
+.status {
+  flex-shrink: 0;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.file-row.error .size { color: var(--error); }
+
+.btn.is-disabled { opacity: .38; pointer-events: none; }
 
 .list-header {
   display: flex;
