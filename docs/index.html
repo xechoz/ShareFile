@@ -65,7 +65,7 @@
   .hero small{color:var(--muted)}
   .hero-shot{filter:drop-shadow(0 18px 40px rgba(31,95,208,.22))}
   .hero-shot img{border-radius:22px;border:1px solid var(--border);width:260px;margin:0 auto;display:block}
-  section{padding:56px 0}
+  section{padding:56px 0;scroll-margin-top:84px}
   section.alt{background:var(--bg-soft)}
   h2{font-size:clamp(24px,3vw,32px);margin:0 0 10px;letter-spacing:-.01em}
   .section-sub{color:var(--muted);margin:0 0 32px;max-width:720px}
@@ -92,10 +92,13 @@
   details[open] summary::after{content:"–"}
   details p{margin:0 0 16px;color:var(--muted)}
   .dl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  .dl{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;display:block;color:var(--text)}
-  .dl:hover{border-color:var(--blue);text-decoration:none;box-shadow:0 8px 24px rgba(31,95,208,.12)}
-  .dl strong{display:block;font-size:16px}
+  .dl{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--text)}
+  .dl:hover{border-color:var(--blue);box-shadow:0 8px 24px rgba(31,95,208,.12)}
+  .dl strong{font-size:16px}
   .dl span{font-size:13px;color:var(--muted)}
+  .dl-links{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px}
+  .dl-link{padding:6px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-weight:600}
+  .dl-link:hover{border-color:var(--blue);text-decoration:none}
   footer{border-top:1px solid var(--border);padding:28px 0;color:var(--muted);font-size:14px}
   .foot{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
   .foot a{color:var(--muted)}
@@ -119,10 +122,10 @@
   <div class="wrap nav">
     <a class="brand" href="./"><img src="logo.svg" alt="Quick File Share logo" width="30" height="30"> Quick File Share</a>
     <nav class="nav-links">
-      <a href="#features" data-en="Features" data-zh="功能">Features</a>
-      <a href="#how" data-en="How it works" data-zh="工作原理">How it works</a>
-      <a href="#download" data-en="Download" data-zh="下载">Download</a>
-      <a href="#faq" data-en="FAQ" data-zh="常见问题">FAQ</a>
+      <a href="#features" data-href-en="#features" data-href-zh="#features-zh" data-en="Features" data-zh="功能">Features</a>
+      <a href="#how" data-href-en="#how" data-href-zh="#how-zh" data-en="How it works" data-zh="工作原理">How it works</a>
+      <a href="#download" data-href-en="#download" data-href-zh="#download-zh" data-en="Download" data-zh="下载">Download</a>
+      <a href="#faq" data-href-en="#faq" data-href-zh="#faq-zh" data-en="FAQ" data-zh="常见问题">FAQ</a>
       <a href="https://github.com/xechoz/quick-file-share">GitHub</a>
     </nav>
     <div class="theme-toggle" role="group" aria-label="Language">
@@ -210,10 +213,22 @@
       <h2>Download</h2>
       <p class="section-sub">All builds are free and open source. See the <a href="https://github.com/xechoz/quick-file-share/releases/latest">latest release</a> for checksums and notes.</p>
       <div class="dl-grid">
-        <a class="dl" href="https://github.com/xechoz/quick-file-share/releases/latest/download/app-release.apk"><strong>Android</strong><span>APK · 8.0+</span></a>
-        <a class="dl" href="https://github.com/xechoz/quick-file-share/releases/latest"><strong>Linux</strong><span>deb · rpm · Arch</span></a>
-        <a class="dl" href="https://github.com/xechoz/quick-file-share/releases/latest"><strong>Windows</strong><span>msi</span></a>
-        <a class="dl" href="https://github.com/xechoz/quick-file-share/releases/latest"><strong>macOS</strong><span>dmg</span></a>
+        <div class="dl"><strong>Android</strong><span>APK · 8.0+</span>
+          <div class="dl-links"><a class="dl-link" href="https://github.com/xechoz/quick-file-share/releases/latest/download/app-release.apk">Download APK</a></div>
+        </div>
+        <div class="dl"><strong>Linux</strong><span>deb · rpm · Arch</span>
+          <div class="dl-links">
+            <a class="dl-link" data-asset=".deb" href="https://github.com/xechoz/quick-file-share/releases/latest">deb</a>
+            <a class="dl-link" data-asset=".rpm" href="https://github.com/xechoz/quick-file-share/releases/latest">rpm</a>
+            <a class="dl-link" data-asset=".pkg.tar.zst" href="https://github.com/xechoz/quick-file-share/releases/latest">Arch</a>
+          </div>
+        </div>
+        <div class="dl"><strong>Windows</strong><span>msi</span>
+          <div class="dl-links"><a class="dl-link" data-asset=".msi" href="https://github.com/xechoz/quick-file-share/releases/latest">Download MSI</a></div>
+        </div>
+        <div class="dl"><strong>macOS</strong><span>dmg</span>
+          <div class="dl-links"><a class="dl-link" data-asset=".dmg" href="https://github.com/xechoz/quick-file-share/releases/latest">Download DMG</a></div>
+        </div>
       </div>
     </div>
   </section>
@@ -229,7 +244,7 @@
           <strong>Android 与桌面端</strong>。用链接或二维码收发文件，不经过云端、无需账号、不依赖互联网。</p>
         <div class="cta">
           <a class="btn btn-primary" href="https://github.com/xechoz/quick-file-share/releases/latest/download/app-release.apk">下载 Android 版</a>
-          <a class="btn btn-ghost" href="#download">桌面端下载</a>
+          <a class="btn btn-ghost" href="#download-zh">桌面端下载</a>
           <a class="btn btn-ghost" href="https://github.com/xechoz/quick-file-share">GitHub 仓库</a>
         </div>
         <small>MIT 开源许可 · Android 8.0+ · 支持 Linux、Windows、macOS</small>
@@ -267,6 +282,19 @@
     </div>
   </section>
 
+  <section id="screens-zh">
+    <div class="wrap">
+      <h2>截图</h2>
+      <p class="section-sub">同一款 App 在 Android 与桌面端的样子，以及对方设备看到的浏览器页面。</p>
+      <div class="shots">
+        <figure><img src="screenshots/android-home.png" width="240" height="480" loading="lazy" alt="Quick File Share Android 应用主界面"><figcaption>Android</figcaption></figure>
+        <figure><img src="screenshots/android-share.png" width="240" height="480" loading="lazy" alt="在 Android 上通过二维码在局域网发送文件"><figcaption>发送</figcaption></figure>
+        <figure><img src="screenshots/android-receive.png" width="240" height="480" loading="lazy" alt="在 Android 上通过 Wi-Fi 接收另一台设备的文件"><figcaption>接收</figcaption></figure>
+        <figure><img src="screenshots/desktop-home.png" width="240" height="480" loading="lazy" alt="支持 Linux、Windows、macOS 的 Quick File Share 桌面端"><figcaption>桌面端</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
   <section id="faq-zh" class="alt" style="background:#fff">
     <div class="wrap">
       <h2>常见问题</h2>
@@ -276,6 +304,31 @@
       <details><summary>它是 LocalSend 的替代品吗？</summary><p>是的。与 LocalSend 一样免费、开源、跨平台。区别在于侧重点：Quick File Share 聚焦收发流程，并让接收方直接用浏览器完成操作，无需安装 App。</p></details>
       <details><summary>安全吗？</summary><p>文件不会离开你的局域网，直接从一台设备传到另一台。内置服务只监听局域网地址，关闭收发页面即停止。</p></details>
       <details><summary>支持哪些平台？</summary><p>Android 8.0+（APK）、Linux（deb、rpm、Arch、便携包）、Windows（msi）、macOS（dmg）。</p></details>
+    </div>
+  </section>
+
+  <section id="download-zh">
+    <div class="wrap">
+      <h2>下载</h2>
+      <p class="section-sub">所有版本均免费开源。校验和与更新说明见 <a href="https://github.com/xechoz/quick-file-share/releases/latest">最新发布</a>。</p>
+      <div class="dl-grid">
+        <div class="dl"><strong>Android</strong><span>APK · 8.0+</span>
+          <div class="dl-links"><a class="dl-link" href="https://github.com/xechoz/quick-file-share/releases/latest/download/app-release.apk">下载 APK</a></div>
+        </div>
+        <div class="dl"><strong>Linux</strong><span>deb · rpm · Arch</span>
+          <div class="dl-links">
+            <a class="dl-link" data-asset=".deb" href="https://github.com/xechoz/quick-file-share/releases/latest">deb</a>
+            <a class="dl-link" data-asset=".rpm" href="https://github.com/xechoz/quick-file-share/releases/latest">rpm</a>
+            <a class="dl-link" data-asset=".pkg.tar.zst" href="https://github.com/xechoz/quick-file-share/releases/latest">Arch</a>
+          </div>
+        </div>
+        <div class="dl"><strong>Windows</strong><span>msi</span>
+          <div class="dl-links"><a class="dl-link" data-asset=".msi" href="https://github.com/xechoz/quick-file-share/releases/latest">下载 MSI</a></div>
+        </div>
+        <div class="dl"><strong>macOS</strong><span>dmg</span>
+          <div class="dl-links"><a class="dl-link" data-asset=".dmg" href="https://github.com/xechoz/quick-file-share/releases/latest">下载 DMG</a></div>
+        </div>
+      </div>
     </div>
   </section>
 </main>
@@ -368,6 +421,10 @@
     document.querySelectorAll('[data-en]').forEach(function(el){
       el.textContent = el.getAttribute('data-' + lang);
     });
+    document.querySelectorAll('[data-href-en]').forEach(function(el){
+      var href = el.getAttribute('data-href-' + lang);
+      if (href) el.setAttribute('href', href);
+    });
     try { localStorage.setItem('qfs-lang', lang); } catch (e) {}
   }
   (function(){
@@ -376,6 +433,26 @@
     var lang = saved || ((navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en');
     setLang(lang);
     document.getElementById('year').textContent = new Date().getFullYear();
+  })();
+  (function(){
+    if (!window.fetch) return;
+    fetch('https://api.github.com/repos/xechoz/quick-file-share/releases/latest', {
+      headers: { 'Accept': 'application/vnd.github+json' }
+    }).then(function(res){
+      if (!res.ok) throw new Error('http ' + res.status);
+      return res.json();
+    }).then(function(release){
+      var assets = release.assets || [];
+      document.querySelectorAll('.dl-link[data-asset]').forEach(function(link){
+        var suffix = link.getAttribute('data-asset').toLowerCase();
+        var hit = assets.filter(function(a){
+          return a.name.toLowerCase().slice(-suffix.length) === suffix;
+        })[0];
+        if (!hit) return;
+        link.setAttribute('href', hit.browser_download_url);
+        link.setAttribute('title', hit.name + ' · ' + (hit.size / 1048576).toFixed(1) + ' MB');
+      });
+    }).catch(function(){ /* keep the releases page fallback links */ });
   })();
 </script>
 </body>
