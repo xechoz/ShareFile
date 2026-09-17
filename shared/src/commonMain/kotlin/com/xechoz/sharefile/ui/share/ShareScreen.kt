@@ -222,7 +222,6 @@ private fun ExpandedShare(
         ) {
             ServerStatus(
                 serverState = serverState,
-                title = "Scan or open to download",
                 onRetry = onRetry,
                 onCopied = { scope.launch { snackbarHostState.showSnackbar("Link copied") } },
                 preferUrl = preferUrl,
@@ -273,7 +272,6 @@ private fun CompactShare(
         if (files.isNotEmpty()) {
             ServerStatus(
                 serverState = serverState,
-                title = "Scan to download",
                 onRetry = onRetry,
                 onCopied = { scope.launch { snackbarHostState.showSnackbar("Link copied") } },
                 preferUrl = preferUrl,
@@ -392,7 +390,6 @@ private fun AddFilesButton(
 @Composable
 private fun ServerStatus(
     serverState: ServerState,
-    title: String,
     onRetry: () -> Unit,
     onCopied: () -> Unit,
     preferUrl: Boolean,
@@ -402,14 +399,12 @@ private fun ServerStatus(
             val expanded = LocalWindowLayout.current == WindowLayout.Expanded
             if (preferUrl || expanded) {
                 ConnectionCard(
-                    title = title,
                     url = serverState.url,
                     onCopied = onCopied,
                     qrSize = if (expanded) 140.dp else 110.dp,
                 )
             } else {
                 QrCard(
-                    title = "Scan to download",
                     url = serverState.url,
                     onCopied = onCopied,
                 )

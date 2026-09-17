@@ -181,7 +181,6 @@ private fun ReceiveContent(
                         ) {
                             ServerStatus(
                                 serverState = serverState,
-                                title = "Scan or open to send files",
                                 onRetry = onRetry,
                                 onCopied = { scope.launch { snackbarHostState.showSnackbar("Link copied") } },
                                 preferUrl = preferUrl,
@@ -206,7 +205,6 @@ private fun ReceiveContent(
                     WindowLayout.Compact -> Column(modifier = Modifier.fillMaxSize()) {
                         ServerStatus(
                             serverState = serverState,
-                            title = "Scan to send files",
                             onRetry = onRetry,
                             onCopied = { scope.launch { snackbarHostState.showSnackbar("Link copied") } },
                             preferUrl = preferUrl,
@@ -340,7 +338,6 @@ private fun FileActionRow(
 @Composable
 private fun ServerStatus(
     serverState: ServerState,
-    title: String,
     onRetry: () -> Unit,
     onCopied: () -> Unit,
     preferUrl: Boolean,
@@ -350,14 +347,12 @@ private fun ServerStatus(
             val expanded = LocalWindowLayout.current == WindowLayout.Expanded
             if (preferUrl || expanded) {
                 ConnectionCard(
-                    title = title,
                     url = serverState.url,
                     onCopied = onCopied,
                     qrSize = if (expanded) 140.dp else 110.dp,
                 )
             } else {
                 QrCard(
-                    title = "Scan to send files",
                     url = serverState.url,
                     onCopied = onCopied,
                 )
