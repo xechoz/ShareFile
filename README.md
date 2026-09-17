@@ -8,6 +8,17 @@ but focused on just two things: **share** and **receive**.
 The other device does not need to install anything — it just opens a URL in a browser, or
 scans a QR code.
 
+## Screenshots
+
+| Android | Share | Receive |
+|:-------:|:-----:|:-------:|
+| <img src="docs/screenshots/android-home.png" width="240"> | <img src="docs/screenshots/android-share.png" width="240"> | <img src="docs/screenshots/android-receive.png" width="240"> |
+
+| Desktop | Browser |
+|:-------:|:-------:|
+| <img src="docs/screenshots/desktop-home.png" width="420"> | <img src="docs/screenshots/browser-upload.png" width="240"> |
+| Share and Receive on Desktop | The other device opens the link in a browser — no install needed |
+
 ## Features
 
 - **Share** — pick files, start a built-in HTTP server, and show a QR code / URL. The other device opens the URL and downloads the files.
