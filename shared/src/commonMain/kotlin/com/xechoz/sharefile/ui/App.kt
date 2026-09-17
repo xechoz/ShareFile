@@ -6,7 +6,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.xechoz.sharefile.AppInfo
 import com.xechoz.sharefile.platform.AppContainer
 import com.xechoz.sharefile.platform.LocalAppContainer
 import com.xechoz.sharefile.ui.layout.ProvideWindowLayout
@@ -14,6 +13,9 @@ import com.xechoz.sharefile.ui.receive.ReceiveScreen
 import com.xechoz.sharefile.ui.remote.RemoteFilesScreen
 import com.xechoz.sharefile.ui.scan.ScanScreen
 import com.xechoz.sharefile.ui.share.ShareScreen
+
+private const val AUTHOR_URL = "https://github.com/xechoz"
+private const val FEEDBACK_URL = "https://github.com/xechoz/ShareFile/issues"
 
 sealed interface Screen {
     data object Home : Screen
@@ -32,12 +34,11 @@ fun App(container: AppContainer) {
             when (val current = screen) {
                 Screen.Home -> HomeScreen(
                     showScan = container.platform.qrScanSupported,
-                    showAboutButtons = !container.platform.hasWindowMenu,
                     onShare = { screen = Screen.Share },
                     onReceive = { screen = Screen.Receive },
                     onScan = { screen = Screen.Scan },
-                    onAbout = { container.platform.openUrl(AppInfo.AUTHOR_URL) },
-                    onFeedback = { container.platform.openUrl(AppInfo.FEEDBACK_URL) },
+                    onAbout = { container.platform.openUrl(AUTHOR_URL) },
+                    onFeedback = { container.platform.openUrl(FEEDBACK_URL) },
                 )
 
                 Screen.Share -> ShareScreen(

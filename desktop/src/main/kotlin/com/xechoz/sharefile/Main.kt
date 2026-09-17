@@ -5,7 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.window.MenuBar
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
@@ -34,16 +33,6 @@ fun main() {
                 window.minimumSize = DesktopWindowState.minSize
             }
             val container = remember { DesktopAppContainer.create() }
-            MenuBar {
-                Menu("Help", mnemonic = 'H') {
-                    Item("About ShareFile", mnemonic = 'A') {
-                        container.platform.openUrl(AppInfo.AUTHOR_URL)
-                    }
-                    Item("Send Feedback", mnemonic = 'F') {
-                        container.platform.openUrl(AppInfo.FEEDBACK_URL)
-                    }
-                }
-            }
             val density = LocalDensity.current
             CompositionLocalProvider(
                 LocalDensity provides Density(density.density, density.fontScale * fontScale),

@@ -13,8 +13,6 @@ class DesktopPlatformServices(
 
     override val qrScanSupported: Boolean = false
 
-    override val hasWindowMenu: Boolean = true
-
     override val prefersUrlConnection: Boolean = true
 
     override val downloadFolderName: String

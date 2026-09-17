@@ -1,5 +1,6 @@
 package com.xechoz.sharefile.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -30,10 +31,10 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -53,7 +54,6 @@ fun HomeScreen(
     onScan: () -> Unit,
     onAbout: () -> Unit,
     onFeedback: () -> Unit,
-    showAboutButtons: Boolean,
     showScan: Boolean = true,
 ) {
     Scaffold { padding ->
@@ -64,7 +64,6 @@ fun HomeScreen(
                 onScan = onScan,
                 onAbout = onAbout,
                 onFeedback = onFeedback,
-                showAboutButtons = showAboutButtons,
                 showScan = showScan,
                 modifier = Modifier
                     .fillMaxSize()
@@ -77,7 +76,6 @@ fun HomeScreen(
                 onScan = onScan,
                 onAbout = onAbout,
                 onFeedback = onFeedback,
-                showAboutButtons = showAboutButtons,
                 showScan = showScan,
                 modifier = Modifier
                     .fillMaxSize()
@@ -94,7 +92,6 @@ private fun ExpandedHome(
     onScan: () -> Unit,
     onAbout: () -> Unit,
     onFeedback: () -> Unit,
-    showAboutButtons: Boolean,
     showScan: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -173,11 +170,9 @@ private fun ExpandedHome(
                     shape = MaterialTheme.shapes.small,
                 )
             }
-            if (showAboutButtons) {
-                Spacer(Modifier.height(24.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                    AboutButtons(onAbout = onAbout, onFeedback = onFeedback)
-                }
+            Spacer(Modifier.height(24.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                AboutButtons(onAbout = onAbout, onFeedback = onFeedback)
             }
         }
     }
@@ -229,7 +224,6 @@ private fun CompactHome(
     onScan: () -> Unit,
     onAbout: () -> Unit,
     onFeedback: () -> Unit,
-    showAboutButtons: Boolean,
     showScan: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -304,10 +298,8 @@ private fun CompactHome(
                     ScanAction(onScan = onScan)
                 }
             }
-            if (showAboutButtons) {
-                Row(horizontalArrangement = Arrangement.Center) {
-                    AboutButtons(onAbout = onAbout, onFeedback = onFeedback)
-                }
+            Row(horizontalArrangement = Arrangement.Center) {
+                AboutButtons(onAbout = onAbout, onFeedback = onFeedback)
             }
         }
     }
@@ -345,22 +337,24 @@ private fun AboutButtons(
     onAbout: () -> Unit,
     onFeedback: () -> Unit,
 ) {
-    TextButton(
-        onClick = onAbout,
-        colors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        ),
-    ) {
-        Text("About")
-    }
-    TextButton(
-        onClick = onFeedback,
-        colors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        ),
-    ) {
-        Text("Feedback")
-    }
+    FooterLink("About", onAbout)
+    FooterLink("Feedback", onFeedback)
+}
+
+@Composable
+private fun FooterLink(
+    label: String,
+    onClick: () -> Unit,
+) {
+    Text(
+        text = label,
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.outline,
+        modifier = Modifier
+            .clip(MaterialTheme.shapes.small)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 6.dp, vertical = 8.dp),
+    )
 }
 
 @Composable
@@ -399,7 +393,6 @@ private fun HomeScreenPreview() {
             onScan = {},
             onAbout = {},
             onFeedback = {},
-            showAboutButtons = true,
             showScan = true,
         )
     }
@@ -415,7 +408,6 @@ private fun HomeScreenLandscapePreview() {
             onScan = {},
             onAbout = {},
             onFeedback = {},
-            showAboutButtons = true,
             showScan = true,
         )
     }
@@ -431,7 +423,6 @@ private fun HomeScreenExpandedPreview() {
             onScan = {},
             onAbout = {},
             onFeedback = {},
-            showAboutButtons = false,
             showScan = false,
         )
     }
@@ -447,7 +438,6 @@ private fun HomeScreenExpandedMinSizePreview() {
             onScan = {},
             onAbout = {},
             onFeedback = {},
-            showAboutButtons = true,
             showScan = false,
         )
     }
