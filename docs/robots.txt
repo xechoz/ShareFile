@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://xechoz.github.io/quick-file-share/sitemap.xml

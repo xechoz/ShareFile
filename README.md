@@ -1,29 +1,40 @@
-# Quick File Share
+# Quick File Share — Share Files Over Your Local Network (Android & Desktop)
 
-A cross-platform app for sharing and receiving files over your local network, built with
-[Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/) and targeting
-**Android** and **Desktop (JVM)**. Similar in spirit to [LocalSend](https://localsend.org/),
-but focused on just two things: **share** and **receive**.
+**English** | [简体中文](README.zh-CN.md)
 
-The other device does not need to install anything — it just opens a URL in a browser, or
-scans a QR code.
+[![Build](https://github.com/xechoz/quick-file-share/actions/workflows/build.yml/badge.svg)](https://github.com/xechoz/quick-file-share/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/xechoz/quick-file-share)](https://github.com/xechoz/quick-file-share/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+Quick File Share is a free, open-source **file transfer app for Android and Desktop** that sends
+and receives files **over your local network (LAN/Wi-Fi)**. The other device does **not** need to
+install anything — it just opens a URL in a browser, or scans a QR code. No account, no cloud, no
+internet connection required.
+
+It is similar in spirit to [LocalSend](https://localsend.org/) and AirDrop, but focused on just two
+things: **share** and **receive**. Built with [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/).
+
+➡️ **Website & downloads: <https://xechoz.github.io/quick-file-share/>**
 
 ## Screenshots
 
-| Android | Share | Receive |
+| Android | Share files | Receive files |
 |:-------:|:-----:|:-------:|
-| <img src="docs/screenshots/android-home.png" width="240"> | <img src="docs/screenshots/android-share.png" width="240"> | <img src="docs/screenshots/android-receive.png" width="240"> |
+| <img src="docs/screenshots/android-home.png" width="240" alt="Quick File Share Android app home screen"> | <img src="docs/screenshots/android-share.png" width="240" alt="Share files over local network with a QR code on Android"> | <img src="docs/screenshots/android-receive.png" width="240" alt="Receive files from another device over Wi-Fi on Android"> |
 
 | Desktop | Browser |
 |:-------:|:-------:|
-| <img src="docs/screenshots/desktop-home.png" width="420"> | <img src="docs/screenshots/browser-upload.png" width="240"> |
+| <img src="docs/screenshots/desktop-home.png" width="420" alt="Quick File Share desktop app for Linux, Windows and macOS"> | <img src="docs/screenshots/browser-upload.png" width="240" alt="Browser upload page for receiving files without installing an app"> |
 | Share and Receive on Desktop | The other device opens the link in a browser — no install needed |
 
 ## Features
 
-- **Share** — pick files, start a built-in HTTP server, and show a QR code / URL. The other device opens the URL and downloads the files.
-- **Receive** — start a built-in HTTP server and show a QR code / URL. The other device opens the URL and uploads files to your device.
-- **Scan** — scan another device's QR code to browse and download its shared files directly inside the app. *Android only; the button is hidden on platforms without a camera.*
+- **Share files** — pick files, start a built-in HTTP server, and show a QR code / URL. The other device opens the URL and downloads the files.
+- **Receive files** — start a built-in HTTP server and show a QR code / URL. The other device opens the URL and uploads files to your device.
+- **Scan a QR code** — scan another device's QR code to browse and download its shared files directly inside the app. *Android only; the button is hidden on platforms without a camera.*
+- **Cross-platform** — one app for Android, Linux, Windows and macOS, with the same local network file sharing protocol.
+- **No install on the other side** — any device with a web browser can send or receive files.
+- **Private by design** — files travel directly between devices on your LAN; nothing is uploaded to a server.
 
 Share and Receive work on both Android and Desktop. Scanning is only available on Android;
 desktop shows an explanatory message instead of the camera preview.
@@ -59,6 +70,34 @@ is also shown so it can be run manually.
 | macOS | the system's "accept incoming connections" prompt; best-effort unblock via `socketfilterfw` |
 
 Android has no host firewall, so the card is never shown there.
+
+## FAQ
+
+### Do both devices need to install the app?
+
+No. Only the device that starts Share or Receive runs Quick File Share. The other device just needs
+a web browser — it opens the link or scans the QR code, then downloads or uploads the files.
+
+### Does it work offline?
+
+Yes. Files are transferred directly over your local network. No internet connection and no cloud
+account are required.
+
+### Is Quick File Share a LocalSend alternative?
+
+Yes. Like LocalSend it is a free, open-source, cross-platform LAN file transfer tool. The difference
+is scope: Quick File Share focuses on the share/receive flow and lets the receiving device use a
+plain browser instead of installing the app.
+
+### Is it safe?
+
+Your files never leave your local network — they go straight from one device to the other. The
+embedded server only listens on your LAN address and is stopped when you close the Share/Receive
+screen.
+
+### Which platforms are supported?
+
+Android 8.0+ (APK), Linux (deb, rpm, Arch, portable), Windows (msi) and macOS (dmg).
 
 ## Project structure
 

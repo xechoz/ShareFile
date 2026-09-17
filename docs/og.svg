@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2E7CF6"/>
+      <stop offset="1" stop-color="#1B4FB0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1080" cy="90" r="220" fill="#ffffff" opacity="0.06"/>
+  <circle cx="120" cy="560" r="180" fill="#ffffff" opacity="0.06"/>
+
+  <g transform="translate(90,86)">
+    <rect width="112" height="112" rx="26" fill="#ffffff"/>
+    <circle cx="45" cy="56" r="23" fill="#2E7CF6"/>
+    <circle cx="67" cy="56" r="23" fill="#A8C8FA"/>
+  </g>
+
+  <text x="90" y="300" font-family="Helvetica, Arial, sans-serif" font-size="78" font-weight="bold" fill="#ffffff">Quick File Share</text>
+  <text x="90" y="372" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#DCE8FF">Share files over your local network —</text>
+  <text x="90" y="418" font-family="Helvetica, Arial, sans-serif" font-size="34" fill="#DCE8FF">no app needed on the other device.</text>
+
+  <g font-family="Helvetica, Arial, sans-serif" font-size="26" fill="#ffffff" opacity="0.9">
+    <text x="90" y="520">Android · Linux · Windows · macOS</text>
+    <text x="90" y="560">Free &amp; open source · MIT</text>
+  </g>
+</svg>

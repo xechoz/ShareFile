@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quick File Share — Share Files Over LAN on Android &amp; Desktop (No App Needed)</title>
+<meta name="description" content="Free, open-source file transfer app for Android and Desktop. Share and receive files over your local network (LAN/Wi-Fi) with a link or QR code — the other device needs no app, just a browser. A privacy-friendly LocalSend alternative.">
+<link rel="canonical" href="https://xechoz.github.io/quick-file-share/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#2E7CF6">
+<meta name="author" content="xechoz">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Quick File Share">
+<meta property="og:title" content="Quick File Share — Share Files Over LAN on Android &amp; Desktop">
+<meta property="og:description" content="Send and receive files over your local network with a link or QR code. The other device needs no app — just a browser. Free, open source, no cloud.">
+<meta property="og:url" content="https://xechoz.github.io/quick-file-share/">
+<meta property="og:image" content="https://xechoz.github.io/quick-file-share/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="zh_CN">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Quick File Share — Share Files Over LAN on Android &amp; Desktop">
+<meta name="twitter:description" content="Send and receive files over your local network with a link or QR code. No app needed on the other device.">
+<meta name="twitter:image" content="https://xechoz.github.io/quick-file-share/og.png">
+
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="logo.svg">
+
+<style>
+  :root{
+    --blue:#2E7CF6; --blue-dark:#1f5fd0; --light:#A8C8FA;
+    --bg:#ffffff; --bg-soft:#f5f8ff; --text:#111827; --muted:#55607a;
+    --border:#e5eaf3; --radius:16px; --maxw:1080px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--font);color:var(--text);background:var(--bg);line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  img{max-width:100%;height:auto}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  header{position:sticky;top:0;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:10}
+  .nav{display:flex;align-items:center;gap:18px;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--text)}
+  .brand img{width:30px;height:30px;border-radius:7px}
+  .nav-links{display:flex;gap:18px;margin-left:auto;align-items:center}
+  .nav-links a{color:var(--muted);font-size:15px}
+  .theme-toggle{display:flex;border:1px solid var(--border);border-radius:999px;overflow:hidden}
+  .theme-toggle button{border:0;background:transparent;padding:5px 12px;font-size:13px;cursor:pointer;color:var(--muted);font-family:var(--font)}
+  .theme-toggle button.on{background:var(--blue);color:#fff}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:10px;font-weight:600;font-size:15px;border:1px solid transparent;cursor:pointer}
+  .btn-primary{background:var(--blue);color:#fff}
+  .btn-primary:hover{background:var(--blue-dark);text-decoration:none}
+  .btn-ghost{background:#fff;color:var(--text);border-color:var(--border)}
+  .btn-ghost:hover{border-color:var(--blue);color:var(--blue);text-decoration:none}
+  .hero{padding:64px 0 40px;background:linear-gradient(180deg,var(--bg-soft),#fff)}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  .hero h1{font-size:clamp(30px,4.5vw,46px);line-height:1.15;margin:0 0 16px;letter-spacing:-.02em}
+  .hero p.lead{font-size:18px;color:var(--muted);margin:0 0 28px}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+  .hero small{color:var(--muted)}
+  .hero-shot{filter:drop-shadow(0 18px 40px rgba(31,95,208,.22))}
+  .hero-shot img{border-radius:22px;border:1px solid var(--border);width:260px;margin:0 auto;display:block}
+  section{padding:56px 0}
+  section.alt{background:var(--bg-soft)}
+  h2{font-size:clamp(24px,3vw,32px);margin:0 0 10px;letter-spacing:-.01em}
+  .section-sub{color:var(--muted);margin:0 0 32px;max-width:720px}
+  .grid{display:grid;gap:22px}
+  .cols-3{grid-template-columns:repeat(3,1fr)}
+  .cols-2{grid-template-columns:repeat(2,1fr)}
+  .card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+  .card h3{margin:0 0 8px;font-size:18px}
+  .card p{margin:0;color:var(--muted);font-size:15px}
+  .icon{width:40px;height:40px;border-radius:10px;background:var(--bg-soft);display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:var(--blue);font-weight:700}
+  .shots{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:start}
+  .shots figure{margin:0;text-align:center}
+  .shots img{border-radius:14px;border:1px solid var(--border);background:#fff}
+  .shots figcaption{font-size:13px;color:var(--muted);margin-top:8px}
+  .steps{counter-reset:step;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .step{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:24px;position:relative}
+  .step::before{counter-increment:step;content:counter(step);position:absolute;top:-14px;left:24px;width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+  .step h3{margin:8px 0 6px;font-size:17px}
+  .step p{margin:0;color:var(--muted);font-size:15px}
+  details{background:#fff;border:1px solid var(--border);border-radius:12px;padding:0 20px;margin-bottom:10px}
+  details summary{cursor:pointer;font-weight:600;padding:16px 0;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+";color:var(--blue);font-size:20px;font-weight:400}
+  details[open] summary::after{content:"–"}
+  details p{margin:0 0 16px;color:var(--muted)}
+  .dl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .dl{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;display:block;color:var(--text)}
+  .dl:hover{border-color:var(--blue);text-decoration:none;box-shadow:0 8px 24px rgba(31,95,208,.12)}
+  .dl strong{display:block;font-size:16px}
+  .dl span{font-size:13px;color:var(--muted)}
+  footer{border-top:1px solid var(--border);padding:28px 0;color:var(--muted);font-size:14px}
+  .foot{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+  .foot a{color:var(--muted)}
+  [data-lang]{display:none}
+  html[data-active="en"] [data-lang="en"]{display:block}
+  html[data-active="zh"] [data-lang="zh"]{display:block}
+  @media(max-width:860px){
+    .hero-grid{grid-template-columns:1fr}
+    .cols-3,.steps,.dl-grid{grid-template-columns:1fr 1fr}
+    .shots{grid-template-columns:1fr 1fr}
+    .nav-links a{display:none}
+  }
+  @media(max-width:560px){
+    .cols-3,.cols-2,.steps,.dl-grid,.shots{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="./"><img src="logo.svg" alt="Quick File Share logo" width="30" height="30"> Quick File Share</a>
+    <nav class="nav-links">
+      <a href="#features" data-en="Features" data-zh="功能">Features</a>
+      <a href="#how" data-en="How it works" data-zh="工作原理">How it works</a>
+      <a href="#download" data-en="Download" data-zh="下载">Download</a>
+      <a href="#faq" data-en="FAQ" data-zh="常见问题">FAQ</a>
+      <a href="https://github.com/xechoz/quick-file-share">GitHub</a>
+    </nav>
+    <div class="theme-toggle" role="group" aria-label="Language">
+      <button id="lang-en" class="on" onclick="setLang('en')">EN</button>
+      <button id="lang-zh" onclick="setLang('zh')">中文</button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ ENGLISH ============ -->
+<main data-lang="en">
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>Share files over your local network — no app needed on the other device</h1>
+        <p class="lead">Quick File Share is a free, open-source file transfer app for <strong>Android and Desktop</strong>.
+          Send or receive files over Wi-Fi/LAN with a link or QR code. No cloud, no account, no internet connection.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="https://github.com/xechoz/quick-file-share/releases/latest/download/app-release.apk">Download for Android</a>
+          <a class="btn btn-ghost" href="#download">Desktop downloads</a>
+          <a class="btn btn-ghost" href="https://github.com/xechoz/quick-file-share">View on GitHub</a>
+        </div>
+        <small>MIT licensed · Android 8.0+ · Linux, Windows &amp; macOS</small>
+      </div>
+      <div class="hero-shot">
+        <img src="screenshots/browser-upload.png" width="240" height="480" alt="Browser upload page for receiving files over LAN without installing an app">
+      </div>
+    </div>
+  </div>
+
+  <section id="features">
+    <div class="wrap">
+      <h2>Why Quick File Share</h2>
+      <p class="section-sub">A simple LAN file transfer tool in the spirit of LocalSend and AirDrop, focused on just two things: sharing and receiving.</p>
+      <div class="grid cols-3">
+        <div class="card"><div class="icon">↗</div><h3>Share files</h3><p>Pick files, start the built-in server, show a QR code or URL. The other device opens it in a browser and downloads.</p></div>
+        <div class="card"><div class="icon">↙</div><h3>Receive files</h3><p>Show a QR code or URL and let the other device upload files straight to yours from a browser.</p></div>
+        <div class="card"><div class="icon">▣</div><h3>Scan a QR code</h3><p>Scan another device's QR code to browse and download its shared files inside the app. Android only.</p></div>
+        <div class="card"><div class="icon">⇄</div><h3>Cross-platform</h3><p>One app for Android, Linux, Windows and macOS, using the same local network protocol.</p></div>
+        <div class="card"><div class="icon">✓</div><h3>No install on the other side</h3><p>Any device with a web browser can send or receive files. Nothing to set up.</p></div>
+        <div class="card"><div class="icon">🔒</div><h3>Private by design</h3><p>Files travel directly between devices on your LAN. Nothing is uploaded to a server.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="alt">
+    <div class="wrap">
+      <h2>How it works</h2>
+      <p class="section-sub">The app embeds a lightweight HTTP server bound to your device's local network address.</p>
+      <div class="steps">
+        <div class="step"><h3>Start Share or Receive</h3><p>The app starts a local web server and shows a QR code plus a URL.</p></div>
+        <div class="step"><h3>Open the link</h3><p>The other device opens the URL in any browser — or scans the QR code.</p></div>
+        <div class="step"><h3>Transfer</h3><p>Download or upload files directly over your Wi-Fi/LAN. No cloud in between.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="screens">
+    <div class="wrap">
+      <h2>Screenshots</h2>
+      <p class="section-sub">The same app on Android and Desktop, and the browser page the other device sees.</p>
+      <div class="shots">
+        <figure><img src="screenshots/android-home.png" width="240" height="480" loading="lazy" alt="Quick File Share Android home screen"><figcaption>Android</figcaption></figure>
+        <figure><img src="screenshots/android-share.png" width="240" height="480" loading="lazy" alt="Sharing files over LAN with a QR code on Android"><figcaption>Share</figcaption></figure>
+        <figure><img src="screenshots/android-receive.png" width="240" height="480" loading="lazy" alt="Receiving files over Wi-Fi on Android"><figcaption>Receive</figcaption></figure>
+        <figure><img src="screenshots/desktop-home.png" width="240" height="480" loading="lazy" alt="Quick File Share desktop app for Linux, Windows and macOS"><figcaption>Desktop</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="alt">
+    <div class="wrap">
+      <h2>Frequently asked questions</h2>
+      <p class="section-sub">Everything you need to know about local network file sharing with Quick File Share.</p>
+      <details><summary>Do both devices need to install the app?</summary><p>No. Only the device that starts Share or Receive runs Quick File Share. The other device just needs a web browser — it opens the link or scans the QR code, then downloads or uploads files.</p></details>
+      <details><summary>Does it work offline?</summary><p>Yes. Files are transferred directly over your local network. No internet connection and no cloud account are required.</p></details>
+      <details><summary>Is it a LocalSend alternative?</summary><p>Yes. Like LocalSend it is free, open source and cross-platform. The difference is scope: Quick File Share focuses on the share/receive flow and lets the receiving device use a plain browser instead of installing the app.</p></details>
+      <details><summary>Is it safe?</summary><p>Your files never leave your local network — they go straight from one device to the other. The embedded server only listens on your LAN address and is stopped when you close the Share/Receive screen.</p></details>
+      <details><summary>Which platforms are supported?</summary><p>Android 8.0+ (APK), Linux (deb, rpm, Arch, portable), Windows (msi) and macOS (dmg).</p></details>
+    </div>
+  </section>
+
+  <section id="download">
+    <div class="wrap">
+      <h2>Download</h2>
+      <p class="section-sub">All builds are free and open source. See the <a href="https://github.com/xechoz/quick-file-share/releases/latest">latest release</a> for checksums and notes.</p>
+      <div class="dl-grid">
+        <a class="dl" href="https://github.com/xechoz/quick-file-share/releases/latest/download/app-release.apk"><strong>Android</strong><span>APK · 8.0+</span></a>
+        <a class="dl" href="https://github.com/xechoz/quick-file-share/releases/latest"><strong>Linux</strong><span>deb · rpm · Arch</span></a>
+        <a class="dl" href="https://github.com/xechoz/quick-file-share/releases/latest"><strong>Windows</strong><span>msi</span></a>
+        <a class="dl" href="https://github.com/xechoz/quick-file-share/releases/latest"><strong>macOS</strong><span>dmg</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ 中文 ============ -->
+<main data-lang="zh">
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>局域网内互传文件 —— 对方设备无需安装任何 App</h1>
+        <p class="lead">Quick File Share 是一款免费、开源的<strong>局域网（Wi-Fi/LAN）文件互传工具</strong>，支持
+          <strong>Android 与桌面端</strong>。用链接或二维码收发文件，不经过云端、无需账号、不依赖互联网。</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="https://github.com/xechoz/quick-file-share/releases/latest/download/app-release.apk">下载 Android 版</a>
+          <a class="btn btn-ghost" href="#download">桌面端下载</a>
+          <a class="btn btn-ghost" href="https://github.com/xechoz/quick-file-share">GitHub 仓库</a>
+        </div>
+        <small>MIT 开源许可 · Android 8.0+ · 支持 Linux、Windows、macOS</small>
+      </div>
+      <div class="hero-shot">
+        <img src="screenshots/browser-upload.png" width="240" height="480" alt="无需安装 App 的浏览器上传页面，用于局域网接收文件">
+      </div>
+    </div>
+  </div>
+
+  <section id="features-zh">
+    <div class="wrap">
+      <h2>为什么选择 Quick File Share</h2>
+      <p class="section-sub">定位类似 LocalSend 与 AirDrop 的轻量局域网传文件工具，只专注两件事：发送与接收。</p>
+      <div class="grid cols-3">
+        <div class="card"><div class="icon">↗</div><h3>发送文件</h3><p>选择文件，启动内置服务，展示二维码 / 链接，对方在浏览器打开即可下载。</p></div>
+        <div class="card"><div class="icon">↙</div><h3>接收文件</h3><p>展示二维码 / 链接，对方在浏览器中直接上传文件到你的设备。</p></div>
+        <div class="card"><div class="icon">▣</div><h3>扫码传输</h3><p>扫描对方二维码，在 App 内浏览并下载其共享文件。仅 Android 支持。</p></div>
+        <div class="card"><div class="icon">⇄</div><h3>跨平台</h3><p>Android、Linux、Windows、macOS 共用同一套局域网传输协议。</p></div>
+        <div class="card"><div class="icon">✓</div><h3>对方零安装</h3><p>任何有浏览器的设备都能收发文件，无需任何配置。</p></div>
+        <div class="card"><div class="icon">🔒</div><h3>隐私优先</h3><p>文件只在局域网内点对点传输，不会上传到任何服务器。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how-zh" class="alt">
+    <div class="wrap">
+      <h2>工作原理</h2>
+      <p class="section-sub">App 内嵌一个轻量 HTTP 服务，绑定在本机的局域网地址上。</p>
+      <div class="steps">
+        <div class="step"><h3>启动发送或接收</h3><p>App 启动本地 Web 服务，展示二维码与链接。</p></div>
+        <div class="step"><h3>打开链接</h3><p>对方用任意浏览器打开链接，或直接扫描二维码。</p></div>
+        <div class="step"><h3>开始传输</h3><p>在 Wi-Fi/局域网内直接下载或上传文件，全程不经过云端。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq-zh" class="alt" style="background:#fff">
+    <div class="wrap">
+      <h2>常见问题</h2>
+      <p class="section-sub">关于局域网文件互传，你想知道的都在这里。</p>
+      <details><summary>两台设备都需要安装 App 吗？</summary><p>不需要。只有启动发送或接收的那台设备运行 Quick File Share。对方只需要一个浏览器——打开链接或扫描二维码即可下载或上传。</p></details>
+      <details><summary>离线能用吗？</summary><p>可以。文件通过局域网直接传输，不需要互联网连接，也不需要云端账号。</p></details>
+      <details><summary>它是 LocalSend 的替代品吗？</summary><p>是的。与 LocalSend 一样免费、开源、跨平台。区别在于侧重点：Quick File Share 聚焦收发流程，并让接收方直接用浏览器完成操作，无需安装 App。</p></details>
+      <details><summary>安全吗？</summary><p>文件不会离开你的局域网，直接从一台设备传到另一台。内置服务只监听局域网地址，关闭收发页面即停止。</p></details>
+      <details><summary>支持哪些平台？</summary><p>Android 8.0+（APK）、Linux（deb、rpm、Arch、便携包）、Windows（msi）、macOS（dmg）。</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>MIT © <span id="year">2026</span> xechoz · Quick File Share</span>
+    <span>
+      <a href="https://github.com/xechoz/quick-file-share" data-en="Source" data-zh="源码">Source</a> ·
+      <a href="https://github.com/xechoz/quick-file-share/releases" data-en="Releases" data-zh="版本发布">Releases</a> ·
+      <a href="https://github.com/xechoz/quick-file-share/issues" data-en="Issues" data-zh="问题反馈">Issues</a>
+    </span>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Quick File Share",
+      "alternateName": "QuickFileShare",
+      "url": "https://xechoz.github.io/quick-file-share/",
+      "description": "Free, open-source file transfer app for Android and Desktop. Share and receive files over your local network (LAN/Wi-Fi) with a link or QR code — the other device needs no app, just a browser.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Android, Linux, Windows, macOS",
+      "softwareVersion": "1.4.0",
+      "license": "https://opensource.org/licenses/MIT",
+      "isAccessibleForFree": true,
+      "downloadUrl": "https://github.com/xechoz/quick-file-share/releases",
+      "codeRepository": "https://github.com/xechoz/quick-file-share",
+      "sameAs": [
+        "https://github.com/xechoz/quick-file-share"
+      ],
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "screenshot": [
+        "https://xechoz.github.io/quick-file-share/screenshots/android-home.png",
+        "https://xechoz.github.io/quick-file-share/screenshots/android-share.png",
+        "https://xechoz.github.io/quick-file-share/screenshots/android-receive.png",
+        "https://xechoz.github.io/quick-file-share/screenshots/desktop-home.png"
+      ],
+      "featureList": [
+        "Share files over local network with QR code",
+        "Receive files from a browser without installing an app",
+        "Cross-platform: Android, Linux, Windows, macOS",
+        "Offline peer-to-peer transfer, no cloud"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Do both devices need to install the app?",
+          "acceptedAnswer": { "@type": "Answer", "text": "No. Only the device that starts Share or Receive runs Quick File Share. The other device just needs a web browser — it opens the link or scans the QR code, then downloads or uploads files." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work offline?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Files are transferred directly over your local network. No internet connection and no cloud account are required." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Quick File Share a LocalSend alternative?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Like LocalSend it is free, open source and cross-platform. The difference is scope: Quick File Share focuses on the share/receive flow and lets the receiving device use a plain browser instead of installing the app." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it safe?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Your files never leave your local network — they go straight from one device to the other. The embedded server only listens on your LAN address and is stopped when you close the Share/Receive screen." }
+        },
+        {
+          "@type": "Question",
+          "name": "Which platforms are supported?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Android 8.0+ (APK), Linux (deb, rpm, Arch, portable), Windows (msi) and macOS (dmg)." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
+<script>
+  function setLang(lang){
+    document.documentElement.setAttribute('data-active', lang);
+    document.documentElement.lang = (lang === 'zh') ? 'zh-CN' : 'en';
+    document.getElementById('lang-en').classList.toggle('on', lang === 'en');
+    document.getElementById('lang-zh').classList.toggle('on', lang === 'zh');
+    document.querySelectorAll('[data-en]').forEach(function(el){
+      el.textContent = el.getAttribute('data-' + lang);
+    });
+    try { localStorage.setItem('qfs-lang', lang); } catch (e) {}
+  }
+  (function(){
+    var saved = null;
+    try { saved = localStorage.getItem('qfs-lang'); } catch (e) {}
+    var lang = saved || ((navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en');
+    setLang(lang);
+    document.getElementById('year').textContent = new Date().getFullYear();
+  })();
+</script>
+</body>
+</html>
