@@ -8,9 +8,18 @@ interface PlatformServices {
 
     val prefersUrlConnection: Boolean
 
+    val downloadFolderName: String
+
     fun openUrl(url: String)
 
     fun openFile(file: ReceivedFile): Boolean
 
     fun shareFile(file: ReceivedFile)
+
+    fun openDownloadFolder(): Boolean
+}
+
+interface DownloadFolderChooser {
+
+    fun chooseDownloadFolder()
 }

@@ -3,6 +3,7 @@ package com.xechoz.sharefile.platform
 import java.io.File
 import java.io.InputStream
 import java.net.URLConnection
+import java.util.prefs.Preferences
 
 class DesktopAssetProvider : AssetProvider {
 
@@ -13,13 +14,31 @@ class DesktopAssetProvider : AssetProvider {
         javaClass.classLoader?.getResourceAsStream(name)?.bufferedReader()?.use { it.readText() }
 }
 
-class DesktopDownloadStore : DownloadStore {
+class DesktopDownloadStore(
+    private val prefs: Preferences = Preferences.userRoot().node("com/xechoz/sharefile/downloads"),
+) : DownloadStore {
+
+    var directory: File = loadDirectory()
+        private set
 
     override fun write(name: String, input: InputStream): String {
-        val dir = File(System.getProperty("user.home"), "Downloads").apply { mkdirs() }
-        val target = uniqueTarget(dir, name)
+        directory.mkdirs()
+        val target = uniqueTarget(directory, name)
         input.use { src -> target.outputStream().use { src.copyTo(it) } }
         return target.absolutePath
+    }
+
+    fun setDirectory(dir: File) {
+        directory = dir.apply { mkdirs() }
+        prefs.put(KEY_DIRECTORY, directory.absolutePath)
+    }
+
+    private fun loadDirectory(): File {
+        val saved = prefs.get(KEY_DIRECTORY, null)
+            ?.takeIf { it.isNotBlank() }
+            ?.let(::File)
+            ?.takeIf { it.isDirectory }
+        return (saved ?: File(System.getProperty("user.home"), "Downloads")).apply { mkdirs() }
     }
 
     private fun uniqueTarget(dir: File, name: String): File {
@@ -33,6 +52,10 @@ class DesktopDownloadStore : DownloadStore {
             index++
         }
         return candidate
+    }
+
+    private companion object {
+        const val KEY_DIRECTORY = "directory"
     }
 }
 

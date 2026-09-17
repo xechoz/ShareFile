@@ -17,8 +17,11 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -45,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xechoz.sharefile.model.ReceivedFile
+import com.xechoz.sharefile.platform.DownloadFolderChooser
 import com.xechoz.sharefile.platform.FirewallStatus
 import com.xechoz.sharefile.platform.LocalAppContainer
 import com.xechoz.sharefile.server.ServerState
@@ -94,18 +98,27 @@ fun ReceiveScreen(
         }
     }
 
+    val chooser = container.platform as? DownloadFolderChooser
+
     ReceiveContent(
         serverState = serverState,
         received = received,
         firewallStatus = firewallStatus,
         isAllowingFirewall = isAllowingFirewall,
         firewallCommand = firewallCommand,
+        downloadFolderName = container.platform.downloadFolderName,
         snackbarHostState = snackbarHostState,
         onBack = onBack,
         onOpen = open,
         onShare = share,
         onRetry = viewModel::retry,
         onAllowFirewall = viewModel::allowFirewall,
+        onOpenFolder = {
+            if (!container.platform.openDownloadFolder()) {
+                scope.launch { snackbarHostState.showSnackbar("No file manager found") }
+            }
+        },
+        onChooseFolder = chooser?.let { target -> { target.chooseDownloadFolder() } },
         preferUrl = container.platform.prefersUrlConnection,
     )
 }
@@ -118,12 +131,15 @@ private fun ReceiveContent(
     firewallStatus: FirewallStatus,
     isAllowingFirewall: Boolean,
     firewallCommand: String?,
+    downloadFolderName: String,
     snackbarHostState: SnackbarHostState,
     onBack: () -> Unit,
     onOpen: (ReceivedFile) -> Unit,
     onShare: (ReceivedFile) -> Unit,
     onRetry: () -> Unit,
     onAllowFirewall: () -> Unit,
+    onOpenFolder: () -> Unit,
+    onChooseFolder: (() -> Unit)?,
     preferUrl: Boolean,
 ) {
     val scope = rememberCoroutineScope()
@@ -141,9 +157,9 @@ private fun ReceiveContent(
         if (fresh.isEmpty()) return@LaunchedEffect
         val result = snackbarHostState.showSnackbar(
             message = if (fresh.size == 1) {
-                "${fresh.first().name} saved to Downloads"
+                "${fresh.first().name} saved to $downloadFolderName"
             } else {
-                "${fresh.size} files saved to Downloads"
+                "${fresh.size} files saved to $downloadFolderName"
             },
             actionLabel = if (fresh.size == 1) "Open" else null,
         )
@@ -158,6 +174,13 @@ private fun ReceiveContent(
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
+                },
+                actions = {
+                    FolderMenu(
+                        folderName = downloadFolderName,
+                        onOpenFolder = onOpenFolder,
+                        onChooseFolder = onChooseFolder,
+                    )
                 },
             )
         },
@@ -323,6 +346,42 @@ private fun ReceivedBody(
 }
 
 @Composable
+private fun FolderMenu(
+    folderName: String,
+    onOpenFolder: () -> Unit,
+    onChooseFolder: (() -> Unit)?,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    Box {
+        IconButton(
+            onClick = {
+                if (onChooseFolder == null) onOpenFolder() else expanded = true
+            },
+        ) {
+            Icon(Icons.Default.FolderOpen, contentDescription = "Open save folder")
+        }
+        if (onChooseFolder != null) {
+            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                DropdownMenuItem(
+                    text = { Text("Open $folderName folder") },
+                    onClick = {
+                        expanded = false
+                        onOpenFolder()
+                    },
+                )
+                DropdownMenuItem(
+                    text = { Text("Change save folder…") },
+                    onClick = {
+                        expanded = false
+                        onChooseFolder()
+                    },
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun FileActionRow(
     icon: ImageVector,
     label: String,
@@ -386,12 +445,15 @@ private fun ReceiveScreenPreview() {
             firewallStatus = FirewallStatus.Allowed,
             isAllowingFirewall = false,
             firewallCommand = null,
+            downloadFolderName = "Downloads",
             snackbarHostState = remember { SnackbarHostState() },
             onBack = {},
             onOpen = {},
             onShare = {},
             onRetry = {},
             onAllowFirewall = {},
+            onOpenFolder = {},
+            onChooseFolder = null,
             preferUrl = false,
         )
     }
@@ -407,13 +469,46 @@ private fun ReceiveScreenEmptyPreview() {
             firewallStatus = FirewallStatus.Allowed,
             isAllowingFirewall = false,
             firewallCommand = null,
+            downloadFolderName = "Downloads",
             snackbarHostState = remember { SnackbarHostState() },
             onBack = {},
             onOpen = {},
             onShare = {},
             onRetry = {},
             onAllowFirewall = {},
+            onOpenFolder = {},
+            onChooseFolder = null,
             preferUrl = false,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ReceiveScreenDesktopPreview() {
+    ShareFileTheme {
+        ReceiveContent(
+            serverState = ServerState.Running(url = "http://192.168.1.42:8080", port = 8080),
+            received = listOf(
+                ReceivedFile(
+                    name = "vacation.jpg",
+                    size = 3_200_000,
+                    savedPath = "/home/user/Downloads/vacation.jpg",
+                ),
+            ),
+            firewallStatus = FirewallStatus.Allowed,
+            isAllowingFirewall = false,
+            firewallCommand = null,
+            downloadFolderName = "Downloads",
+            snackbarHostState = remember { SnackbarHostState() },
+            onBack = {},
+            onOpen = {},
+            onShare = {},
+            onRetry = {},
+            onAllowFirewall = {},
+            onOpenFolder = {},
+            onChooseFolder = {},
+            preferUrl = true,
         )
     }
 }
@@ -428,12 +523,15 @@ private fun ReceiveScreenFirewallPreview() {
             firewallStatus = FirewallStatus.Blocked,
             isAllowingFirewall = false,
             firewallCommand = "sudo ufw allow from 192.168.1.0/24 to any port 8080 proto tcp",
+            downloadFolderName = "Downloads",
             snackbarHostState = remember { SnackbarHostState() },
             onBack = {},
             onOpen = {},
             onShare = {},
             onRetry = {},
             onAllowFirewall = {},
+            onOpenFolder = {},
+            onChooseFolder = null,
             preferUrl = false,
         )
     }
