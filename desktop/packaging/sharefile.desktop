@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=ShareFile
+Comment=Share files over your local network
+Exec=sharefile %U
+Icon=sharefile
+Terminal=false
+Categories=Utility;Network;

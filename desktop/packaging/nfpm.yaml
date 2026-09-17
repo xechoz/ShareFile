@@ -1,0 +1,34 @@
+name: sharefile
+arch: amd64
+platform: linux
+version: ${VERSION}
+section: utils
+priority: optional
+maintainer: xechoz
+vendor: xechoz
+homepage: https://github.com/xechoz/ShareFile
+license: MIT
+description: |
+  Share files between devices over the local network.
+  The other device just opens the link in a browser, no install needed.
+contents:
+  - src: ${ROOT_DIR}/desktop/build/slim/lib
+    dst: /usr/lib/sharefile/lib
+  - src: ${ROOT_DIR}/desktop/build/slim/bin/sharefile
+    dst: /usr/lib/sharefile/bin/sharefile
+  - src: /usr/lib/sharefile/bin/sharefile
+    dst: /usr/bin/sharefile
+    type: symlink
+  - src: ${ROOT_DIR}/desktop/packaging/sharefile.desktop
+    dst: /usr/share/applications/sharefile.desktop
+  - src: ${ROOT_DIR}/desktop/packaging/icon/sharefile.png
+    dst: /usr/share/icons/hicolor/512x512/apps/sharefile.png
+depends:
+  - openjdk-17-jre | openjdk-21-jre
+overrides:
+  rpm:
+    depends:
+      - java-17-openjdk
+  archlinux:
+    depends:
+      - java-runtime>=17

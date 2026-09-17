@@ -14,11 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -55,6 +50,7 @@ import com.xechoz.sharefile.ui.components.FileRow
 import com.xechoz.sharefile.ui.components.FirewallCard
 import com.xechoz.sharefile.ui.components.QrCard
 import com.xechoz.sharefile.ui.components.ServerErrorCard
+import com.xechoz.sharefile.ui.icons.AppIcons
 import com.xechoz.sharefile.ui.layout.LocalWindowLayout
 import com.xechoz.sharefile.ui.layout.WindowLayout
 import com.xechoz.sharefile.ui.theme.PillShape
@@ -129,7 +125,7 @@ private fun ShareContent(
                 title = { Text("Share") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(AppIcons.ArrowLeft, contentDescription = "Back")
                     }
                 },
             )
@@ -339,7 +335,7 @@ private fun FileList(
                             }
                         }
                     }) {
-                        Icon(Icons.Default.Close, contentDescription = "Remove")
+                        Icon(AppIcons.Close, contentDescription = "Remove")
                     }
                 },
             )
@@ -359,7 +355,7 @@ private fun EmptyFiles(
     modifier: Modifier = Modifier,
 ) {
     EmptyFileHint(
-        icon = Icons.Default.Upload,
+        icon = AppIcons.Upload,
         title = "No files yet",
         description = "Drag files here or click Select files, then let the other device scan the QR code or open the link to download.",
         modifier = modifier,
@@ -378,7 +374,7 @@ private fun AddFilesButton(
             .height(56.dp),
         shape = PillShape,
     ) {
-        Icon(Icons.Default.Add, contentDescription = null)
+        Icon(AppIcons.Add, contentDescription = null)
         Spacer(Modifier.size(8.dp))
         Text(
             text = if (isEmpty) "Select files" else "Add more files",

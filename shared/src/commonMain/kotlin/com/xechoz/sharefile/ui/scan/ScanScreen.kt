@@ -3,8 +3,6 @@ package com.xechoz.sharefile.ui.scan
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.xechoz.sharefile.platform.LocalAppContainer
 import com.xechoz.sharefile.platform.PlatformQrScanner
+import com.xechoz.sharefile.ui.icons.AppIcons
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -49,7 +48,7 @@ private fun ScanContent(
                 title = { Text("Scan QR code") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(AppIcons.ArrowLeft, contentDescription = "Back")
                     }
                 },
             )

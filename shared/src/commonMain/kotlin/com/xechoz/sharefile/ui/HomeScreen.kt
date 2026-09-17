@@ -16,11 +16,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.QrCodeScanner
-import androidx.compose.material.icons.filled.SwapHoriz
-import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -42,6 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.xechoz.sharefile.ui.icons.AppIcons
 import com.xechoz.sharefile.ui.layout.LocalWindowLayout
 import com.xechoz.sharefile.ui.layout.WindowLayout
 import com.xechoz.sharefile.ui.theme.PillShape
@@ -111,7 +107,7 @@ private fun ExpandedHome(
                 color = MaterialTheme.colorScheme.primaryContainer,
             ) {
                 Icon(
-                    Icons.Default.SwapHoriz,
+                    AppIcons.SwapHoriz,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier
@@ -146,7 +142,7 @@ private fun ExpandedHome(
                 ActionTile(
                     title = "Share",
                     description = "Send files from this device",
-                    icon = Icons.Default.Upload,
+                    icon = AppIcons.Upload,
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     onClick = onShare,
@@ -155,7 +151,7 @@ private fun ExpandedHome(
                 ActionTile(
                     title = "Receive",
                     description = "Get files from another device",
-                    icon = Icons.Default.Download,
+                    icon = AppIcons.Download,
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                     onClick = onReceive,
@@ -261,7 +257,7 @@ private fun CompactHome(
                     ) {
                         ActionButton(
                             label = "Share",
-                            icon = Icons.Default.Upload,
+                            icon = AppIcons.Upload,
                             containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
                             onClick = onShare,
@@ -269,7 +265,7 @@ private fun CompactHome(
                         )
                         ActionButton(
                             label = "Receive",
-                            icon = Icons.Default.Download,
+                            icon = AppIcons.Download,
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
                             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                             onClick = onReceive,
@@ -279,7 +275,7 @@ private fun CompactHome(
                 } else {
                     ActionButton(
                         label = "Share",
-                        icon = Icons.Default.Upload,
+                        icon = AppIcons.Upload,
                         containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary,
                         onClick = onShare,
@@ -287,7 +283,7 @@ private fun CompactHome(
                     Spacer(Modifier.height(16.dp))
                     ActionButton(
                         label = "Receive",
-                        icon = Icons.Default.Download,
+                        icon = AppIcons.Download,
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
                         contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                         onClick = onReceive,
@@ -320,7 +316,7 @@ private fun ScanAction(
         shape = shape,
     ) {
         Icon(
-            Icons.Default.QrCodeScanner,
+            AppIcons.QrCodeScanner,
             contentDescription = null,
             modifier = Modifier.size(24.dp),
         )

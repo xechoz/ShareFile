@@ -1,0 +1,22 @@
+#!/bin/sh
+set -e
+
+APP_HOME=$(CDPATH= cd -- "$(dirname -- "$(readlink -f "$0")")/.." && pwd)
+
+if [ -n "$JAVA_HOME" ] && [ -x "$JAVA_HOME/bin/java" ]; then
+    JAVA="$JAVA_HOME/bin/java"
+elif command -v java >/dev/null 2>&1; then
+    JAVA=java
+else
+    echo "ShareFile requires Java 17 or newer, but no 'java' was found." >&2
+    echo "Install a JRE (e.g. apt install openjdk-17-jre), or set JAVA_HOME." >&2
+    exit 1
+fi
+
+exec "$JAVA" \
+    -Djpackage.app-version=@APP_VERSION@ \
+    -Dcompose.application.resources.dir="$APP_HOME/lib/resources" \
+    -Dcompose.application.configure.swing.globals=true \
+    -Dskiko.library.path="$APP_HOME/lib" \
+    -cp "$APP_HOME/lib/*" \
+    com.xechoz.sharefile.MainKt "$@"

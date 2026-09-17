@@ -14,12 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.FolderOpen
-import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -61,6 +55,7 @@ import com.xechoz.sharefile.ui.components.FileRow
 import com.xechoz.sharefile.ui.components.FirewallCard
 import com.xechoz.sharefile.ui.components.QrCard
 import com.xechoz.sharefile.ui.components.ServerErrorCard
+import com.xechoz.sharefile.ui.icons.AppIcons
 import com.xechoz.sharefile.ui.layout.LocalWindowLayout
 import com.xechoz.sharefile.ui.layout.WindowLayout
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
@@ -172,7 +167,7 @@ private fun ReceiveContent(
                 title = { Text("Receive") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(AppIcons.ArrowLeft, contentDescription = "Back")
                     }
                 },
                 actions = {
@@ -255,7 +250,7 @@ private fun ReceiveContent(
     sheetFile?.let { file ->
         ModalBottomSheet(onDismissRequest = { sheetFile = null }) {
             FileActionRow(
-                icon = Icons.AutoMirrored.Filled.OpenInNew,
+                icon = AppIcons.OpenInNew,
                 label = "Open",
                 onClick = {
                     sheetFile = null
@@ -263,7 +258,7 @@ private fun ReceiveContent(
                 },
             )
             FileActionRow(
-                icon = Icons.Default.Share,
+                icon = AppIcons.Share,
                 label = "Share",
                 onClick = {
                     sheetFile = null
@@ -303,7 +298,7 @@ private fun ReceivedBody(
 ) {
     if (received.isEmpty()) {
         EmptyFileHint(
-            icon = Icons.Default.Download,
+            icon = AppIcons.Download,
             title = "Waiting for uploads…",
             description = "Files sent from the other device will appear here.",
             modifier = modifier,
@@ -329,7 +324,7 @@ private fun ReceivedBody(
                 locator = file.savedPath,
                 trailing = {
                     Icon(
-                        Icons.AutoMirrored.Filled.OpenInNew,
+                        AppIcons.OpenInNew,
                         contentDescription = "Open",
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -358,7 +353,7 @@ private fun FolderMenu(
                 if (onChooseFolder == null) onOpenFolder() else expanded = true
             },
         ) {
-            Icon(Icons.Default.FolderOpen, contentDescription = "Open save folder")
+            Icon(AppIcons.FolderOpen, contentDescription = "Open save folder")
         }
         if (onChooseFolder != null) {
             DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {

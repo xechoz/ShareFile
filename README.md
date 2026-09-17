@@ -116,6 +116,18 @@ Package a native distribution for the current OS:
 ./gradlew :desktop:packageDistributionForCurrentOS
 ```
 
+### Linux packages
+
+Linux packages are slim: they do not bundle a JRE and depend on the system
+Java 17+ instead, which the package manager installs automatically.
+
+```bash
+bash desktop/packaging/build-linux-packages.sh
+```
+
+The script builds a portable staging directory (`:desktop:slimDist`) and
+generates `deb`, `rpm` and Arch packages into `desktop/build/dist/`.
+
 ### Release build
 
 Release builds are signed with a keystore configured outside the repository. Create

@@ -11,9 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
@@ -37,6 +34,7 @@ import com.xechoz.sharefile.model.RemoteFile
 import com.xechoz.sharefile.platform.LocalAppContainer
 import com.xechoz.sharefile.ui.components.ContentContainer
 import com.xechoz.sharefile.ui.components.FileRow
+import com.xechoz.sharefile.ui.icons.AppIcons
 import com.xechoz.sharefile.ui.theme.PillShape
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
 import androidx.compose.ui.tooling.preview.Preview
@@ -77,7 +75,7 @@ private fun RemoteFilesContent(
                 title = { Text("Remote files") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(AppIcons.ArrowLeft, contentDescription = "Back")
                     }
                 },
             )
@@ -114,7 +112,7 @@ private fun RemoteFilesContent(
                     is RemoteUiState.Done -> Centered {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(
-                                Icons.Default.CheckCircle,
+                                AppIcons.CheckCircle,
                                 contentDescription = null,
                                 tint = MaterialTheme.colorScheme.secondary,
                                 modifier = Modifier.size(48.dp),
