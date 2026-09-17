@@ -6,6 +6,8 @@ interface PlatformServices {
 
     val qrScanSupported: Boolean
 
+    val hasWindowMenu: Boolean
+
     val prefersUrlConnection: Boolean
 
     val downloadFolderName: String

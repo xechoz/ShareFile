@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Download
-import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.Upload
@@ -52,9 +51,9 @@ fun HomeScreen(
     onShare: () -> Unit,
     onReceive: () -> Unit,
     onScan: () -> Unit,
-    onConnectUrl: () -> Unit,
     onAbout: () -> Unit,
     onFeedback: () -> Unit,
+    showAboutButtons: Boolean,
     showScan: Boolean = true,
 ) {
     Scaffold { padding ->
@@ -63,9 +62,9 @@ fun HomeScreen(
                 onShare = onShare,
                 onReceive = onReceive,
                 onScan = onScan,
-                onConnectUrl = onConnectUrl,
                 onAbout = onAbout,
                 onFeedback = onFeedback,
+                showAboutButtons = showAboutButtons,
                 showScan = showScan,
                 modifier = Modifier
                     .fillMaxSize()
@@ -76,9 +75,9 @@ fun HomeScreen(
                 onShare = onShare,
                 onReceive = onReceive,
                 onScan = onScan,
-                onConnectUrl = onConnectUrl,
                 onAbout = onAbout,
                 onFeedback = onFeedback,
+                showAboutButtons = showAboutButtons,
                 showScan = showScan,
                 modifier = Modifier
                     .fillMaxSize()
@@ -93,9 +92,9 @@ private fun ExpandedHome(
     onShare: () -> Unit,
     onReceive: () -> Unit,
     onScan: () -> Unit,
-    onConnectUrl: () -> Unit,
     onAbout: () -> Unit,
     onFeedback: () -> Unit,
+    showAboutButtons: Boolean,
     showScan: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -166,17 +165,19 @@ private fun ExpandedHome(
                     modifier = Modifier.weight(1f),
                 )
             }
-            Spacer(Modifier.height(16.dp))
-            SecondaryAction(
-                showScan = showScan,
-                onScan = onScan,
-                onConnectUrl = onConnectUrl,
-                height = 48.dp,
-                shape = MaterialTheme.shapes.small,
-            )
-            Spacer(Modifier.height(24.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                AboutButtons(onAbout = onAbout, onFeedback = onFeedback)
+            if (showScan) {
+                Spacer(Modifier.height(16.dp))
+                ScanAction(
+                    onScan = onScan,
+                    height = 48.dp,
+                    shape = MaterialTheme.shapes.small,
+                )
+            }
+            if (showAboutButtons) {
+                Spacer(Modifier.height(24.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                    AboutButtons(onAbout = onAbout, onFeedback = onFeedback)
+                }
             }
         }
     }
@@ -226,9 +227,9 @@ private fun CompactHome(
     onShare: () -> Unit,
     onReceive: () -> Unit,
     onScan: () -> Unit,
-    onConnectUrl: () -> Unit,
     onAbout: () -> Unit,
     onFeedback: () -> Unit,
+    showAboutButtons: Boolean,
     showScan: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -298,44 +299,42 @@ private fun CompactHome(
                         onClick = onReceive,
                     )
                 }
-                Spacer(Modifier.height(if (isLandscape) 16.dp else 24.dp))
-                SecondaryAction(
-                    showScan = showScan,
-                    onScan = onScan,
-                    onConnectUrl = onConnectUrl,
-                )
+                if (showScan) {
+                    Spacer(Modifier.height(if (isLandscape) 16.dp else 24.dp))
+                    ScanAction(onScan = onScan)
+                }
             }
-            Row(horizontalArrangement = Arrangement.Center) {
-                AboutButtons(onAbout = onAbout, onFeedback = onFeedback)
+            if (showAboutButtons) {
+                Row(horizontalArrangement = Arrangement.Center) {
+                    AboutButtons(onAbout = onAbout, onFeedback = onFeedback)
+                }
             }
         }
     }
 }
 
 @Composable
-private fun SecondaryAction(
-    showScan: Boolean,
+private fun ScanAction(
     onScan: () -> Unit,
-    onConnectUrl: () -> Unit,
     modifier: Modifier = Modifier,
     height: Dp = 56.dp,
     shape: Shape = PillShape,
 ) {
     OutlinedButton(
-        onClick = if (showScan) onScan else onConnectUrl,
+        onClick = onScan,
         modifier = modifier
             .fillMaxWidth()
             .height(height),
         shape = shape,
     ) {
         Icon(
-            if (showScan) Icons.Default.QrCodeScanner else Icons.Default.Link,
+            Icons.Default.QrCodeScanner,
             contentDescription = null,
             modifier = Modifier.size(24.dp),
         )
         Spacer(Modifier.size(12.dp))
         Text(
-            text = if (showScan) "Scan QR code" else "Open link",
+            text = "Scan QR code",
             style = MaterialTheme.typography.titleMedium,
         )
     }
@@ -398,9 +397,9 @@ private fun HomeScreenPreview() {
             onShare = {},
             onReceive = {},
             onScan = {},
-            onConnectUrl = {},
             onAbout = {},
             onFeedback = {},
+            showAboutButtons = true,
             showScan = true,
         )
     }
@@ -414,9 +413,9 @@ private fun HomeScreenLandscapePreview() {
             onShare = {},
             onReceive = {},
             onScan = {},
-            onConnectUrl = {},
             onAbout = {},
             onFeedback = {},
+            showAboutButtons = true,
             showScan = true,
         )
     }
@@ -430,9 +429,9 @@ private fun HomeScreenExpandedPreview() {
             onShare = {},
             onReceive = {},
             onScan = {},
-            onConnectUrl = {},
             onAbout = {},
             onFeedback = {},
+            showAboutButtons = false,
             showScan = false,
         )
     }
@@ -446,9 +445,9 @@ private fun HomeScreenExpandedMinSizePreview() {
             onShare = {},
             onReceive = {},
             onScan = {},
-            onConnectUrl = {},
             onAbout = {},
             onFeedback = {},
+            showAboutButtons = true,
             showScan = false,
         )
     }

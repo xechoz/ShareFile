@@ -15,6 +15,8 @@ class AndroidPlatformServices(
 
     override val qrScanSupported: Boolean = true
 
+    override val hasWindowMenu: Boolean = false
+
     override val prefersUrlConnection: Boolean = false
 
     override val downloadFolderName: String = "Downloads"
