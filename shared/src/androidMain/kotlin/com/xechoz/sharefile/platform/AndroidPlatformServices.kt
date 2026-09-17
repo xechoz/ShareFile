@@ -13,6 +13,8 @@ class AndroidPlatformServices(
 
     override val qrScanSupported: Boolean = true
 
+    override val prefersUrlConnection: Boolean = false
+
     override fun openUrl(url: String) {
         activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }

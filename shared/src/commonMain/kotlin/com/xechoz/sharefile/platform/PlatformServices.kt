@@ -6,6 +6,8 @@ interface PlatformServices {
 
     val qrScanSupported: Boolean
 
+    val prefersUrlConnection: Boolean
+
     fun openUrl(url: String)
 
     fun openFile(file: ReceivedFile): Boolean

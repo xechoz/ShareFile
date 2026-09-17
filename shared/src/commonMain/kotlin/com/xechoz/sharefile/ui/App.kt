@@ -8,6 +8,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.xechoz.sharefile.platform.AppContainer
 import com.xechoz.sharefile.platform.LocalAppContainer
+import com.xechoz.sharefile.ui.connect.ConnectScreen
+import com.xechoz.sharefile.ui.layout.ProvideWindowLayout
 import com.xechoz.sharefile.ui.receive.ReceiveScreen
 import com.xechoz.sharefile.ui.remote.RemoteFilesScreen
 import com.xechoz.sharefile.ui.scan.ScanScreen
@@ -21,41 +23,50 @@ sealed interface Screen {
     data object Share : Screen
     data object Receive : Screen
     data object Scan : Screen
+    data object Connect : Screen
     data class RemoteFiles(val url: String) : Screen
 }
 
 @Composable
 fun App(container: AppContainer) {
     CompositionLocalProvider(LocalAppContainer provides container) {
-        var screen by remember { mutableStateOf<Screen>(Screen.Home) }
+        ProvideWindowLayout {
+            var screen by remember { mutableStateOf<Screen>(Screen.Home) }
 
-        when (val current = screen) {
-            Screen.Home -> HomeScreen(
-                showScan = container.platform.qrScanSupported,
-                onShare = { screen = Screen.Share },
-                onReceive = { screen = Screen.Receive },
-                onScan = { screen = Screen.Scan },
-                onAbout = { container.platform.openUrl(AUTHOR_URL) },
-                onFeedback = { container.platform.openUrl(FEEDBACK_URL) },
-            )
+            when (val current = screen) {
+                Screen.Home -> HomeScreen(
+                    showScan = container.platform.qrScanSupported,
+                    onShare = { screen = Screen.Share },
+                    onReceive = { screen = Screen.Receive },
+                    onScan = { screen = Screen.Scan },
+                    onConnectUrl = { screen = Screen.Connect },
+                    onAbout = { container.platform.openUrl(AUTHOR_URL) },
+                    onFeedback = { container.platform.openUrl(FEEDBACK_URL) },
+                )
 
-            Screen.Share -> ShareScreen(
-                onBack = { screen = Screen.Home },
-            )
+                Screen.Share -> ShareScreen(
+                    onBack = { screen = Screen.Home },
+                )
 
-            Screen.Receive -> ReceiveScreen(
-                onBack = { screen = Screen.Home },
-            )
+                Screen.Receive -> ReceiveScreen(
+                    onBack = { screen = Screen.Home },
+                )
 
-            Screen.Scan -> ScanScreen(
-                onBack = { screen = Screen.Home },
-                onResult = { url -> screen = Screen.RemoteFiles(url) },
-            )
+                Screen.Scan -> ScanScreen(
+                    onBack = { screen = Screen.Home },
+                    onResult = { url -> screen = Screen.RemoteFiles(url) },
+                )
 
-            is Screen.RemoteFiles -> RemoteFilesScreen(
-                url = current.url,
-                onBack = { screen = Screen.Home },
-            )
+                Screen.Connect -> ConnectScreen(
+                    onBack = { screen = Screen.Home },
+                    onConnect = { url -> screen = Screen.RemoteFiles(url) },
+                )
+
+                is Screen.RemoteFiles -> RemoteFilesScreen(
+                    url = current.url,
+                    onBack = { screen = Screen.Home },
+                )
+            }
         }
     }
 }

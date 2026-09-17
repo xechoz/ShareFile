@@ -35,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xechoz.sharefile.model.RemoteFile
 import com.xechoz.sharefile.platform.LocalAppContainer
+import com.xechoz.sharefile.ui.components.ContentContainer
 import com.xechoz.sharefile.ui.components.FileRow
 import com.xechoz.sharefile.ui.theme.PillShape
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
@@ -82,49 +83,53 @@ private fun RemoteFilesContent(
             )
         },
     ) { padding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp),
+        ContentContainer(
+            modifier = Modifier.padding(padding),
+            maxWidth = 720.dp,
         ) {
-            when (state) {
-                RemoteUiState.Loading -> Centered {
-                    CircularProgressIndicator()
-                }
-
-                is RemoteUiState.Loaded -> LoadedContent(
-                    state = state,
-                    onToggle = onToggle,
-                    onDownload = onDownload,
-                )
-
-                is RemoteUiState.Downloading -> Centered {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+            ) {
+                when (state) {
+                    RemoteUiState.Loading -> Centered {
                         CircularProgressIndicator()
-                        Spacer(Modifier.height(16.dp))
-                        Text("Downloading ${state.current}/${state.total}")
                     }
-                }
 
-                is RemoteUiState.Done -> Centered {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Icon(
-                            Icons.Default.CheckCircle,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.size(48.dp),
-                        )
-                        Spacer(Modifier.height(12.dp))
-                        Text("Downloaded ${state.count} file(s)")
-                    }
-                }
-
-                is RemoteUiState.Error -> Centered {
-                    Text(
-                        text = state.message,
-                        color = MaterialTheme.colorScheme.error,
+                    is RemoteUiState.Loaded -> LoadedContent(
+                        state = state,
+                        onToggle = onToggle,
+                        onDownload = onDownload,
                     )
+
+                    is RemoteUiState.Downloading -> Centered {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            CircularProgressIndicator()
+                            Spacer(Modifier.height(16.dp))
+                            Text("Downloading ${state.current}/${state.total}")
+                        }
+                    }
+
+                    is RemoteUiState.Done -> Centered {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                Icons.Default.CheckCircle,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.size(48.dp),
+                            )
+                            Spacer(Modifier.height(12.dp))
+                            Text("Downloaded ${state.count} file(s)")
+                        }
+                    }
+
+                    is RemoteUiState.Error -> Centered {
+                        Text(
+                            text = state.message,
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    }
                 }
             }
         }

@@ -2,11 +2,16 @@ package com.xechoz.sharefile.ui.receive
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
@@ -43,6 +48,8 @@ import com.xechoz.sharefile.model.ReceivedFile
 import com.xechoz.sharefile.platform.FirewallStatus
 import com.xechoz.sharefile.platform.LocalAppContainer
 import com.xechoz.sharefile.server.ServerState
+import com.xechoz.sharefile.ui.components.ConnectionCard
+import com.xechoz.sharefile.ui.components.ContentContainer
 import com.xechoz.sharefile.ui.components.DoubleBackHandler
 import com.xechoz.sharefile.ui.components.EmptyFileHint
 import com.xechoz.sharefile.ui.components.FileListHeader
@@ -50,6 +57,8 @@ import com.xechoz.sharefile.ui.components.FileRow
 import com.xechoz.sharefile.ui.components.FirewallCard
 import com.xechoz.sharefile.ui.components.QrCard
 import com.xechoz.sharefile.ui.components.ServerErrorCard
+import com.xechoz.sharefile.ui.layout.LocalWindowLayout
+import com.xechoz.sharefile.ui.layout.WindowLayout
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
 import kotlinx.coroutines.launch
 import androidx.compose.ui.tooling.preview.Preview
@@ -97,6 +106,7 @@ fun ReceiveScreen(
         onShare = share,
         onRetry = viewModel::retry,
         onAllowFirewall = viewModel::allowFirewall,
+        preferUrl = container.platform.prefersUrlConnection,
     )
 }
 
@@ -114,6 +124,7 @@ private fun ReceiveContent(
     onShare: (ReceivedFile) -> Unit,
     onRetry: () -> Unit,
     onAllowFirewall: () -> Unit,
+    preferUrl: Boolean,
 ) {
     val scope = rememberCoroutineScope()
     var sheetFile by remember { mutableStateOf<ReceivedFile?>(null) }
@@ -152,69 +163,68 @@ private fun ReceiveContent(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp),
+        ContentContainer(
+            modifier = Modifier.padding(padding),
+            maxWidth = 960.dp,
         ) {
-            ServerStatus(serverState = serverState, onRetry = onRetry, onCopied = {
-                scope.launch { snackbarHostState.showSnackbar("Link copied") }
-            })
-            if (firewallStatus !is FirewallStatus.Allowed) {
-                Spacer(Modifier.height(8.dp))
-                FirewallCard(
-                    status = firewallStatus,
-                    isAllowing = isAllowingFirewall,
-                    command = firewallCommand,
-                    onAllow = onAllowFirewall,
-                    onCopied = {
-                        scope.launch { snackbarHostState.showSnackbar("Command copied") }
-                    },
-                )
-            }
-            Spacer(Modifier.height(8.dp))
-            if (received.isEmpty()) {
-                EmptyFileHint(
-                    icon = Icons.Default.Download,
-                    title = "Waiting for uploads…",
-                    description = "Files sent from the other device will appear here.",
-                    modifier = Modifier.weight(1f),
-                )
-            } else {
-                LazyColumn(
-                    modifier = Modifier.weight(1f),
-                ) {
-                    item {
-                        FileListHeader(
-                            count = received.size,
-                            totalSize = received.sumOf { it.size },
-                        )
-                        Spacer(Modifier.height(4.dp))
-                    }
-                    itemsIndexed(received, key = { _, file -> file.savedPath }) { index, file ->
-                        FileRow(
-                            name = file.name,
-                            size = file.size,
-                            modifier = Modifier.combinedClickable(
-                                onClick = { onOpen(file) },
-                                onLongClick = { sheetFile = file },
-                            ),
-                            locator = file.savedPath,
-                            trailing = {
-                                Icon(
-                                    Icons.AutoMirrored.Filled.OpenInNew,
-                                    contentDescription = "Open",
-                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            },
-                        )
-                        if (index < received.lastIndex) {
-                            HorizontalDivider(
-                                modifier = Modifier.padding(start = 68.dp),
-                                color = MaterialTheme.colorScheme.outlineVariant,
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+            ) {
+                when (LocalWindowLayout.current) {
+                    WindowLayout.Expanded -> Row(modifier = Modifier.fillMaxSize()) {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .verticalScroll(rememberScrollState()),
+                        ) {
+                            ServerStatus(
+                                serverState = serverState,
+                                title = "Scan or open to send files",
+                                onRetry = onRetry,
+                                onCopied = { scope.launch { snackbarHostState.showSnackbar("Link copied") } },
+                                preferUrl = preferUrl,
+                            )
+                            FirewallSection(
+                                firewallStatus = firewallStatus,
+                                isAllowingFirewall = isAllowingFirewall,
+                                firewallCommand = firewallCommand,
+                                onAllowFirewall = onAllowFirewall,
+                                onCopied = { scope.launch { snackbarHostState.showSnackbar("Command copied") } },
                             )
                         }
+                        Spacer(Modifier.width(24.dp))
+                        ReceivedBody(
+                            received = received,
+                            onOpen = onOpen,
+                            onLongPress = { sheetFile = it },
+                            modifier = Modifier.weight(1.4f),
+                        )
+                    }
+
+                    WindowLayout.Compact -> Column(modifier = Modifier.fillMaxSize()) {
+                        ServerStatus(
+                            serverState = serverState,
+                            title = "Scan to send files",
+                            onRetry = onRetry,
+                            onCopied = { scope.launch { snackbarHostState.showSnackbar("Link copied") } },
+                            preferUrl = preferUrl,
+                        )
+                        FirewallSection(
+                            firewallStatus = firewallStatus,
+                            isAllowingFirewall = isAllowingFirewall,
+                            firewallCommand = firewallCommand,
+                            onAllowFirewall = onAllowFirewall,
+                            onCopied = { scope.launch { snackbarHostState.showSnackbar("Command copied") } },
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        ReceivedBody(
+                            received = received,
+                            onOpen = onOpen,
+                            onLongPress = { sheetFile = it },
+                            modifier = Modifier.weight(1f),
+                        )
                     }
                 }
             }
@@ -245,6 +255,76 @@ private fun ReceiveContent(
 }
 
 @Composable
+private fun FirewallSection(
+    firewallStatus: FirewallStatus,
+    isAllowingFirewall: Boolean,
+    firewallCommand: String?,
+    onAllowFirewall: () -> Unit,
+    onCopied: () -> Unit,
+) {
+    if (firewallStatus is FirewallStatus.Allowed) return
+    Spacer(Modifier.height(12.dp))
+    FirewallCard(
+        status = firewallStatus,
+        isAllowing = isAllowingFirewall,
+        command = firewallCommand,
+        onAllow = onAllowFirewall,
+        onCopied = onCopied,
+    )
+}
+
+@Composable
+private fun ReceivedBody(
+    received: List<ReceivedFile>,
+    onOpen: (ReceivedFile) -> Unit,
+    onLongPress: (ReceivedFile) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    if (received.isEmpty()) {
+        EmptyFileHint(
+            icon = Icons.Default.Download,
+            title = "Waiting for uploads…",
+            description = "Files sent from the other device will appear here.",
+            modifier = modifier,
+        )
+        return
+    }
+    LazyColumn(modifier = modifier) {
+        item {
+            FileListHeader(
+                count = received.size,
+                totalSize = received.sumOf { it.size },
+            )
+            Spacer(Modifier.height(4.dp))
+        }
+        itemsIndexed(received, key = { _, file -> file.savedPath }) { index, file ->
+            FileRow(
+                name = file.name,
+                size = file.size,
+                modifier = Modifier.combinedClickable(
+                    onClick = { onOpen(file) },
+                    onLongClick = { onLongPress(file) },
+                ),
+                locator = file.savedPath,
+                trailing = {
+                    Icon(
+                        Icons.AutoMirrored.Filled.OpenInNew,
+                        contentDescription = "Open",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                },
+            )
+            if (index < received.lastIndex) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(start = 68.dp),
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun FileActionRow(
     icon: ImageVector,
     label: String,
@@ -260,15 +340,29 @@ private fun FileActionRow(
 @Composable
 private fun ServerStatus(
     serverState: ServerState,
+    title: String,
     onRetry: () -> Unit,
     onCopied: () -> Unit,
+    preferUrl: Boolean,
 ) {
     when (serverState) {
-        is ServerState.Running -> QrCard(
-            title = "Scan to send files",
-            url = serverState.url,
-            onCopied = onCopied,
-        )
+        is ServerState.Running -> {
+            val expanded = LocalWindowLayout.current == WindowLayout.Expanded
+            if (preferUrl || expanded) {
+                ConnectionCard(
+                    title = title,
+                    url = serverState.url,
+                    onCopied = onCopied,
+                    qrSize = if (expanded) 140.dp else 110.dp,
+                )
+            } else {
+                QrCard(
+                    title = "Scan to send files",
+                    url = serverState.url,
+                    onCopied = onCopied,
+                )
+            }
+        }
 
         is ServerState.Error -> ServerErrorCard(message = serverState.message, onRetry = onRetry)
 
@@ -303,6 +397,7 @@ private fun ReceiveScreenPreview() {
             onShare = {},
             onRetry = {},
             onAllowFirewall = {},
+            preferUrl = false,
         )
     }
 }
@@ -323,6 +418,7 @@ private fun ReceiveScreenEmptyPreview() {
             onShare = {},
             onRetry = {},
             onAllowFirewall = {},
+            preferUrl = false,
         )
     }
 }
@@ -343,6 +439,7 @@ private fun ReceiveScreenFirewallPreview() {
             onShare = {},
             onRetry = {},
             onAllowFirewall = {},
+            preferUrl = false,
         )
     }
 }

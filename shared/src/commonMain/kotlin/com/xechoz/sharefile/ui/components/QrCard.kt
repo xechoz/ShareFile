@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xechoz.sharefile.platform.qrCodeMatrix
 
@@ -36,7 +37,6 @@ fun QrCard(
     onCopied: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val matrix = remember(url) { qrCodeMatrix(url, QR_MODULES) }
     val clipboard = LocalClipboardManager.current
 
     Card(
@@ -70,36 +70,47 @@ fun QrCard(
                 overflow = TextOverflow.Ellipsis,
             )
             Spacer(Modifier.height(8.dp))
-            Surface(
-                shape = MaterialTheme.shapes.medium,
-                color = Color.White,
-                shadowElevation = 1.dp,
-            ) {
-                Canvas(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(QrSize),
-                ) {
-                    val cell = size.minDimension / matrix.size
-                    matrix.forEachIndexed { y, row ->
-                        row.forEachIndexed { x, dark ->
-                            if (dark) {
-                                drawRect(
-                                    color = Color.Black,
-                                    topLeft = Offset(x * cell, y * cell),
-                                    size = Size(cell, cell),
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            QrImage(url = url, size = QrSize)
             Spacer(Modifier.height(8.dp))
             Text(
                 text = "Same Wi-Fi required",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+        }
+    }
+}
+
+@Composable
+internal fun QrImage(
+    url: String,
+    size: Dp = QrSize,
+    modifier: Modifier = Modifier,
+) {
+    val matrix = remember(url) { qrCodeMatrix(url, QR_MODULES) }
+    Surface(
+        modifier = modifier,
+        shape = MaterialTheme.shapes.medium,
+        color = Color.White,
+        shadowElevation = 1.dp,
+    ) {
+        Canvas(
+            modifier = Modifier
+                .padding(8.dp)
+                .size(size),
+        ) {
+            val cell = this.size.minDimension / matrix.size
+            matrix.forEachIndexed { y, row ->
+                row.forEachIndexed { x, dark ->
+                    if (dark) {
+                        drawRect(
+                            color = Color.Black,
+                            topLeft = Offset(x * cell, y * cell),
+                            size = Size(cell, cell),
+                        )
+                    }
+                }
+            }
         }
     }
 }

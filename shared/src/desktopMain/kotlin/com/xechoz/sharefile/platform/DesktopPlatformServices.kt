@@ -9,6 +9,8 @@ class DesktopPlatformServices : PlatformServices {
 
     override val qrScanSupported: Boolean = false
 
+    override val prefersUrlConnection: Boolean = true
+
     override fun openUrl(url: String) {
         runCatching { Desktop.getDesktop().browse(URI(url)) }
     }
