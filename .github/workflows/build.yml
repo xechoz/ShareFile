@@ -59,6 +59,14 @@ jobs:
         run: ./gradlew :shared:desktopTest :shared:testAndroidHostTest --console=plain
       - name: Assemble release APK
         run: ./gradlew :app:assembleRelease --stacktrace --console=plain
+      - name: Name per-ABI APKs
+        run: |
+          cd app/build/outputs/apk/release
+          for abi in arm64-v8a armeabi-v7a x86_64; do
+            mv "app-$abi-release.apk" "app-release-$abi.apk"
+          done
+          cp app-release-arm64-v8a.apk app-release.apk
+          ls -l *.apk
       - uses: actions/upload-artifact@v7
         with:
           name: ShareFile-android-apk

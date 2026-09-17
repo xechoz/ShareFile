@@ -4,10 +4,13 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import android.util.Size
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview as CameraPreviewUseCase
+import androidx.camera.core.resolutionselector.ResolutionSelector
+import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.Box
@@ -27,9 +30,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.google.mlkit.vision.barcode.BarcodeScanning
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.common.InputImage
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.DecodeHintType
+import com.google.zxing.MultiFormatReader
+import com.google.zxing.PlanarYUVLuminanceSource
+import com.google.zxing.ReaderException
+import com.google.zxing.common.HybridBinarizer
 import java.util.concurrent.Executors
 
 @Composable
@@ -73,7 +80,11 @@ private fun CameraPreview(onResult: (String) -> Unit, resetToken: Int) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val executor = remember { Executors.newSingleThreadExecutor() }
-    val scanner = remember { BarcodeScanning.getClient() }
+    val reader = remember {
+        MultiFormatReader().apply {
+            setHints(mapOf(DecodeHintType.POSSIBLE_FORMATS to listOf(BarcodeFormat.QR_CODE)))
+        }
+    }
     var handled by remember { mutableStateOf(false) }
 
     LaunchedEffect(resetToken) {
@@ -83,7 +94,6 @@ private fun CameraPreview(onResult: (String) -> Unit, resetToken: Int) {
     DisposableEffect(Unit) {
         onDispose {
             executor.shutdown()
-            scanner.close()
         }
     }
 
@@ -99,9 +109,19 @@ private fun CameraPreview(onResult: (String) -> Unit, resetToken: Int) {
                 }
                 val analysis = ImageAnalysis.Builder()
                     .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                    .setResolutionSelector(
+                        ResolutionSelector.Builder()
+                            .setResolutionStrategy(
+                                ResolutionStrategy(
+                                    Size(1280, 720),
+                                    ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER,
+                                )
+                            )
+                            .build()
+                    )
                     .build()
                 analysis.setAnalyzer(executor) { imageProxy ->
-                    processImage(imageProxy, scanner) { value ->
+                    processImage(imageProxy, reader) { value ->
                         if (!handled) {
                             handled = true
                             onResult(value)
@@ -121,23 +141,38 @@ private fun CameraPreview(onResult: (String) -> Unit, resetToken: Int) {
     )
 }
 
-@androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 private fun processImage(
     imageProxy: ImageProxy,
-    scanner: com.google.mlkit.vision.barcode.BarcodeScanner,
+    reader: MultiFormatReader,
     onFound: (String) -> Unit,
 ) {
-    val mediaImage = imageProxy.image
-    if (mediaImage == null) {
-        imageProxy.close()
-        return
-    }
-    val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
-    scanner.process(image)
-        .addOnSuccessListener { barcodes ->
-            barcodes.firstOrNull { it.format == Barcode.FORMAT_QR_CODE }
-                ?.rawValue
-                ?.let(onFound)
+    try {
+        val plane = imageProxy.planes[0]
+        if (plane.pixelStride != 1) return
+        val width = imageProxy.width
+        val height = imageProxy.height
+        val rowStride = plane.rowStride
+        val buffer = plane.buffer
+        val data = ByteArray(rowStride * height)
+        buffer.rewind()
+        buffer.get(data, 0, minOf(data.size, buffer.remaining()))
+        val source = PlanarYUVLuminanceSource(
+            data,
+            rowStride,
+            height,
+            0,
+            0,
+            width,
+            height,
+            false,
+        )
+        val result = try {
+            reader.decode(BinaryBitmap(HybridBinarizer(source)))
+        } catch (_: ReaderException) {
+            null
         }
-        .addOnCompleteListener { imageProxy.close() }
+        result?.text?.let(onFound)
+    } finally {
+        imageProxy.close()
+    }
 }
