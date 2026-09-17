@@ -117,7 +117,7 @@ private fun ExpandedHome(
             }
             Spacer(Modifier.height(20.dp))
             Text(
-                text = "ShareFile",
+                text = "Quick File Share",
                 style = MaterialTheme.typography.headlineMedium,
             )
             Spacer(Modifier.height(8.dp))
@@ -239,7 +239,7 @@ private fun CompactHome(
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    text = "ShareFile",
+                    text = "Quick File Share",
                     style = MaterialTheme.typography.headlineMedium,
                 )
                 Spacer(Modifier.height(8.dp))

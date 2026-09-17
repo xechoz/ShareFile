@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Name=ShareFile
+Name=Quick File Share
 Comment=Share files over your local network
 Exec=sharefile %U
 Icon=sharefile

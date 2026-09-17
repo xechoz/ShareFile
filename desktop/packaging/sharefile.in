@@ -8,7 +8,7 @@ if [ -n "$JAVA_HOME" ] && [ -x "$JAVA_HOME/bin/java" ]; then
 elif command -v java >/dev/null 2>&1; then
     JAVA=java
 else
-    echo "ShareFile requires Java 17 or newer, but no 'java' was found." >&2
+    echo "Quick File Share requires Java 17 or newer, but no 'java' was found." >&2
     echo "Install a JRE (e.g. apt install openjdk-17-jre), or set JAVA_HOME." >&2
     exit 1
 fi

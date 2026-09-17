@@ -34,7 +34,7 @@ fun main() {
                 DesktopWindowState.save(windowState)
                 exitApplication()
             },
-            title = "ShareFile",
+            title = "Quick File Share",
             state = windowState,
             icon = icon,
         ) {

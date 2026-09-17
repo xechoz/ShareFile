@@ -1,4 +1,4 @@
-# ShareFile
+# Quick File Share
 
 A cross-platform app for sharing and receiving files over your local network, built with
 [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/) and targeting
