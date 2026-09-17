@@ -19,6 +19,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -58,6 +59,7 @@ fun RemoteFilesScreen(
         onBack = onBack,
         onToggle = viewModel::toggle,
         onDownload = viewModel::downloadSelected,
+        onOpenInBrowser = { container.platform.openUrl(url) },
     )
 }
 
@@ -68,6 +70,7 @@ private fun RemoteFilesContent(
     onBack: () -> Unit,
     onToggle: (String) -> Unit,
     onDownload: () -> Unit,
+    onOpenInBrowser: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -123,10 +126,16 @@ private fun RemoteFilesContent(
                     }
 
                     is RemoteUiState.Error -> Centered {
-                        Text(
-                            text = state.message,
-                            color = MaterialTheme.colorScheme.error,
-                        )
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                text = state.message,
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                            Spacer(Modifier.height(16.dp))
+                            OutlinedButton(onClick = onOpenInBrowser, shape = PillShape) {
+                                Text("Open in browser")
+                            }
+                        }
                     }
                 }
             }
@@ -202,6 +211,7 @@ private fun RemoteFilesScreenPreview() {
             onBack = {},
             onToggle = {},
             onDownload = {},
+            onOpenInBrowser = {},
         )
     }
 }

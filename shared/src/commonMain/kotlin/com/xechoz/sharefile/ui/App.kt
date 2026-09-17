@@ -51,7 +51,11 @@ fun App(container: AppContainer) {
 
                 Screen.Scan -> ScanScreen(
                     onBack = { screen = Screen.Home },
-                    onResult = { url -> screen = Screen.RemoteFiles(url) },
+                    onShareUrl = { url -> screen = Screen.RemoteFiles(url) },
+                    onBrowserUrl = { url ->
+                        container.platform.openUrl(url)
+                        screen = Screen.Home
+                    },
                 )
 
                 is Screen.RemoteFiles -> RemoteFilesScreen(

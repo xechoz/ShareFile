@@ -10,7 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 
 @Composable
-actual fun PlatformQrScanner(onResult: (String) -> Unit, modifier: Modifier) {
+actual fun PlatformQrScanner(
+    onResult: (String) -> Unit,
+    modifier: Modifier,
+    resetToken: Int,
+) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,

@@ -47,7 +47,7 @@ class NanoHttpdFileServer(
             ?: return fail("No local network address")
         val bound = bind(mode) ?: return fail("Failed to start server")
         server = bound
-        val path = if (mode is Mode.Share) SHARE_PATH else RECEIVE_PATH
+        val path = if (mode is Mode.Share) ShareRoutes.SHARE else ShareRoutes.RECEIVE
         return ServerState.Running("http://$ip:${bound.listeningPort}$path", bound.listeningPort)
             .also { _state.value = it }
     }
@@ -203,7 +203,5 @@ class NanoHttpdFileServer(
 
     companion object {
         const val DEFAULT_PORT = ServerPorts.PRIMARY_PORT
-        const val SHARE_PATH = "/share"
-        const val RECEIVE_PATH = "/receive"
     }
 }

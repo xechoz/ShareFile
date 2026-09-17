@@ -4,4 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-expect fun PlatformQrScanner(onResult: (String) -> Unit, modifier: Modifier = Modifier)
+expect fun PlatformQrScanner(
+    onResult: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    resetToken: Int = 0,
+)

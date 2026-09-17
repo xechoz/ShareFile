@@ -33,7 +33,11 @@ import com.google.mlkit.vision.common.InputImage
 import java.util.concurrent.Executors
 
 @Composable
-actual fun PlatformQrScanner(onResult: (String) -> Unit, modifier: Modifier) {
+actual fun PlatformQrScanner(
+    onResult: (String) -> Unit,
+    modifier: Modifier,
+    resetToken: Int,
+) {
     val context = LocalContext.current
     var hasPermission by remember {
         mutableStateOf(
@@ -54,7 +58,7 @@ actual fun PlatformQrScanner(onResult: (String) -> Unit, modifier: Modifier) {
         contentAlignment = Alignment.Center,
     ) {
         if (hasPermission) {
-            CameraPreview(onResult = onResult)
+            CameraPreview(onResult = onResult, resetToken = resetToken)
         } else {
             Text(
                 "Camera permission is required to scan QR codes",
@@ -65,12 +69,16 @@ actual fun PlatformQrScanner(onResult: (String) -> Unit, modifier: Modifier) {
 }
 
 @Composable
-private fun CameraPreview(onResult: (String) -> Unit) {
+private fun CameraPreview(onResult: (String) -> Unit, resetToken: Int) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val executor = remember { Executors.newSingleThreadExecutor() }
     val scanner = remember { BarcodeScanning.getClient() }
     var handled by remember { mutableStateOf(false) }
+
+    LaunchedEffect(resetToken) {
+        handled = false
+    }
 
     DisposableEffect(Unit) {
         onDispose {
