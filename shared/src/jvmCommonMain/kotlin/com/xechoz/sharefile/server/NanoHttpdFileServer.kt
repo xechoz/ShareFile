@@ -44,8 +44,8 @@ class NanoHttpdFileServer(
     private fun start(mode: Mode): ServerState {
         stop()
         val ip = NetworkInfo.localIpAddress()
-            ?: return fail("No local network address")
-        val bound = bind(mode) ?: return fail("Failed to start server")
+            ?: return fail(ServerError.NoLocalAddress)
+        val bound = bind(mode) ?: return fail(ServerError.StartFailed)
         server = bound
         val path = if (mode is Mode.Share) ShareRoutes.SHARE else ShareRoutes.RECEIVE
         return ServerState.Running("http://$ip:${bound.listeningPort}$path", bound.listeningPort)
@@ -65,8 +65,8 @@ class NanoHttpdFileServer(
         return null
     }
 
-    private fun fail(message: String): ServerState =
-        ServerState.Error(message).also { _state.value = it }
+    private fun fail(reason: ServerError): ServerState =
+        ServerState.Error(reason).also { _state.value = it }
 
     private inner class NanoHttpdServer(
         port: Int,
@@ -92,9 +92,9 @@ class NanoHttpdFileServer(
             mode is Mode.Receive && session.uri == "/files" ->
                 serveFileList()
 
-            mode is Mode.Receive -> serveUploadPage()
+            mode is Mode.Receive -> serveUploadPage(session)
 
-            else -> serveSharePage(mode as Mode.Share)
+            else -> serveSharePage(mode as Mode.Share, session)
         }
 
         private fun serveDownload(session: IHTTPSession): Response {
@@ -139,7 +139,8 @@ class NanoHttpdFileServer(
             )
             _received.value = saved + _received.value
             newFixedLengthResponse(
-                Response.Status.OK, "text/html; charset=utf-8", pages.successPage(saved)
+                Response.Status.OK, "text/html; charset=utf-8",
+                pages.successPage(saved, stringsFor(session)),
             )
         } catch (e: Exception) {
             newFixedLengthResponse(
@@ -162,13 +163,20 @@ class NanoHttpdFileServer(
             return newFixedLengthResponse(Response.Status.OK, "application/json", json)
         }
 
-        private fun serveUploadPage(): Response =
-            newFixedLengthResponse(Response.Status.OK, "text/html; charset=utf-8", pages.uploadPage())
-
-        private fun serveSharePage(share: Mode.Share): Response =
+        private fun serveUploadPage(session: IHTTPSession): Response =
             newFixedLengthResponse(
-                Response.Status.OK, "text/html; charset=utf-8", pages.sharePage(share.files)
+                Response.Status.OK, "text/html; charset=utf-8",
+                pages.uploadPage(stringsFor(session)),
             )
+
+        private fun serveSharePage(share: Mode.Share, session: IHTTPSession): Response =
+            newFixedLengthResponse(
+                Response.Status.OK, "text/html; charset=utf-8",
+                pages.sharePage(share.files, stringsFor(session)),
+            )
+
+        private fun stringsFor(session: IHTTPSession): WebStrings =
+            WebStrings.of(webLocale(session.headers["accept-language"]))
 
         private fun serveAsset(session: IHTTPSession): Response {
             val name = session.uri.removePrefix("/assets/")

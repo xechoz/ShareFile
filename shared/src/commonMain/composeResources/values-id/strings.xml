@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Berbagi File</string>
+
+    <string name="action_share">Bagikan</string>
+    <string name="action_receive">Terima</string>
+    <string name="action_back">Kembali</string>
+    <string name="home_tagline">Bagikan dan terima file di jaringan lokal Anda</string>
+    <string name="home_subtitle">Perangkat lain cukup membuka tautan di browser — tanpa perlu memasang apa pun</string>
+    <string name="home_share_desc">Kirim file dari perangkat ini</string>
+    <string name="home_receive_desc">Terima file dari perangkat lain</string>
+    <string name="action_scan_qr">Pindai kode QR</string>
+    <string name="action_about">Tentang</string>
+    <string name="action_feedback">Masukan</string>
+
+    <string name="exit_share_confirm">Ketuk lagi untuk keluar dari berbagi</string>
+    <string name="snackbar_link_copied">Tautan disalin</string>
+    <string name="snackbar_command_copied">Perintah disalin</string>
+    <string name="snackbar_file_removed">%1$s dihapus</string>
+    <string name="action_undo">Urungkan</string>
+    <string name="cd_remove">Hapus</string>
+    <string name="share_empty_title">Belum ada file</string>
+    <string name="share_empty_desc">Seret file ke sini atau ketuk Pilih file, lalu biarkan perangkat lain memindai kode QR atau membuka tautan untuk mengunduh.</string>
+    <string name="action_select_files">Pilih file</string>
+    <string name="action_add_more_files">Tambah file lain</string>
+
+    <string name="exit_receive_confirm">Ketuk lagi untuk keluar dari penerimaan</string>
+    <string name="snackbar_no_app_can_open">Tidak ada aplikasi yang dapat membuka %1$s</string>
+    <string name="snackbar_no_file_manager">Pengelola file tidak ditemukan</string>
+    <string name="snackbar_file_saved">%1$s disimpan ke %2$s</string>
+    <plurals name="saved_files_count">
+        <item quantity="other">%1$d file disimpan ke %2$s</item>
+    </plurals>
+    <string name="action_open">Buka</string>
+    <string name="cd_open_save_folder">Buka folder penyimpanan</string>
+    <string name="menu_open_folder">Buka folder %1$s</string>
+    <string name="menu_change_save_folder">Ubah folder penyimpanan…</string>
+    <string name="receive_empty_title">Menunggu file…</string>
+    <string name="receive_empty_desc">File yang dikirim dari perangkat lain akan muncul di sini.</string>
+
+    <string name="scan_unrecognized">Kode QR tidak dikenali</string>
+    <string name="scan_unsupported">Pemindaian QR tidak tersedia di platform ini</string>
+
+    <string name="remote_title">File jarak jauh</string>
+    <string name="remote_downloading">Mengunduh %1$d/%2$d</string>
+    <plurals name="remote_downloaded_count">
+        <item quantity="other">%1$d file diunduh</item>
+    </plurals>
+    <string name="action_open_in_browser">Buka di browser</string>
+    <string name="remote_empty">Tidak ada file yang tersedia</string>
+    <string name="remote_download_selected">Unduh yang dipilih (%1$d)</string>
+    <string name="remote_error_load_failed">Gagal memuat file</string>
+    <string name="remote_error_download_failed">Gagal mengunduh file</string>
+    <string name="remote_error_server">Kesalahan server (%1$d)</string>
+
+    <string name="connection_scan_hint">Pindai dengan kamera perangkat lain</string>
+    <string name="connection_same_wifi">Harus jaringan Wi-Fi yang sama</string>
+    <string name="copy_open_on_device">Buka di perangkat lain</string>
+    <string name="cd_copy_link">Salin tautan</string>
+    <string name="cd_link_copied">Tautan disalin</string>
+    <string name="firewall_blocked_detail">Firewall memblokir koneksi masuk, sehingga perangkat lain tidak dapat membuka tautan.</string>
+    <string name="firewall_unknown_detail">Tidak dapat membaca aturan firewall untuk menentukan status.</string>
+    <string name="firewall_title">Tidak bisa terhubung dari perangkat lain?</string>
+    <string name="cd_copy_command">Salin perintah</string>
+    <string name="action_allowing">Mengizinkan…</string>
+    <string name="action_allow_firewall">Izinkan melalui firewall</string>
+    <string name="server_error_title">Kesalahan server</string>
+    <string name="action_retry">Coba lagi</string>
+    <string name="server_error_no_local_address">Alamat jaringan lokal tidak ditemukan</string>
+    <string name="server_error_start_failed">Gagal memulai server</string>
+    <plurals name="file_count_size">
+        <item quantity="other">%1$d file · %2$s</item>
+    </plurals>
+
+    <string name="choose_save_folder">Pilih folder penyimpanan</string>
+</resources>

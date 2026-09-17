@@ -25,12 +25,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.xechoz.sharefile.platform.LocalAppContainer
 import com.xechoz.sharefile.platform.PlatformQrScanner
+import com.xechoz.sharefile.resources.Res
+import com.xechoz.sharefile.resources.action_back
+import com.xechoz.sharefile.resources.action_scan_qr
+import com.xechoz.sharefile.resources.scan_unrecognized
+import com.xechoz.sharefile.resources.scan_unsupported
 import com.xechoz.sharefile.scan.ScannedTarget
 import com.xechoz.sharefile.scan.classifyScanned
 import com.xechoz.sharefile.ui.icons.AppIcons
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.stringResource
 
 private const val MESSAGE_DURATION_MS = 2_500L
 
@@ -60,6 +66,7 @@ private fun ScanContent(
 ) {
     var message by remember { mutableStateOf<String?>(null) }
     var resetToken by remember { mutableStateOf(0) }
+    val unrecognizedMessage = stringResource(Res.string.scan_unrecognized)
 
     LaunchedEffect(message) {
         if (message != null) {
@@ -71,10 +78,10 @@ private fun ScanContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Scan QR code") },
+                title = { Text(stringResource(Res.string.action_scan_qr)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(AppIcons.ArrowLeft, contentDescription = "Back")
+                        Icon(AppIcons.ArrowLeft, contentDescription = stringResource(Res.string.action_back))
                     }
                 },
             )
@@ -94,7 +101,7 @@ private fun ScanContent(
                             is ScannedTarget.Share -> onShareUrl(target.url)
                             is ScannedTarget.Browser -> onBrowserUrl(target.url)
                             ScannedTarget.Unrecognized -> {
-                                message = "Unrecognized QR code"
+                                message = unrecognizedMessage
                                 resetToken++
                             }
                         }
@@ -104,7 +111,7 @@ private fun ScanContent(
                 )
             } else {
                 Text(
-                    text = "QR scanning is not available on this platform",
+                    text = stringResource(Res.string.scan_unsupported),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,

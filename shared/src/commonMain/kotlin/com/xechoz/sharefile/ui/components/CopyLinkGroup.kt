@@ -17,7 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.xechoz.sharefile.resources.Res
+import com.xechoz.sharefile.resources.cd_copy_link
+import com.xechoz.sharefile.resources.cd_link_copied
+import com.xechoz.sharefile.resources.copy_open_on_device
 import com.xechoz.sharefile.ui.icons.AppIcons
+import org.jetbrains.compose.resources.stringResource
 
 internal const val CopiedFeedbackMillis = 1500L
 
@@ -29,7 +34,7 @@ internal fun CopyLinkGroup(
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
-            text = "Open on the other device",
+            text = stringResource(Res.string.copy_open_on_device),
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -54,7 +59,11 @@ internal fun CopyLinkGroup(
                 Spacer(Modifier.width(8.dp))
                 Icon(
                     imageVector = if (copied) AppIcons.Check else AppIcons.ContentCopy,
-                    contentDescription = if (copied) "Link copied" else "Copy link",
+                    contentDescription = if (copied) {
+                        stringResource(Res.string.cd_link_copied)
+                    } else {
+                        stringResource(Res.string.cd_copy_link)
+                    },
                     tint = if (copied) {
                         MaterialTheme.colorScheme.primary
                     } else {

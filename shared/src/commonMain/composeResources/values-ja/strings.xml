@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ファイル共有</string>
+
+    <string name="action_share">共有</string>
+    <string name="action_receive">受信</string>
+    <string name="action_back">戻る</string>
+    <string name="home_tagline">ローカルネットワークでファイルを共有・受信</string>
+    <string name="home_subtitle">相手の端末はブラウザでリンクを開くだけ。インストールは不要です</string>
+    <string name="home_share_desc">この端末からファイルを送信</string>
+    <string name="home_receive_desc">別の端末からファイルを受信</string>
+    <string name="action_scan_qr">QRコードをスキャン</string>
+    <string name="action_about">このアプリについて</string>
+    <string name="action_feedback">フィードバック</string>
+
+    <string name="exit_share_confirm">もう一度タップすると共有を終了します</string>
+    <string name="snackbar_link_copied">リンクをコピーしました</string>
+    <string name="snackbar_command_copied">コマンドをコピーしました</string>
+    <string name="snackbar_file_removed">%1$s を削除しました</string>
+    <string name="action_undo">元に戻す</string>
+    <string name="cd_remove">削除</string>
+    <string name="share_empty_title">まだファイルがありません</string>
+    <string name="share_empty_desc">ここにファイルをドラッグするか「ファイルを選択」をタップし、相手の端末でQRコードをスキャンするかリンクを開いてダウンロードしてください。</string>
+    <string name="action_select_files">ファイルを選択</string>
+    <string name="action_add_more_files">ファイルを追加</string>
+
+    <string name="exit_receive_confirm">もう一度タップすると受信を終了します</string>
+    <string name="snackbar_no_app_can_open">%1$s を開けるアプリがありません</string>
+    <string name="snackbar_no_file_manager">ファイルマネージャーが見つかりません</string>
+    <string name="snackbar_file_saved">%1$s を %2$s に保存しました</string>
+    <plurals name="saved_files_count">
+        <item quantity="other">%1$d 個のファイルを %2$s に保存しました</item>
+    </plurals>
+    <string name="action_open">開く</string>
+    <string name="cd_open_save_folder">保存フォルダを開く</string>
+    <string name="menu_open_folder">%1$s フォルダを開く</string>
+    <string name="menu_change_save_folder">保存フォルダを変更…</string>
+    <string name="receive_empty_title">ファイルを待機中…</string>
+    <string name="receive_empty_desc">相手の端末から送信されたファイルがここに表示されます。</string>
+
+    <string name="scan_unrecognized">QRコードを認識できません</string>
+    <string name="scan_unsupported">このプラットフォームではQRスキャンを利用できません</string>
+
+    <string name="remote_title">リモートのファイル</string>
+    <string name="remote_downloading">ダウンロード中 %1$d/%2$d</string>
+    <plurals name="remote_downloaded_count">
+        <item quantity="other">%1$d 個のファイルをダウンロードしました</item>
+    </plurals>
+    <string name="action_open_in_browser">ブラウザで開く</string>
+    <string name="remote_empty">利用できるファイルがありません</string>
+    <string name="remote_download_selected">選択した項目をダウンロード（%1$d）</string>
+    <string name="remote_error_load_failed">ファイルの読み込みに失敗しました</string>
+    <string name="remote_error_download_failed">ファイルのダウンロードに失敗しました</string>
+    <string name="remote_error_server">サーバーエラー（%1$d）</string>
+
+    <string name="connection_scan_hint">相手の端末のカメラでスキャン</string>
+    <string name="connection_same_wifi">同じWi-Fiが必要です</string>
+    <string name="copy_open_on_device">相手の端末で開く</string>
+    <string name="cd_copy_link">リンクをコピー</string>
+    <string name="cd_link_copied">リンクをコピーしました</string>
+    <string name="firewall_blocked_detail">ファイアウォールが受信接続をブロックしているため、相手の端末でリンクを開けません。</string>
+    <string name="firewall_unknown_detail">ファイアウォールの規則を読み取れず、状態を確認できませんでした。</string>
+    <string name="firewall_title">相手の端末から接続できませんか？</string>
+    <string name="cd_copy_command">コマンドをコピー</string>
+    <string name="action_allowing">許可しています…</string>
+    <string name="action_allow_firewall">ファイアウォールで許可</string>
+    <string name="server_error_title">サーバーエラー</string>
+    <string name="action_retry">再試行</string>
+    <string name="server_error_no_local_address">ローカルネットワークのアドレスが見つかりません</string>
+    <string name="server_error_start_failed">サーバーを起動できませんでした</string>
+    <plurals name="file_count_size">
+        <item quantity="other">%1$d 個のファイル · %2$s</item>
+    </plurals>
+
+    <string name="choose_save_folder">保存フォルダを選択</string>
+</resources>

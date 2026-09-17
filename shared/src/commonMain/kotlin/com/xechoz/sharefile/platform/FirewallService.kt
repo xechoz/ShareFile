@@ -6,7 +6,11 @@ sealed interface FirewallStatus {
 
     data object Blocked : FirewallStatus
 
-    data class Unknown(val detail: String) : FirewallStatus
+    data class Unknown(val reason: FirewallUnknown) : FirewallStatus
+}
+
+enum class FirewallUnknown {
+    UfwRulesUnreadable,
 }
 
 interface FirewallService {

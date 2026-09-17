@@ -40,6 +40,19 @@ import com.xechoz.sharefile.platform.LocalAppContainer
 import com.xechoz.sharefile.platform.fileDropTarget
 import com.xechoz.sharefile.platform.rememberFileDropState
 import com.xechoz.sharefile.platform.rememberFilePicker
+import com.xechoz.sharefile.resources.Res
+import com.xechoz.sharefile.resources.action_add_more_files
+import com.xechoz.sharefile.resources.action_back
+import com.xechoz.sharefile.resources.action_select_files
+import com.xechoz.sharefile.resources.action_share
+import com.xechoz.sharefile.resources.action_undo
+import com.xechoz.sharefile.resources.cd_remove
+import com.xechoz.sharefile.resources.exit_share_confirm
+import com.xechoz.sharefile.resources.share_empty_desc
+import com.xechoz.sharefile.resources.share_empty_title
+import com.xechoz.sharefile.resources.snackbar_command_copied
+import com.xechoz.sharefile.resources.snackbar_file_removed
+import com.xechoz.sharefile.resources.snackbar_link_copied
 import com.xechoz.sharefile.server.ServerState
 import com.xechoz.sharefile.ui.components.ConnectionCard
 import com.xechoz.sharefile.ui.components.ContentContainer
@@ -50,12 +63,14 @@ import com.xechoz.sharefile.ui.components.FileRow
 import com.xechoz.sharefile.ui.components.FirewallCard
 import com.xechoz.sharefile.ui.components.QrCard
 import com.xechoz.sharefile.ui.components.ServerErrorCard
+import com.xechoz.sharefile.ui.components.serverErrorMessage
 import com.xechoz.sharefile.ui.icons.AppIcons
 import com.xechoz.sharefile.ui.layout.LocalWindowLayout
 import com.xechoz.sharefile.ui.layout.WindowLayout
 import com.xechoz.sharefile.ui.theme.PillShape
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -114,7 +129,7 @@ private fun ShareContent(
     val dropState = rememberFileDropState()
 
     DoubleBackHandler(
-        message = "Tap again to exit sharing",
+        message = stringResource(Res.string.exit_share_confirm),
         onBack = onBack,
         showMessage = { snackbarHostState.showSnackbar(it) },
     )
@@ -122,10 +137,10 @@ private fun ShareContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Share") },
+                title = { Text(stringResource(Res.string.action_share)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(AppIcons.ArrowLeft, contentDescription = "Back")
+                        Icon(AppIcons.ArrowLeft, contentDescription = stringResource(Res.string.action_back))
                     }
                 },
             )
@@ -202,6 +217,8 @@ private fun ExpandedShare(
     preferUrl: Boolean,
 ) {
     val scope = rememberCoroutineScope()
+    val linkCopied = stringResource(Res.string.snackbar_link_copied)
+    val commandCopied = stringResource(Res.string.snackbar_command_copied)
     if (files.isEmpty()) {
         Column(modifier = Modifier.fillMaxSize()) {
             EmptyFiles(onPickFiles = onPickFiles, modifier = Modifier.weight(1f))
@@ -219,7 +236,7 @@ private fun ExpandedShare(
             ServerStatus(
                 serverState = serverState,
                 onRetry = onRetry,
-                onCopied = { scope.launch { snackbarHostState.showSnackbar("Link copied") } },
+                onCopied = { scope.launch { snackbarHostState.showSnackbar(linkCopied) } },
                 preferUrl = preferUrl,
             )
             if (firewallStatus !is FirewallStatus.Allowed) {
@@ -229,7 +246,7 @@ private fun ExpandedShare(
                     isAllowing = isAllowingFirewall,
                     command = firewallCommand,
                     onAllow = onAllowFirewall,
-                    onCopied = { scope.launch { snackbarHostState.showSnackbar("Command copied") } },
+                    onCopied = { scope.launch { snackbarHostState.showSnackbar(commandCopied) } },
                 )
             }
         }
@@ -264,12 +281,14 @@ private fun CompactShare(
     preferUrl: Boolean,
 ) {
     val scope = rememberCoroutineScope()
+    val linkCopied = stringResource(Res.string.snackbar_link_copied)
+    val commandCopied = stringResource(Res.string.snackbar_command_copied)
     Column(modifier = Modifier.fillMaxSize()) {
         if (files.isNotEmpty()) {
             ServerStatus(
                 serverState = serverState,
                 onRetry = onRetry,
-                onCopied = { scope.launch { snackbarHostState.showSnackbar("Link copied") } },
+                onCopied = { scope.launch { snackbarHostState.showSnackbar(linkCopied) } },
                 preferUrl = preferUrl,
             )
             if (firewallStatus !is FirewallStatus.Allowed) {
@@ -279,7 +298,7 @@ private fun CompactShare(
                     isAllowing = isAllowingFirewall,
                     command = firewallCommand,
                     onAllow = onAllowFirewall,
-                    onCopied = { scope.launch { snackbarHostState.showSnackbar("Command copied") } },
+                    onCopied = { scope.launch { snackbarHostState.showSnackbar(commandCopied) } },
                 )
             }
         }
@@ -318,6 +337,8 @@ private fun FileList(
             Spacer(Modifier.height(4.dp))
         }
         itemsIndexed(files) { index, file ->
+            val removedMessage = stringResource(Res.string.snackbar_file_removed, file.name)
+            val undoLabel = stringResource(Res.string.action_undo)
             FileRow(
                 name = file.name,
                 size = file.size,
@@ -327,15 +348,15 @@ private fun FileList(
                         onRemoveFile(file.id)
                         scope.launch {
                             val result = snackbarHostState.showSnackbar(
-                                message = "Removed ${file.name}",
-                                actionLabel = "Undo",
+                                message = removedMessage,
+                                actionLabel = undoLabel,
                             )
                             if (result == SnackbarResult.ActionPerformed) {
                                 onRestoreFile(file, index)
                             }
                         }
                     }) {
-                        Icon(AppIcons.Close, contentDescription = "Remove")
+                        Icon(AppIcons.Close, contentDescription = stringResource(Res.string.cd_remove))
                     }
                 },
             )
@@ -356,8 +377,8 @@ private fun EmptyFiles(
 ) {
     EmptyFileHint(
         icon = AppIcons.Upload,
-        title = "No files yet",
-        description = "Drag files here or click Select files, then let the other device scan the QR code or open the link to download.",
+        title = stringResource(Res.string.share_empty_title),
+        description = stringResource(Res.string.share_empty_desc),
         modifier = modifier,
     )
 }
@@ -377,7 +398,11 @@ private fun AddFilesButton(
         Icon(AppIcons.Add, contentDescription = null)
         Spacer(Modifier.size(8.dp))
         Text(
-            text = if (isEmpty) "Select files" else "Add more files",
+            text = if (isEmpty) {
+                stringResource(Res.string.action_select_files)
+            } else {
+                stringResource(Res.string.action_add_more_files)
+            },
             style = MaterialTheme.typography.titleMedium,
         )
     }
@@ -407,7 +432,7 @@ private fun ServerStatus(
             }
         }
 
-        is ServerState.Error -> ServerErrorCard(message = serverState.message, onRetry = onRetry)
+        is ServerState.Error -> ServerErrorCard(message = serverErrorMessage(serverState.reason), onRetry = onRetry)
 
         ServerState.Stopped -> Unit
     }

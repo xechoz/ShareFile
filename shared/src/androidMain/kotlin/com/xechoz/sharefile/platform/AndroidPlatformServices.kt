@@ -30,11 +30,11 @@ class AndroidPlatformServices(
         false
     }
 
-    override fun shareFile(file: ReceivedFile) {
+    override fun shareFile(file: ReceivedFile, chooserTitle: String) {
         activity.startActivity(
             Intent.createChooser(
                 ReceivedFiles.shareIntent(activity, file),
-                "Share ${file.name}",
+                chooserTitle,
             )
         )
     }

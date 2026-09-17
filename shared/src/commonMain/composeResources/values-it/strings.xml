@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Condividi file</string>
+
+    <string name="action_share">Condividi</string>
+    <string name="action_receive">Ricevi</string>
+    <string name="action_back">Indietro</string>
+    <string name="home_tagline">Condividi e ricevi file sulla tua rete locale</string>
+    <string name="home_subtitle">L\'altro dispositivo apre semplicemente il link nel browser — nessuna installazione necessaria</string>
+    <string name="home_share_desc">Invia file da questo dispositivo</string>
+    <string name="home_receive_desc">Ricevi file da un altro dispositivo</string>
+    <string name="action_scan_qr">Scansiona codice QR</string>
+    <string name="action_about">Informazioni</string>
+    <string name="action_feedback">Commenti</string>
+
+    <string name="exit_share_confirm">Tocca di nuovo per uscire dalla condivisione</string>
+    <string name="snackbar_link_copied">Link copiato</string>
+    <string name="snackbar_command_copied">Comando copiato</string>
+    <string name="snackbar_file_removed">%1$s rimosso</string>
+    <string name="action_undo">Annulla</string>
+    <string name="cd_remove">Rimuovi</string>
+    <string name="share_empty_title">Nessun file ancora</string>
+    <string name="share_empty_desc">Trascina i file qui o tocca Seleziona file, poi lascia che l\'altro dispositivo scansiona il codice QR o apra il link per scaricare.</string>
+    <string name="action_select_files">Seleziona file</string>
+    <string name="action_add_more_files">Aggiungi altri file</string>
+
+    <string name="exit_receive_confirm">Tocca di nuovo per uscire dalla ricezione</string>
+    <string name="snackbar_no_app_can_open">Nessuna app può aprire %1$s</string>
+    <string name="snackbar_no_file_manager">Nessun gestore di file trovato</string>
+    <string name="snackbar_file_saved">%1$s salvato in %2$s</string>
+    <plurals name="saved_files_count">
+        <item quantity="one">%1$d file salvato in %2$s</item>
+        <item quantity="other">%1$d file salvati in %2$s</item>
+    </plurals>
+    <string name="action_open">Apri</string>
+    <string name="cd_open_save_folder">Apri cartella di salvataggio</string>
+    <string name="menu_open_folder">Apri cartella %1$s</string>
+    <string name="menu_change_save_folder">Cambia cartella di salvataggio…</string>
+    <string name="receive_empty_title">In attesa di file…</string>
+    <string name="receive_empty_desc">I file inviati dall\'altro dispositivo appariranno qui.</string>
+
+    <string name="scan_unrecognized">Codice QR non riconosciuto</string>
+    <string name="scan_unsupported">La scansione QR non è disponibile su questa piattaforma</string>
+
+    <string name="remote_title">File remoti</string>
+    <string name="remote_downloading">Download %1$d/%2$d</string>
+    <plurals name="remote_downloaded_count">
+        <item quantity="one">%1$d file scaricato</item>
+        <item quantity="other">%1$d file scaricati</item>
+    </plurals>
+    <string name="action_open_in_browser">Apri nel browser</string>
+    <string name="remote_empty">Nessun file disponibile</string>
+    <string name="remote_download_selected">Scarica selezionati (%1$d)</string>
+    <string name="remote_error_load_failed">Impossibile caricare i file</string>
+    <string name="remote_error_download_failed">Impossibile scaricare i file</string>
+    <string name="remote_error_server">Errore del server (%1$d)</string>
+
+    <string name="connection_scan_hint">Scansiona con la fotocamera dell\'altro dispositivo</string>
+    <string name="connection_same_wifi">Stessa rete Wi-Fi richiesta</string>
+    <string name="copy_open_on_device">Aprilo sull\'altro dispositivo</string>
+    <string name="cd_copy_link">Copia link</string>
+    <string name="cd_link_copied">Link copiato</string>
+    <string name="firewall_blocked_detail">Il firewall sta bloccando le connessioni in entrata, quindi l\'altro dispositivo non può aprire il link.</string>
+    <string name="firewall_unknown_detail">Impossibile leggere le regole del firewall per determinare lo stato.</string>
+    <string name="firewall_title">Non riesci a connetterti dall\'altro dispositivo?</string>
+    <string name="cd_copy_command">Copia comando</string>
+    <string name="action_allowing">Autorizzazione…</string>
+    <string name="action_allow_firewall">Consenti nel firewall</string>
+    <string name="server_error_title">Errore del server</string>
+    <string name="action_retry">Riprova</string>
+    <string name="server_error_no_local_address">Nessun indirizzo di rete locale trovato</string>
+    <string name="server_error_start_failed">Impossibile avviare il server</string>
+    <plurals name="file_count_size">
+        <item quantity="one">%1$d file · %2$s</item>
+        <item quantity="other">%1$d file · %2$s</item>
+    </plurals>
+
+    <string name="choose_save_folder">Scegli cartella di salvataggio</string>
+</resources>

@@ -31,6 +31,7 @@ kotlin {
                 implementation(compose.material3)
                 implementation(compose.ui)
                 implementation(compose.components.uiToolingPreview)
+                implementation(compose.components.resources)
                 implementation(libs.androidx.lifecycle.viewmodel.compose)
                 implementation(libs.androidx.lifecycle.runtime.compose)
                 implementation(libs.kotlinx.coroutines.core)
@@ -83,4 +84,8 @@ kotlin {
             dependsOn(getByName("jvmCommonTest"))
         }
     }
+}
+
+compose.resources {
+    packageOfResClass = "com.xechoz.sharefile.resources"
 }

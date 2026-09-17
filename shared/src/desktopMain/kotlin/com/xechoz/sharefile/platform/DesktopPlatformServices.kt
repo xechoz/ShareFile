@@ -1,11 +1,15 @@
 package com.xechoz.sharefile.platform
 
 import com.xechoz.sharefile.model.ReceivedFile
+import com.xechoz.sharefile.resources.Res
+import com.xechoz.sharefile.resources.choose_save_folder
 import java.awt.Desktop
 import java.io.File
 import java.net.URI
 import javax.swing.JFileChooser
 import javax.swing.SwingUtilities
+import kotlinx.coroutines.runBlocking
+import org.jetbrains.compose.resources.getString
 
 class DesktopPlatformServices(
     private val downloads: DesktopDownloadStore,
@@ -25,7 +29,7 @@ class DesktopPlatformServices(
     override fun openFile(file: ReceivedFile): Boolean =
         runCatching { Desktop.getDesktop().open(File(file.savedPath)) }.isSuccess
 
-    override fun shareFile(file: ReceivedFile) {
+    override fun shareFile(file: ReceivedFile, chooserTitle: String) {
         runCatching {
             val target = File(file.savedPath)
             Desktop.getDesktop().open(target.parentFile ?: target)
@@ -37,9 +41,10 @@ class DesktopPlatformServices(
     }.isSuccess
 
     override fun chooseDownloadFolder() {
+        val title = runBlocking { getString(Res.string.choose_save_folder) }
         SwingUtilities.invokeLater {
             val chooser = JFileChooser(downloads.directory).apply {
-                dialogTitle = "Choose save folder"
+                dialogTitle = title
                 fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
             }
             if (chooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {

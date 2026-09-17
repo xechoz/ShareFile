@@ -1,44 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{lang}}" dir="{{dir}}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quick File Share - Upload</title>
+<title>{{upload.title}}</title>
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
   <div class="card">
-    <h1>Send files</h1>
-    <p>Choose one or more files to upload to the device.</p>
+    <h1>{{upload.heading}}</h1>
+    <p>{{upload.lead}}</p>
     <form id="upload-form" method="post" action="/upload" enctype="multipart/form-data">
       <input id="file-input" type="file" name="file" multiple>
       <noscript>
         <div class="actions">
-          <button class="btn" type="submit">Upload</button>
+          <button class="btn" type="submit">{{upload.upload}}</button>
         </div>
       </noscript>
       <div id="picker" hidden>
         <div id="list-header" class="list-header" hidden>
           <span id="summary" class="summary"></span>
-          <button id="clear-all" class="btn btn-text" type="button">Clear all</button>
+          <button id="clear-all" class="btn btn-text" type="button">{{upload.clear_all}}</button>
         </div>
         <ul id="file-list" class="file-list"></ul>
         <div id="empty" class="empty">
           <span class="empty-icon">⬆️</span>
-          <span class="empty-title">No files yet</span>
-          <span class="empty-text">Select files, then upload them to the device.</span>
+          <span class="empty-title">{{upload.empty_title}}</span>
+          <span class="empty-text">{{upload.empty_text}}</span>
         </div>
         <div class="actions">
-          <button id="upload-btn" class="btn" type="submit" disabled>Upload</button>
-          <label id="pick-btn" class="btn btn-outlined" for="file-input">Select files</label>
+          <button id="upload-btn" class="btn" type="submit" disabled>{{upload.upload}}</button>
+          <label id="pick-btn" class="btn btn-outlined" for="file-input">{{upload.select_files}}</label>
         </div>
       </div>
     </form>
   </div>
   <div id="toast" class="toast">
     <span id="toast-text"></span>
-    <button id="toast-action" class="toast-action" type="button" hidden>Undo</button>
+    <button id="toast-action" class="toast-action" type="button" hidden>{{upload.undo}}</button>
   </div>
+  <script>window.I18N = {{i18n}};</script>
   <script src="/assets/upload.js" defer></script>
 </body>
 </html>

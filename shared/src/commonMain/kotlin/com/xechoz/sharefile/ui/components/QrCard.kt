@@ -32,8 +32,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xechoz.sharefile.platform.qrCodeMatrix
+import com.xechoz.sharefile.resources.Res
+import com.xechoz.sharefile.resources.cd_copy_link
+import com.xechoz.sharefile.resources.connection_scan_hint
+import com.xechoz.sharefile.resources.connection_same_wifi
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.stringResource
 
 private val QrSize = 140.dp
 private const val QR_MODULES = 128
@@ -56,7 +61,7 @@ fun QrCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable(role = Role.Button, onClickLabel = "Copy link") {
+            .clickable(role = Role.Button, onClickLabel = stringResource(Res.string.cd_copy_link)) {
                 clipboard.setText(AnnotatedString(url))
                 copied = true
                 onCopied()
@@ -75,7 +80,7 @@ fun QrCard(
             QrImage(url = url, size = QrSize)
             Spacer(Modifier.height(12.dp))
             Text(
-                text = "Scan with the other device's camera",
+                text = stringResource(Res.string.connection_scan_hint),
                 style = MaterialTheme.typography.titleSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -84,7 +89,7 @@ fun QrCard(
             CopyLinkGroup(url = url, copied = copied)
             Spacer(Modifier.height(12.dp))
             Text(
-                text = "Same Wi-Fi required",
+                text = stringResource(Res.string.connection_same_wifi),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )

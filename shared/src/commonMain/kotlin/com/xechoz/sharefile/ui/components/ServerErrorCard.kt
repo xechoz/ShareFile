@@ -17,8 +17,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.xechoz.sharefile.resources.Res
+import com.xechoz.sharefile.resources.action_retry
+import com.xechoz.sharefile.resources.server_error_no_local_address
+import com.xechoz.sharefile.resources.server_error_start_failed
+import com.xechoz.sharefile.resources.server_error_title
+import com.xechoz.sharefile.server.ServerError
 import com.xechoz.sharefile.ui.icons.AppIcons
 import com.xechoz.sharefile.ui.theme.PillShape
+import org.jetbrains.compose.resources.stringResource
+
+@Composable
+internal fun serverErrorMessage(reason: ServerError): String = when (reason) {
+    ServerError.NoLocalAddress -> stringResource(Res.string.server_error_no_local_address)
+    ServerError.StartFailed -> stringResource(Res.string.server_error_start_failed)
+}
 
 @Composable
 fun ServerErrorCard(
@@ -43,7 +56,7 @@ fun ServerErrorCard(
                 )
                 Spacer(Modifier.size(8.dp))
                 Text(
-                    text = "Server error",
+                    text = stringResource(Res.string.server_error_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onErrorContainer,
                 )
@@ -56,7 +69,7 @@ fun ServerErrorCard(
             )
             Spacer(Modifier.height(14.dp))
             Button(onClick = onRetry, shape = PillShape) {
-                Text("Retry")
+                Text(stringResource(Res.string.action_retry))
             }
         }
     }

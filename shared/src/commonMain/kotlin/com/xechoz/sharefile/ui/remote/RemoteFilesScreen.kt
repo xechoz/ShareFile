@@ -32,12 +32,26 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.xechoz.sharefile.model.RemoteFile
+import com.xechoz.sharefile.net.RemoteError
 import com.xechoz.sharefile.platform.LocalAppContainer
+import com.xechoz.sharefile.resources.Res
+import com.xechoz.sharefile.resources.action_back
+import com.xechoz.sharefile.resources.action_open_in_browser
+import com.xechoz.sharefile.resources.remote_download_selected
+import com.xechoz.sharefile.resources.remote_downloaded_count
+import com.xechoz.sharefile.resources.remote_downloading
+import com.xechoz.sharefile.resources.remote_empty
+import com.xechoz.sharefile.resources.remote_error_download_failed
+import com.xechoz.sharefile.resources.remote_error_load_failed
+import com.xechoz.sharefile.resources.remote_error_server
+import com.xechoz.sharefile.resources.remote_title
 import com.xechoz.sharefile.ui.components.ContentContainer
 import com.xechoz.sharefile.ui.components.FileRow
 import com.xechoz.sharefile.ui.icons.AppIcons
 import com.xechoz.sharefile.ui.theme.PillShape
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,10 +89,10 @@ private fun RemoteFilesContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Remote files") },
+                title = { Text(stringResource(Res.string.remote_title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(AppIcons.ArrowLeft, contentDescription = "Back")
+                        Icon(AppIcons.ArrowLeft, contentDescription = stringResource(Res.string.action_back))
                     }
                 },
             )
@@ -108,7 +122,7 @@ private fun RemoteFilesContent(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             CircularProgressIndicator()
                             Spacer(Modifier.height(16.dp))
-                            Text("Downloading ${state.current}/${state.total}")
+                            Text(stringResource(Res.string.remote_downloading, state.current, state.total))
                         }
                     }
 
@@ -121,19 +135,30 @@ private fun RemoteFilesContent(
                                 modifier = Modifier.size(48.dp),
                             )
                             Spacer(Modifier.height(12.dp))
-                            Text("Downloaded ${state.count} file(s)")
+                            Text(
+                                pluralStringResource(
+                                    Res.plurals.remote_downloaded_count,
+                                    state.count,
+                                    state.count,
+                                ),
+                            )
                         }
                     }
 
                     is RemoteUiState.Error -> Centered {
+                        val message = when (val error = state.error) {
+                            RemoteError.LoadFailed -> stringResource(Res.string.remote_error_load_failed)
+                            RemoteError.DownloadFailed -> stringResource(Res.string.remote_error_download_failed)
+                            is RemoteError.Server -> stringResource(Res.string.remote_error_server, error.code)
+                        }
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
-                                text = state.message,
+                                text = message,
                                 color = MaterialTheme.colorScheme.error,
                             )
                             Spacer(Modifier.height(16.dp))
                             OutlinedButton(onClick = onOpenInBrowser, shape = PillShape) {
-                                Text("Open in browser")
+                                Text(stringResource(Res.string.action_open_in_browser))
                             }
                         }
                     }
@@ -151,7 +176,7 @@ private fun LoadedContent(
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         if (state.files.isEmpty()) {
-            Centered { Text("No files available") }
+            Centered { Text(stringResource(Res.string.remote_empty)) }
             return@Column
         }
         LazyColumn(
@@ -181,7 +206,7 @@ private fun LoadedContent(
             modifier = Modifier.fillMaxWidth(),
             shape = PillShape,
         ) {
-            Text("Download selected (${state.selected.size})")
+            Text(stringResource(Res.string.remote_download_selected, state.selected.size))
         }
     }
 }

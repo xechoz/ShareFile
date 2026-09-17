@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xechoz.sharefile.model.RemoteFile
 import com.xechoz.sharefile.net.FileDownloader
+import com.xechoz.sharefile.net.RemoteError
+import com.xechoz.sharefile.net.RemoteException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +20,7 @@ sealed interface RemoteUiState {
 
     data class Downloading(val current: Int, val total: Int) : RemoteUiState
     data class Done(val count: Int) : RemoteUiState
-    data class Error(val message: String) : RemoteUiState
+    data class Error(val error: RemoteError) : RemoteUiState
 }
 
 class RemoteFilesViewModel(
@@ -37,8 +39,10 @@ class RemoteFilesViewModel(
             _state.value = try {
                 val files = client.fetchFiles(shareUrl)
                 RemoteUiState.Loaded(files, files.map { it.id }.toSet())
+            } catch (e: RemoteException) {
+                RemoteUiState.Error(RemoteError.Server(e.code))
             } catch (e: Exception) {
-                RemoteUiState.Error(e.message ?: "Failed to load files")
+                RemoteUiState.Error(RemoteError.LoadFailed)
             }
         }
     }
@@ -60,8 +64,10 @@ class RemoteFilesViewModel(
                     client.download(shareUrl, file)
                 }
                 _state.value = RemoteUiState.Done(targets.size)
+            } catch (e: RemoteException) {
+                _state.value = RemoteUiState.Error(RemoteError.Server(e.code))
             } catch (e: Exception) {
-                _state.value = RemoteUiState.Error(e.message ?: "Download failed")
+                _state.value = RemoteUiState.Error(RemoteError.DownloadFailed)
             }
         }
     }

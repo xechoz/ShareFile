@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">फ़ाइल साझा करें</string>
+
+    <string name="action_share">साझा करें</string>
+    <string name="action_receive">प्राप्त करें</string>
+    <string name="action_back">वापस</string>
+    <string name="home_tagline">अपने लोकल नेटवर्क पर फ़ाइलें साझा करें और प्राप्त करें</string>
+    <string name="home_subtitle">दूसरा डिवाइस बस ब्राउज़र में लिंक खोलता है — इंस्टॉल की ज़रूरत नहीं</string>
+    <string name="home_share_desc">इस डिवाइस से फ़ाइलें भेजें</string>
+    <string name="home_receive_desc">किसी दूसरे डिवाइस से फ़ाइलें प्राप्त करें</string>
+    <string name="action_scan_qr">QR कोड स्कैन करें</string>
+    <string name="action_about">ऐप के बारे में</string>
+    <string name="action_feedback">फ़ीडबैक</string>
+
+    <string name="exit_share_confirm">शेयरिंग बंद करने के लिए फिर से टैप करें</string>
+    <string name="snackbar_link_copied">लिंक कॉपी हुआ</string>
+    <string name="snackbar_command_copied">कमांड कॉपी हुआ</string>
+    <string name="snackbar_file_removed">%1$s हटाया गया</string>
+    <string name="action_undo">पूर्ववत करें</string>
+    <string name="cd_remove">हटाएँ</string>
+    <string name="share_empty_title">अभी कोई फ़ाइल नहीं</string>
+    <string name="share_empty_desc">फ़ाइलें यहाँ खींचें या फ़ाइलें चुनें पर टैप करें, फिर दूसरे डिवाइस से QR कोड स्कैन करें या डाउनलोड के लिए लिंक खोलें।</string>
+    <string name="action_select_files">फ़ाइलें चुनें</string>
+    <string name="action_add_more_files">और फ़ाइलें जोड़ें</string>
+
+    <string name="exit_receive_confirm">प्राप्त करना बंद करने के लिए फिर से टैप करें</string>
+    <string name="snackbar_no_app_can_open">%1$s को खोलने वाला कोई ऐप नहीं है</string>
+    <string name="snackbar_no_file_manager">कोई फ़ाइल मैनेजर नहीं मिला</string>
+    <string name="snackbar_file_saved">%1$s को %2$s में सहेजा गया</string>
+    <plurals name="saved_files_count">
+        <item quantity="one">%1$d फ़ाइल %2$s में सहेजी गई</item>
+        <item quantity="other">%1$d फ़ाइलें %2$s में सहेजी गईं</item>
+    </plurals>
+    <string name="action_open">खोलें</string>
+    <string name="cd_open_save_folder">सहेजने वाला फ़ोल्डर खोलें</string>
+    <string name="menu_open_folder">%1$s फ़ोल्डर खोलें</string>
+    <string name="menu_change_save_folder">सहेजने वाला फ़ोल्डर बदलें…</string>
+    <string name="receive_empty_title">फ़ाइलों की प्रतीक्षा में…</string>
+    <string name="receive_empty_desc">दूसरे डिवाइस से भेजी गई फ़ाइलें यहाँ दिखाई देंगी।</string>
+
+    <string name="scan_unrecognized">अज्ञात QR कोड</string>
+    <string name="scan_unsupported">इस प्लेटफ़ॉर्म पर QR स्कैनिंग उपलब्ध नहीं है</string>
+
+    <string name="remote_title">दूरस्थ फ़ाइलें</string>
+    <string name="remote_downloading">डाउनलोड हो रहा है %1$d/%2$d</string>
+    <plurals name="remote_downloaded_count">
+        <item quantity="one">%1$d फ़ाइल डाउनलोड हुई</item>
+        <item quantity="other">%1$d फ़ाइलें डाउनलोड हुईं</item>
+    </plurals>
+    <string name="action_open_in_browser">ब्राउज़र में खोलें</string>
+    <string name="remote_empty">कोई फ़ाइल उपलब्ध नहीं</string>
+    <string name="remote_download_selected">चयनित डाउनलोड करें (%1$d)</string>
+    <string name="remote_error_load_failed">फ़ाइलें लोड नहीं हो सकीं</string>
+    <string name="remote_error_download_failed">फ़ाइलें डाउनलोड नहीं हो सकीं</string>
+    <string name="remote_error_server">सर्वर त्रुटि (%1$d)</string>
+
+    <string name="connection_scan_hint">दूसरे डिवाइस के कैमरे से स्कैन करें</string>
+    <string name="connection_same_wifi">एक ही Wi-Fi ज़रूरी है</string>
+    <string name="copy_open_on_device">दूसरे डिवाइस पर खोलें</string>
+    <string name="cd_copy_link">लिंक कॉपी करें</string>
+    <string name="cd_link_copied">लिंक कॉपी हुआ</string>
+    <string name="firewall_blocked_detail">फ़ायरवॉल आने वाले कनेक्शन को ब्लॉक कर रहा है, इसलिए दूसरा डिवाइस लिंक नहीं खोल सकता।</string>
+    <string name="firewall_unknown_detail">स्थिति जानने के लिए फ़ायरवॉल नियम पढ़े नहीं जा सके।</string>
+    <string name="firewall_title">दूसरे डिवाइस से कनेक्ट नहीं हो रहा?</string>
+    <string name="cd_copy_command">कमांड कॉपी करें</string>
+    <string name="action_allowing">अनुमति दी जा रही है…</string>
+    <string name="action_allow_firewall">फ़ायरवॉल से अनुमति दें</string>
+    <string name="server_error_title">सर्वर त्रुटि</string>
+    <string name="action_retry">फिर से कोशिश करें</string>
+    <string name="server_error_no_local_address">कोई लोकल नेटवर्क पता नहीं मिला</string>
+    <string name="server_error_start_failed">सर्वर शुरू नहीं हो सका</string>
+    <plurals name="file_count_size">
+        <item quantity="one">%1$d फ़ाइल · %2$s</item>
+        <item quantity="other">%1$d फ़ाइलें · %2$s</item>
+    </plurals>
+
+    <string name="choose_save_folder">सहेजने वाला फ़ोल्डर चुनें</string>
+</resources>

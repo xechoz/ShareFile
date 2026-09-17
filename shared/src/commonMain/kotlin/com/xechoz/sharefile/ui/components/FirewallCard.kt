@@ -24,9 +24,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.xechoz.sharefile.platform.FirewallStatus
+import com.xechoz.sharefile.platform.FirewallUnknown
+import com.xechoz.sharefile.resources.Res
+import com.xechoz.sharefile.resources.action_allow_firewall
+import com.xechoz.sharefile.resources.action_allowing
+import com.xechoz.sharefile.resources.cd_copy_command
+import com.xechoz.sharefile.resources.firewall_blocked_detail
+import com.xechoz.sharefile.resources.firewall_title
+import com.xechoz.sharefile.resources.firewall_unknown_detail
 import com.xechoz.sharefile.ui.icons.AppIcons
 import com.xechoz.sharefile.ui.theme.PillShape
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
+import org.jetbrains.compose.resources.stringResource
+
+@Composable
+internal fun firewallUnknownMessage(reason: FirewallUnknown): String = when (reason) {
+    FirewallUnknown.UfwRulesUnreadable -> stringResource(Res.string.firewall_unknown_detail)
+}
 
 @Composable
 fun FirewallCard(
@@ -39,9 +53,8 @@ fun FirewallCard(
 ) {
     val detail = when (status) {
         FirewallStatus.Allowed -> return
-        FirewallStatus.Blocked ->
-            "The firewall is blocking incoming connections, so the other device cannot open the link."
-        is FirewallStatus.Unknown -> status.detail
+        FirewallStatus.Blocked -> stringResource(Res.string.firewall_blocked_detail)
+        is FirewallStatus.Unknown -> firewallUnknownMessage(status.reason)
     }
     val clipboard = LocalClipboardManager.current
 
@@ -62,7 +75,7 @@ fun FirewallCard(
                 )
                 Spacer(Modifier.size(8.dp))
                 Text(
-                    text = "Can't connect from the other device?",
+                    text = stringResource(Res.string.firewall_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onTertiaryContainer,
                 )
@@ -94,14 +107,20 @@ fun FirewallCard(
                             clipboard.setText(AnnotatedString(command))
                             onCopied()
                         }) {
-                            Icon(AppIcons.ContentCopy, contentDescription = "Copy command")
+                            Icon(AppIcons.ContentCopy, contentDescription = stringResource(Res.string.cd_copy_command))
                         }
                     }
                 }
             }
             Spacer(Modifier.height(14.dp))
             Button(onClick = onAllow, shape = PillShape, enabled = !isAllowing) {
-                Text(if (isAllowing) "Allowing…" else "Allow through firewall")
+                Text(
+                    if (isAllowing) {
+                        stringResource(Res.string.action_allowing)
+                    } else {
+                        stringResource(Res.string.action_allow_firewall)
+                    },
+                )
             }
         }
     }

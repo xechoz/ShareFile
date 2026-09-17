@@ -5,7 +5,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.xechoz.sharefile.resources.Res
+import com.xechoz.sharefile.resources.file_count_size
 import com.xechoz.sharefile.server.formatSize
+import org.jetbrains.compose.resources.pluralStringResource
 
 @Composable
 fun FileListHeader(
@@ -14,7 +17,7 @@ fun FileListHeader(
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = "$count ${if (count == 1) "file" else "files"} · ${formatSize(totalSize)}",
+        text = pluralStringResource(Res.plurals.file_count_size, count, count, formatSize(totalSize)),
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier.fillMaxWidth(),

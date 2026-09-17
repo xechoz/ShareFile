@@ -45,6 +45,23 @@ import com.xechoz.sharefile.model.ReceivedFile
 import com.xechoz.sharefile.platform.DownloadFolderChooser
 import com.xechoz.sharefile.platform.FirewallStatus
 import com.xechoz.sharefile.platform.LocalAppContainer
+import com.xechoz.sharefile.resources.Res
+import com.xechoz.sharefile.resources.action_back
+import com.xechoz.sharefile.resources.action_open
+import com.xechoz.sharefile.resources.action_receive
+import com.xechoz.sharefile.resources.action_share
+import com.xechoz.sharefile.resources.cd_open_save_folder
+import com.xechoz.sharefile.resources.exit_receive_confirm
+import com.xechoz.sharefile.resources.menu_change_save_folder
+import com.xechoz.sharefile.resources.menu_open_folder
+import com.xechoz.sharefile.resources.receive_empty_desc
+import com.xechoz.sharefile.resources.receive_empty_title
+import com.xechoz.sharefile.resources.saved_files_count
+import com.xechoz.sharefile.resources.snackbar_command_copied
+import com.xechoz.sharefile.resources.snackbar_file_saved
+import com.xechoz.sharefile.resources.snackbar_link_copied
+import com.xechoz.sharefile.resources.snackbar_no_app_can_open
+import com.xechoz.sharefile.resources.snackbar_no_file_manager
 import com.xechoz.sharefile.server.ServerState
 import com.xechoz.sharefile.ui.components.ConnectionCard
 import com.xechoz.sharefile.ui.components.ContentContainer
@@ -55,11 +72,14 @@ import com.xechoz.sharefile.ui.components.FileRow
 import com.xechoz.sharefile.ui.components.FirewallCard
 import com.xechoz.sharefile.ui.components.QrCard
 import com.xechoz.sharefile.ui.components.ServerErrorCard
+import com.xechoz.sharefile.ui.components.serverErrorMessage
 import com.xechoz.sharefile.ui.icons.AppIcons
 import com.xechoz.sharefile.ui.layout.LocalWindowLayout
 import com.xechoz.sharefile.ui.layout.WindowLayout
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.pluralStringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -79,20 +99,26 @@ fun ReceiveScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    val share: (ReceivedFile) -> Unit = { container.platform.shareFile(it) }
+    val shareTitle = stringResource(Res.string.action_share)
+    val share: (ReceivedFile) -> Unit = { container.platform.shareFile(it, shareTitle) }
 
+    var pendingOpen by remember { mutableStateOf<ReceivedFile?>(null) }
     val open: (ReceivedFile) -> Unit = { file ->
-        if (!container.platform.openFile(file)) {
-            scope.launch {
-                val result = snackbarHostState.showSnackbar(
-                    message = "No app can open ${file.name}",
-                    actionLabel = "Share",
-                )
-                if (result == SnackbarResult.ActionPerformed) share(file)
-            }
-        }
+        if (!container.platform.openFile(file)) pendingOpen = file
+    }
+    val pending = pendingOpen
+    val openFailedMessage = pending?.let { stringResource(Res.string.snackbar_no_app_can_open, it.name) }
+    LaunchedEffect(pending, openFailedMessage) {
+        if (pending == null || openFailedMessage == null) return@LaunchedEffect
+        val result = snackbarHostState.showSnackbar(
+            message = openFailedMessage,
+            actionLabel = shareTitle,
+        )
+        if (result == SnackbarResult.ActionPerformed) share(pending)
+        pendingOpen = null
     }
 
+    val noFileManager = stringResource(Res.string.snackbar_no_file_manager)
     val chooser = container.platform as? DownloadFolderChooser
 
     ReceiveContent(
@@ -110,7 +136,7 @@ fun ReceiveScreen(
         onAllowFirewall = viewModel::allowFirewall,
         onOpenFolder = {
             if (!container.platform.openDownloadFolder()) {
-                scope.launch { snackbarHostState.showSnackbar("No file manager found") }
+                scope.launch { snackbarHostState.showSnackbar(noFileManager) }
             }
         },
         onChooseFolder = chooser?.let { target -> { target.chooseDownloadFolder() } },
@@ -139,35 +165,48 @@ private fun ReceiveContent(
 ) {
     val scope = rememberCoroutineScope()
     var sheetFile by remember { mutableStateOf<ReceivedFile?>(null) }
+    val linkCopied = stringResource(Res.string.snackbar_link_copied)
+    val commandCopied = stringResource(Res.string.snackbar_command_copied)
+    val shareLabel = stringResource(Res.string.action_share)
 
     DoubleBackHandler(
-        message = "Tap again to exit receiving",
+        message = stringResource(Res.string.exit_receive_confirm),
         onBack = onBack,
         showMessage = { snackbarHostState.showSnackbar(it) },
     )
 
     val seen = remember { received.mapTo(mutableSetOf()) { it.savedPath } }
+    var saved by remember { mutableStateOf<List<ReceivedFile>?>(null) }
     LaunchedEffect(received) {
         val fresh = received.filter { seen.add(it.savedPath) }
-        if (fresh.isEmpty()) return@LaunchedEffect
+        if (fresh.isNotEmpty()) saved = fresh
+    }
+    val savedNotice = saved
+    val savedMessage = savedNotice?.let {
+        if (it.size == 1) {
+            stringResource(Res.string.snackbar_file_saved, it.first().name, downloadFolderName)
+        } else {
+            pluralStringResource(Res.plurals.saved_files_count, it.size, it.size, downloadFolderName)
+        }
+    }
+    val openLabel = stringResource(Res.string.action_open)
+    LaunchedEffect(savedNotice, savedMessage) {
+        if (savedNotice == null || savedMessage == null) return@LaunchedEffect
         val result = snackbarHostState.showSnackbar(
-            message = if (fresh.size == 1) {
-                "${fresh.first().name} saved to $downloadFolderName"
-            } else {
-                "${fresh.size} files saved to $downloadFolderName"
-            },
-            actionLabel = if (fresh.size == 1) "Open" else null,
+            message = savedMessage,
+            actionLabel = if (savedNotice.size == 1) openLabel else null,
         )
-        if (result == SnackbarResult.ActionPerformed) onOpen(fresh.first())
+        if (result == SnackbarResult.ActionPerformed) onOpen(savedNotice.first())
+        saved = null
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Receive") },
+                title = { Text(stringResource(Res.string.action_receive)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(AppIcons.ArrowLeft, contentDescription = "Back")
+                        Icon(AppIcons.ArrowLeft, contentDescription = stringResource(Res.string.action_back))
                     }
                 },
                 actions = {
@@ -200,7 +239,7 @@ private fun ReceiveContent(
                             ServerStatus(
                                 serverState = serverState,
                                 onRetry = onRetry,
-                                onCopied = { scope.launch { snackbarHostState.showSnackbar("Link copied") } },
+                                onCopied = { scope.launch { snackbarHostState.showSnackbar(linkCopied) } },
                                 preferUrl = preferUrl,
                             )
                             FirewallSection(
@@ -208,7 +247,7 @@ private fun ReceiveContent(
                                 isAllowingFirewall = isAllowingFirewall,
                                 firewallCommand = firewallCommand,
                                 onAllowFirewall = onAllowFirewall,
-                                onCopied = { scope.launch { snackbarHostState.showSnackbar("Command copied") } },
+                                onCopied = { scope.launch { snackbarHostState.showSnackbar(commandCopied) } },
                             )
                         }
                         Spacer(Modifier.width(24.dp))
@@ -224,7 +263,7 @@ private fun ReceiveContent(
                         ServerStatus(
                             serverState = serverState,
                             onRetry = onRetry,
-                            onCopied = { scope.launch { snackbarHostState.showSnackbar("Link copied") } },
+                            onCopied = { scope.launch { snackbarHostState.showSnackbar(linkCopied) } },
                             preferUrl = preferUrl,
                         )
                         FirewallSection(
@@ -232,7 +271,7 @@ private fun ReceiveContent(
                             isAllowingFirewall = isAllowingFirewall,
                             firewallCommand = firewallCommand,
                             onAllowFirewall = onAllowFirewall,
-                            onCopied = { scope.launch { snackbarHostState.showSnackbar("Command copied") } },
+                            onCopied = { scope.launch { snackbarHostState.showSnackbar(commandCopied) } },
                         )
                         Spacer(Modifier.height(8.dp))
                         ReceivedBody(
@@ -251,7 +290,7 @@ private fun ReceiveContent(
         ModalBottomSheet(onDismissRequest = { sheetFile = null }) {
             FileActionRow(
                 icon = AppIcons.OpenInNew,
-                label = "Open",
+                label = openLabel,
                 onClick = {
                     sheetFile = null
                     onOpen(file)
@@ -259,7 +298,7 @@ private fun ReceiveContent(
             )
             FileActionRow(
                 icon = AppIcons.Share,
-                label = "Share",
+                label = shareLabel,
                 onClick = {
                     sheetFile = null
                     onShare(file)
@@ -299,8 +338,8 @@ private fun ReceivedBody(
     if (received.isEmpty()) {
         EmptyFileHint(
             icon = AppIcons.Download,
-            title = "Waiting for uploads…",
-            description = "Files sent from the other device will appear here.",
+            title = stringResource(Res.string.receive_empty_title),
+            description = stringResource(Res.string.receive_empty_desc),
             modifier = modifier,
         )
         return
@@ -325,7 +364,7 @@ private fun ReceivedBody(
                 trailing = {
                     Icon(
                         AppIcons.OpenInNew,
-                        contentDescription = "Open",
+                        contentDescription = stringResource(Res.string.action_open),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 },
@@ -353,19 +392,19 @@ private fun FolderMenu(
                 if (onChooseFolder == null) onOpenFolder() else expanded = true
             },
         ) {
-            Icon(AppIcons.FolderOpen, contentDescription = "Open save folder")
+            Icon(AppIcons.FolderOpen, contentDescription = stringResource(Res.string.cd_open_save_folder))
         }
         if (onChooseFolder != null) {
             DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                 DropdownMenuItem(
-                    text = { Text("Open $folderName folder") },
+                    text = { Text(stringResource(Res.string.menu_open_folder, folderName)) },
                     onClick = {
                         expanded = false
                         onOpenFolder()
                     },
                 )
                 DropdownMenuItem(
-                    text = { Text("Change save folder…") },
+                    text = { Text(stringResource(Res.string.menu_change_save_folder)) },
                     onClick = {
                         expanded = false
                         onChooseFolder()
@@ -413,7 +452,7 @@ private fun ServerStatus(
             }
         }
 
-        is ServerState.Error -> ServerErrorCard(message = serverState.message, onRetry = onRetry)
+        is ServerState.Error -> ServerErrorCard(message = serverErrorMessage(serverState.reason), onRetry = onRetry)
 
         ServerState.Stopped -> Unit
     }

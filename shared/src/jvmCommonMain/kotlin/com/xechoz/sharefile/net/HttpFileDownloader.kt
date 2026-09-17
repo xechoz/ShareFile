@@ -4,7 +4,6 @@ import com.xechoz.sharefile.model.RemoteFile
 import com.xechoz.sharefile.platform.DownloadStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URI
 
@@ -17,7 +16,7 @@ class HttpFileDownloader(
             val connection = open("${originOf(shareUrl)}/api/files")
             try {
                 if (connection.responseCode != HttpURLConnection.HTTP_OK) {
-                    throw IOException("Server returned ${connection.responseCode}")
+                    throw RemoteException(connection.responseCode)
                 }
                 val body = connection.inputStream.bufferedReader().use { it.readText() }
                 FileListParser.parse(body)
@@ -31,7 +30,7 @@ class HttpFileDownloader(
             val connection = open("${originOf(shareUrl)}/download/${file.id}")
             try {
                 if (connection.responseCode != HttpURLConnection.HTTP_OK) {
-                    throw IOException("Server returned ${connection.responseCode}")
+                    throw RemoteException(connection.responseCode)
                 }
                 downloads.write(file.name, connection.inputStream)
             } finally {

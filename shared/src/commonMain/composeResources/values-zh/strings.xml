@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">快速文件共享</string>
+
+    <string name="action_share">分享</string>
+    <string name="action_receive">接收</string>
+    <string name="action_back">返回</string>
+    <string name="home_tagline">在局域网内分享和接收文件</string>
+    <string name="home_subtitle">另一台设备只需用浏览器打开链接，无需安装</string>
+    <string name="home_share_desc">从本机发送文件</string>
+    <string name="home_receive_desc">接收另一台设备的文件</string>
+    <string name="action_scan_qr">扫描二维码</string>
+    <string name="action_about">关于</string>
+    <string name="action_feedback">反馈</string>
+
+    <string name="exit_share_confirm">再按一次退出分享</string>
+    <string name="snackbar_link_copied">已复制链接</string>
+    <string name="snackbar_command_copied">已复制命令</string>
+    <string name="snackbar_file_removed">已移除 %1$s</string>
+    <string name="action_undo">撤销</string>
+    <string name="cd_remove">移除</string>
+    <string name="share_empty_title">暂无文件</string>
+    <string name="share_empty_desc">将文件拖到此处或点击“选择文件”，然后让另一台设备扫描二维码或打开链接下载。</string>
+    <string name="action_select_files">选择文件</string>
+    <string name="action_add_more_files">添加更多文件</string>
+
+    <string name="exit_receive_confirm">再按一次退出接收</string>
+    <string name="snackbar_no_app_can_open">没有应用可以打开 %1$s</string>
+    <string name="snackbar_no_file_manager">未找到文件管理器</string>
+    <string name="snackbar_file_saved">%1$s 已保存到 %2$s</string>
+    <plurals name="saved_files_count">
+        <item quantity="one">%1$d 个文件已保存到 %2$s</item>
+        <item quantity="other">%1$d 个文件已保存到 %2$s</item>
+    </plurals>
+    <string name="action_open">打开</string>
+    <string name="cd_open_save_folder">打开保存文件夹</string>
+    <string name="menu_open_folder">打开 %1$s 文件夹</string>
+    <string name="menu_change_save_folder">更改保存文件夹…</string>
+    <string name="receive_empty_title">等待上传…</string>
+    <string name="receive_empty_desc">从另一台设备发送的文件将显示在这里。</string>
+
+    <string name="scan_unrecognized">无法识别的二维码</string>
+    <string name="scan_unsupported">当前平台不支持扫描二维码</string>
+
+    <string name="remote_title">远程文件</string>
+    <string name="remote_downloading">正在下载 %1$d/%2$d</string>
+    <plurals name="remote_downloaded_count">
+        <item quantity="one">已下载 %1$d 个文件</item>
+        <item quantity="other">已下载 %1$d 个文件</item>
+    </plurals>
+    <string name="action_open_in_browser">在浏览器中打开</string>
+    <string name="remote_empty">没有可下载的文件</string>
+    <string name="remote_download_selected">下载所选（%1$d）</string>
+    <string name="remote_error_load_failed">加载文件失败</string>
+    <string name="remote_error_download_failed">下载文件失败</string>
+    <string name="remote_error_server">服务器错误（%1$d）</string>
+
+    <string name="connection_scan_hint">用另一台设备的相机扫描</string>
+    <string name="connection_same_wifi">需要连接同一 Wi-Fi</string>
+    <string name="copy_open_on_device">在另一台设备上打开</string>
+    <string name="cd_copy_link">复制链接</string>
+    <string name="cd_link_copied">已复制链接</string>
+    <string name="firewall_blocked_detail">防火墙正在阻止传入连接，另一台设备无法打开该链接。</string>
+    <string name="firewall_unknown_detail">无法读取防火墙规则以确定状态。</string>
+    <string name="firewall_title">另一台设备无法连接？</string>
+    <string name="cd_copy_command">复制命令</string>
+    <string name="action_allowing">正在允许…</string>
+    <string name="action_allow_firewall">允许通过防火墙</string>
+    <string name="server_error_title">服务器错误</string>
+    <string name="action_retry">重试</string>
+    <string name="server_error_no_local_address">未找到本地网络地址</string>
+    <string name="server_error_start_failed">启动服务器失败</string>
+    <plurals name="file_count_size">
+        <item quantity="one">%1$d 个文件 · %2$s</item>
+        <item quantity="other">%1$d 个文件 · %2$s</item>
+    </plurals>
+
+    <string name="choose_save_folder">选择保存文件夹</string>
+</resources>

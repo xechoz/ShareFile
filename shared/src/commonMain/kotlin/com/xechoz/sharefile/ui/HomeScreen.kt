@@ -37,11 +37,23 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.xechoz.sharefile.resources.Res
+import com.xechoz.sharefile.resources.action_about
+import com.xechoz.sharefile.resources.action_feedback
+import com.xechoz.sharefile.resources.action_receive
+import com.xechoz.sharefile.resources.action_scan_qr
+import com.xechoz.sharefile.resources.action_share
+import com.xechoz.sharefile.resources.app_name
+import com.xechoz.sharefile.resources.home_receive_desc
+import com.xechoz.sharefile.resources.home_share_desc
+import com.xechoz.sharefile.resources.home_subtitle
+import com.xechoz.sharefile.resources.home_tagline
 import com.xechoz.sharefile.ui.icons.AppIcons
 import com.xechoz.sharefile.ui.layout.LocalWindowLayout
 import com.xechoz.sharefile.ui.layout.WindowLayout
 import com.xechoz.sharefile.ui.theme.PillShape
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun HomeScreen(
@@ -117,19 +129,19 @@ private fun ExpandedHome(
             }
             Spacer(Modifier.height(20.dp))
             Text(
-                text = "Quick File Share",
+                text = stringResource(Res.string.app_name),
                 style = MaterialTheme.typography.headlineMedium,
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = "Share and receive files over your local network",
+                text = stringResource(Res.string.home_tagline),
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = "The other device just opens the link in a browser — no install needed",
+                text = stringResource(Res.string.home_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -140,8 +152,8 @@ private fun ExpandedHome(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 ActionTile(
-                    title = "Share",
-                    description = "Send files from this device",
+                    title = stringResource(Res.string.action_share),
+                    description = stringResource(Res.string.home_share_desc),
                     icon = AppIcons.Upload,
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -149,8 +161,8 @@ private fun ExpandedHome(
                     modifier = Modifier.weight(1f),
                 )
                 ActionTile(
-                    title = "Receive",
-                    description = "Get files from another device",
+                    title = stringResource(Res.string.action_receive),
+                    description = stringResource(Res.string.home_receive_desc),
                     icon = AppIcons.Download,
                     containerColor = MaterialTheme.colorScheme.secondaryContainer,
                     contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -239,12 +251,12 @@ private fun CompactHome(
                 verticalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    text = "Quick File Share",
+                    text = stringResource(Res.string.app_name),
                     style = MaterialTheme.typography.headlineMedium,
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text = "Share and receive files over your local network",
+                    text = stringResource(Res.string.home_tagline),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -256,7 +268,7 @@ private fun CompactHome(
                         horizontalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
                         ActionButton(
-                            label = "Share",
+                            label = stringResource(Res.string.action_share),
                             icon = AppIcons.Upload,
                             containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -264,7 +276,7 @@ private fun CompactHome(
                             modifier = Modifier.weight(1f),
                         )
                         ActionButton(
-                            label = "Receive",
+                            label = stringResource(Res.string.action_receive),
                             icon = AppIcons.Download,
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
                             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -274,7 +286,7 @@ private fun CompactHome(
                     }
                 } else {
                     ActionButton(
-                        label = "Share",
+                        label = stringResource(Res.string.action_share),
                         icon = AppIcons.Upload,
                         containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary,
@@ -282,7 +294,7 @@ private fun CompactHome(
                     )
                     Spacer(Modifier.height(16.dp))
                     ActionButton(
-                        label = "Receive",
+                        label = stringResource(Res.string.action_receive),
                         icon = AppIcons.Download,
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
                         contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -322,7 +334,7 @@ private fun ScanAction(
         )
         Spacer(Modifier.size(12.dp))
         Text(
-            text = "Scan QR code",
+            text = stringResource(Res.string.action_scan_qr),
             style = MaterialTheme.typography.titleMedium,
         )
     }
@@ -333,8 +345,8 @@ private fun AboutButtons(
     onAbout: () -> Unit,
     onFeedback: () -> Unit,
 ) {
-    FooterLink("About", onAbout)
-    FooterLink("Feedback", onFeedback)
+    FooterLink(stringResource(Res.string.action_about), onAbout)
+    FooterLink(stringResource(Res.string.action_feedback), onFeedback)
 }
 
 @Composable

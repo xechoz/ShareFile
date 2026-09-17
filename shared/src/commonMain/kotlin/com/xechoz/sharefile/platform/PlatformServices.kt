@@ -14,7 +14,7 @@ interface PlatformServices {
 
     fun openFile(file: ReceivedFile): Boolean
 
-    fun shareFile(file: ReceivedFile)
+    fun shareFile(file: ReceivedFile, chooserTitle: String)
 
     fun openDownloadFolder(): Boolean
 }

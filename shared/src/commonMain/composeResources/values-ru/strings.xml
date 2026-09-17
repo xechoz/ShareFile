@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Обмен файлами</string>
+
+    <string name="action_share">Поделиться</string>
+    <string name="action_receive">Принять</string>
+    <string name="action_back">Назад</string>
+    <string name="home_tagline">Делитесь файлами и принимайте их в локальной сети</string>
+    <string name="home_subtitle">Другому устройству достаточно открыть ссылку в браузере — установка не нужна</string>
+    <string name="home_share_desc">Отправить файлы с этого устройства</string>
+    <string name="home_receive_desc">Принять файлы с другого устройства</string>
+    <string name="action_scan_qr">Сканировать QR-код</string>
+    <string name="action_about">О программе</string>
+    <string name="action_feedback">Отзыв</string>
+
+    <string name="exit_share_confirm">Нажмите ещё раз, чтобы выйти из режима раздачи</string>
+    <string name="snackbar_link_copied">Ссылка скопирована</string>
+    <string name="snackbar_command_copied">Команда скопирована</string>
+    <string name="snackbar_file_removed">%1$s удалён</string>
+    <string name="action_undo">Отменить</string>
+    <string name="cd_remove">Удалить</string>
+    <string name="share_empty_title">Пока нет файлов</string>
+    <string name="share_empty_desc">Перетащите файлы сюда или нажмите «Выбрать файлы», затем отсканируйте QR-код или откройте ссылку на другом устройстве, чтобы скачать.</string>
+    <string name="action_select_files">Выбрать файлы</string>
+    <string name="action_add_more_files">Добавить ещё файлы</string>
+
+    <string name="exit_receive_confirm">Нажмите ещё раз, чтобы выйти из режима приёма</string>
+    <string name="snackbar_no_app_can_open">Нет приложения для открытия %1$s</string>
+    <string name="snackbar_no_file_manager">Файловый менеджер не найден</string>
+    <string name="snackbar_file_saved">%1$s сохранён в %2$s</string>
+    <plurals name="saved_files_count">
+        <item quantity="one">%1$d файл сохранён в %2$s</item>
+        <item quantity="few">%1$d файла сохранены в %2$s</item>
+        <item quantity="many">%1$d файлов сохранено в %2$s</item>
+        <item quantity="other">%1$d файла сохранено в %2$s</item>
+    </plurals>
+    <string name="action_open">Открыть</string>
+    <string name="cd_open_save_folder">Открыть папку сохранения</string>
+    <string name="menu_open_folder">Открыть папку %1$s</string>
+    <string name="menu_change_save_folder">Изменить папку сохранения…</string>
+    <string name="receive_empty_title">Ожидание файлов…</string>
+    <string name="receive_empty_desc">Файлы, отправленные с другого устройства, появятся здесь.</string>
+
+    <string name="scan_unrecognized">QR-код не распознан</string>
+    <string name="scan_unsupported">Сканирование QR недоступно на этой платформе</string>
+
+    <string name="remote_title">Удалённые файлы</string>
+    <string name="remote_downloading">Загрузка %1$d/%2$d</string>
+    <plurals name="remote_downloaded_count">
+        <item quantity="one">%1$d файл загружен</item>
+        <item quantity="few">%1$d файла загружено</item>
+        <item quantity="many">%1$d файлов загружено</item>
+        <item quantity="other">%1$d файла загружено</item>
+    </plurals>
+    <string name="action_open_in_browser">Открыть в браузере</string>
+    <string name="remote_empty">Нет доступных файлов</string>
+    <string name="remote_download_selected">Скачать выбранные (%1$d)</string>
+    <string name="remote_error_load_failed">Не удалось загрузить файлы</string>
+    <string name="remote_error_download_failed">Не удалось скачать файлы</string>
+    <string name="remote_error_server">Ошибка сервера (%1$d)</string>
+
+    <string name="connection_scan_hint">Отсканируйте камерой другого устройства</string>
+    <string name="connection_same_wifi">Нужна одна сеть Wi-Fi</string>
+    <string name="copy_open_on_device">Откройте на другом устройстве</string>
+    <string name="cd_copy_link">Копировать ссылку</string>
+    <string name="cd_link_copied">Ссылка скопирована</string>
+    <string name="firewall_blocked_detail">Брандмауэр блокирует входящие подключения, поэтому другое устройство не может открыть ссылку.</string>
+    <string name="firewall_unknown_detail">Не удалось прочитать правила брандмауэра, чтобы определить состояние.</string>
+    <string name="firewall_title">Не удаётся подключиться с другого устройства?</string>
+    <string name="cd_copy_command">Копировать команду</string>
+    <string name="action_allowing">Разрешение…</string>
+    <string name="action_allow_firewall">Разрешить в брандмауэре</string>
+    <string name="server_error_title">Ошибка сервера</string>
+    <string name="action_retry">Повторить</string>
+    <string name="server_error_no_local_address">Локальный сетевой адрес не найден</string>
+    <string name="server_error_start_failed">Не удалось запустить сервер</string>
+    <plurals name="file_count_size">
+        <item quantity="one">%1$d файл · %2$s</item>
+        <item quantity="few">%1$d файла · %2$s</item>
+        <item quantity="many">%1$d файлов · %2$s</item>
+        <item quantity="other">%1$d файла · %2$s</item>
+    </plurals>
+
+    <string name="choose_save_folder">Выбрать папку сохранения</string>
+</resources>

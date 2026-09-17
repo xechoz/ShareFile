@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Partage de fichiers</string>
+
+    <string name="action_share">Partager</string>
+    <string name="action_receive">Recevoir</string>
+    <string name="action_back">Retour</string>
+    <string name="home_tagline">Partagez et recevez des fichiers sur votre réseau local</string>
+    <string name="home_subtitle">L\'autre appareil ouvre simplement le lien dans un navigateur — aucune installation requise</string>
+    <string name="home_share_desc">Envoyer des fichiers depuis cet appareil</string>
+    <string name="home_receive_desc">Recevoir des fichiers depuis un autre appareil</string>
+    <string name="action_scan_qr">Scanner le code QR</string>
+    <string name="action_about">À propos</string>
+    <string name="action_feedback">Commentaires</string>
+
+    <string name="exit_share_confirm">Appuyez à nouveau pour quitter le partage</string>
+    <string name="snackbar_link_copied">Lien copié</string>
+    <string name="snackbar_command_copied">Commande copiée</string>
+    <string name="snackbar_file_removed">%1$s supprimé</string>
+    <string name="action_undo">Annuler</string>
+    <string name="cd_remove">Supprimer</string>
+    <string name="share_empty_title">Aucun fichier pour l\'instant</string>
+    <string name="share_empty_desc">Glissez des fichiers ici ou appuyez sur Sélectionner des fichiers, puis laissez l\'autre appareil scanner le code QR ou ouvrir le lien pour télécharger.</string>
+    <string name="action_select_files">Sélectionner des fichiers</string>
+    <string name="action_add_more_files">Ajouter des fichiers</string>
+
+    <string name="exit_receive_confirm">Appuyez à nouveau pour quitter la réception</string>
+    <string name="snackbar_no_app_can_open">Aucune application ne peut ouvrir %1$s</string>
+    <string name="snackbar_no_file_manager">Aucun gestionnaire de fichiers trouvé</string>
+    <string name="snackbar_file_saved">%1$s enregistré dans %2$s</string>
+    <plurals name="saved_files_count">
+        <item quantity="one">%1$d fichier enregistré dans %2$s</item>
+        <item quantity="other">%1$d fichiers enregistrés dans %2$s</item>
+    </plurals>
+    <string name="action_open">Ouvrir</string>
+    <string name="cd_open_save_folder">Ouvrir le dossier d\'enregistrement</string>
+    <string name="menu_open_folder">Ouvrir le dossier %1$s</string>
+    <string name="menu_change_save_folder">Changer le dossier d\'enregistrement…</string>
+    <string name="receive_empty_title">En attente de fichiers…</string>
+    <string name="receive_empty_desc">Les fichiers envoyés depuis l\'autre appareil apparaîtront ici.</string>
+
+    <string name="scan_unrecognized">Code QR non reconnu</string>
+    <string name="scan_unsupported">Le scan de code QR n\'est pas disponible sur cette plateforme</string>
+
+    <string name="remote_title">Fichiers distants</string>
+    <string name="remote_downloading">Téléchargement %1$d/%2$d</string>
+    <plurals name="remote_downloaded_count">
+        <item quantity="one">%1$d fichier téléchargé</item>
+        <item quantity="other">%1$d fichiers téléchargés</item>
+    </plurals>
+    <string name="action_open_in_browser">Ouvrir dans le navigateur</string>
+    <string name="remote_empty">Aucun fichier disponible</string>
+    <string name="remote_download_selected">Télécharger la sélection (%1$d)</string>
+    <string name="remote_error_load_failed">Échec du chargement des fichiers</string>
+    <string name="remote_error_download_failed">Échec du téléchargement des fichiers</string>
+    <string name="remote_error_server">Erreur du serveur (%1$d)</string>
+
+    <string name="connection_scan_hint">Scannez avec l\'appareil photo de l\'autre appareil</string>
+    <string name="connection_same_wifi">Même réseau Wi-Fi requis</string>
+    <string name="copy_open_on_device">Ouvrez-le sur l\'autre appareil</string>
+    <string name="cd_copy_link">Copier le lien</string>
+    <string name="cd_link_copied">Lien copié</string>
+    <string name="firewall_blocked_detail">Le pare-feu bloque les connexions entrantes, l\'autre appareil ne peut donc pas ouvrir le lien.</string>
+    <string name="firewall_unknown_detail">Impossible de lire les règles du pare-feu pour déterminer l\'état.</string>
+    <string name="firewall_title">Impossible de vous connecter depuis l\'autre appareil ?</string>
+    <string name="cd_copy_command">Copier la commande</string>
+    <string name="action_allowing">Autorisation…</string>
+    <string name="action_allow_firewall">Autoriser via le pare-feu</string>
+    <string name="server_error_title">Erreur du serveur</string>
+    <string name="action_retry">Réessayer</string>
+    <string name="server_error_no_local_address">Aucune adresse réseau locale trouvée</string>
+    <string name="server_error_start_failed">Échec du démarrage du serveur</string>
+    <plurals name="file_count_size">
+        <item quantity="one">%1$d fichier · %2$s</item>
+        <item quantity="other">%1$d fichiers · %2$s</item>
+    </plurals>
+
+    <string name="choose_save_folder">Choisir le dossier d\'enregistrement</string>
+</resources>

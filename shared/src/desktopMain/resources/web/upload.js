@@ -15,6 +15,18 @@
 
   if (!form || !input || !picker) return;
 
+  var I18N = window.I18N || {};
+
+  function t(key, params) {
+    var s = I18N[key] || key;
+    if (params) {
+      Object.keys(params).forEach(function (k) {
+        s = s.split('{' + k + '}').join(params[k]);
+      });
+    }
+    return s;
+  }
+
   input.classList.add('visually-hidden');
   picker.hidden = false;
 
@@ -121,7 +133,7 @@
     remove.className = 'remove';
     remove.type = 'button';
     remove.textContent = '✕';
-    remove.setAttribute('aria-label', 'Remove ' + entry.file.name);
+    remove.setAttribute('aria-label', t('upload.aria_remove', { name: entry.file.name }));
     remove.addEventListener('click', function () { removeAt(index); });
     li.appendChild(remove);
 
@@ -145,12 +157,12 @@
 
     listHeader.hidden = !hasFiles;
     empty.hidden = hasFiles;
-    pickBtn.textContent = hasFiles ? 'Add more files' : 'Select files';
+    pickBtn.textContent = hasFiles ? t('upload.add_more') : t('upload.select_files');
     pickBtn.classList.toggle('is-disabled', uploading);
     input.disabled = uploading;
     clearAll.disabled = uploading;
     uploadBtn.disabled = uploading || pending === 0;
-    if (!uploading) uploadBtn.textContent = 'Upload';
+    if (!uploading) uploadBtn.textContent = t('upload.upload');
 
     entries.forEach(function (entry) {
       if (entry.el) entry.el.remove.disabled = uploading;
@@ -158,8 +170,10 @@
 
     if (hasFiles) {
       var total = entries.reduce(function (sum, entry) { return sum + entry.file.size; }, 0);
-      var label = entries.length + (entries.length === 1 ? ' file · ' : ' files · ') + formatSize(total);
-      if (uploaded > 0) label += ' · ' + uploaded + ' uploaded';
+      var label = entries.length === 1
+        ? t('upload.summary_one', { count: entries.length, size: formatSize(total) })
+        : t('upload.summary_many', { count: entries.length, size: formatSize(total) });
+      if (uploaded > 0) label += ' · ' + t('upload.summary_uploaded', { count: uploaded });
       summary.textContent = label;
     }
   }
@@ -204,7 +218,7 @@
     var removed = entries[index];
     entries.splice(index, 1);
     render();
-    showToast('Removed ' + removed.file.name, 'Undo', function () {
+    showToast(t('upload.removed', { name: removed.file.name }), t('upload.undo'), function () {
       entries.splice(index, 0, removed);
       render();
     });
@@ -253,17 +267,19 @@
         render();
         var uploaded = total - failed;
         if (failed === 0) {
-          showToast('Uploaded ' + total + (total === 1 ? ' file' : ' files'));
+          showToast(total === 1
+            ? t('upload.uploaded_one', { count: total })
+            : t('upload.uploaded_many', { count: total }));
         } else if (uploaded === 0) {
-          showToast('Upload failed');
+          showToast(t('upload.failed'));
         } else {
-          showToast(uploaded + ' uploaded · ' + failed + ' failed');
+          showToast(t('upload.partial', { uploaded: uploaded, failed: failed }));
         }
         return;
       }
       var entry = queue[index];
       index++;
-      uploadBtn.textContent = 'Uploading ' + index + '/' + total + '…';
+      uploadBtn.textContent = t('upload.uploading', { current: index, total: total });
       uploadOne(entry, function (ok) {
         if (!ok) failed++;
         next();
@@ -283,7 +299,7 @@
     var removed = entries;
     entries = [];
     render();
-    showToast('Cleared all files', 'Undo', function () {
+    showToast(t('upload.cleared'), t('upload.undo'), function () {
       entries = removed;
       render();
     });

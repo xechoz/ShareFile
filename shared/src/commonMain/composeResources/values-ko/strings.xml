@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">파일 공유</string>
+
+    <string name="action_share">공유</string>
+    <string name="action_receive">받기</string>
+    <string name="action_back">뒤로</string>
+    <string name="home_tagline">로컬 네트워크에서 파일을 공유하고 받으세요</string>
+    <string name="home_subtitle">상대 기기는 브라우저에서 링크만 열면 됩니다 — 설치가 필요 없습니다</string>
+    <string name="home_share_desc">이 기기에서 파일 보내기</string>
+    <string name="home_receive_desc">다른 기기에서 파일 받기</string>
+    <string name="action_scan_qr">QR 코드 스캔</string>
+    <string name="action_about">정보</string>
+    <string name="action_feedback">의견 보내기</string>
+
+    <string name="exit_share_confirm">한 번 더 누르면 공유를 종료합니다</string>
+    <string name="snackbar_link_copied">링크를 복사했습니다</string>
+    <string name="snackbar_command_copied">명령을 복사했습니다</string>
+    <string name="snackbar_file_removed">%1$s 삭제됨</string>
+    <string name="action_undo">실행 취소</string>
+    <string name="cd_remove">삭제</string>
+    <string name="share_empty_title">아직 파일이 없습니다</string>
+    <string name="share_empty_desc">파일을 여기로 끌어다 놓거나 파일 선택을 누른 뒤, 상대 기기에서 QR 코드를 스캔하거나 링크를 열어 다운로드하세요.</string>
+    <string name="action_select_files">파일 선택</string>
+    <string name="action_add_more_files">파일 더 추가</string>
+
+    <string name="exit_receive_confirm">한 번 더 누르면 받기를 종료합니다</string>
+    <string name="snackbar_no_app_can_open">%1$s을(를) 열 수 있는 앱이 없습니다</string>
+    <string name="snackbar_no_file_manager">파일 관리자를 찾을 수 없습니다</string>
+    <string name="snackbar_file_saved">%1$s을(를) %2$s에 저장했습니다</string>
+    <plurals name="saved_files_count">
+        <item quantity="other">%1$d개 파일을 %2$s에 저장했습니다</item>
+    </plurals>
+    <string name="action_open">열기</string>
+    <string name="cd_open_save_folder">저장 폴더 열기</string>
+    <string name="menu_open_folder">%1$s 폴더 열기</string>
+    <string name="menu_change_save_folder">저장 폴더 변경…</string>
+    <string name="receive_empty_title">파일을 기다리는 중…</string>
+    <string name="receive_empty_desc">상대 기기에서 보낸 파일이 여기에 표시됩니다.</string>
+
+    <string name="scan_unrecognized">QR 코드를 인식할 수 없습니다</string>
+    <string name="scan_unsupported">이 플랫폼에서는 QR 스캔을 사용할 수 없습니다</string>
+
+    <string name="remote_title">원격 파일</string>
+    <string name="remote_downloading">다운로드 중 %1$d/%2$d</string>
+    <plurals name="remote_downloaded_count">
+        <item quantity="other">%1$d개 파일을 다운로드했습니다</item>
+    </plurals>
+    <string name="action_open_in_browser">브라우저에서 열기</string>
+    <string name="remote_empty">사용할 수 있는 파일이 없습니다</string>
+    <string name="remote_download_selected">선택 항목 다운로드 (%1$d)</string>
+    <string name="remote_error_load_failed">파일을 불러오지 못했습니다</string>
+    <string name="remote_error_download_failed">파일을 다운로드하지 못했습니다</string>
+    <string name="remote_error_server">서버 오류 (%1$d)</string>
+
+    <string name="connection_scan_hint">상대 기기의 카메라로 스캔하세요</string>
+    <string name="connection_same_wifi">같은 Wi-Fi가 필요합니다</string>
+    <string name="copy_open_on_device">상대 기기에서 여세요</string>
+    <string name="cd_copy_link">링크 복사</string>
+    <string name="cd_link_copied">링크를 복사했습니다</string>
+    <string name="firewall_blocked_detail">방화벽이 들어오는 연결을 차단하고 있어 상대 기기에서 링크를 열 수 없습니다.</string>
+    <string name="firewall_unknown_detail">방화벽 규칙을 읽지 못해 상태를 확인할 수 없습니다.</string>
+    <string name="firewall_title">상대 기기에서 연결할 수 없나요?</string>
+    <string name="cd_copy_command">명령 복사</string>
+    <string name="action_allowing">허용하는 중…</string>
+    <string name="action_allow_firewall">방화벽에서 허용</string>
+    <string name="server_error_title">서버 오류</string>
+    <string name="action_retry">다시 시도</string>
+    <string name="server_error_no_local_address">로컬 네트워크 주소를 찾을 수 없습니다</string>
+    <string name="server_error_start_failed">서버를 시작하지 못했습니다</string>
+    <plurals name="file_count_size">
+        <item quantity="other">%1$d개 파일 · %2$s</item>
+    </plurals>
+
+    <string name="choose_save_folder">저장 폴더 선택</string>
+</resources>

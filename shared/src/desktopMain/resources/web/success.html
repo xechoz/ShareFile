@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{lang}}" dir="{{dir}}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quick File Share - Done</title>
+<title>{{success.title}}</title>
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
   <div class="card">
-    <h1 class="success">Upload complete</h1>
+    <h1 class="success">{{success.heading}}</h1>
     <ul>{{items}}</ul>
-    <a href="/">Upload more</a>
+    <a href="/">{{success.upload_more}}</a>
   </div>
 </body>
 </html>

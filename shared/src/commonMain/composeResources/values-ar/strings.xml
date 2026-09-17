@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مشاركة الملفات</string>
+
+    <string name="action_share">مشاركة</string>
+    <string name="action_receive">استقبال</string>
+    <string name="action_back">رجوع</string>
+    <string name="home_tagline">شارك واستقبل الملفات عبر شبكتك المحلية</string>
+    <string name="home_subtitle">يفتح الجهاز الآخر الرابط في المتصفح فقط — دون الحاجة إلى تثبيت</string>
+    <string name="home_share_desc">إرسال ملفات من هذا الجهاز</string>
+    <string name="home_receive_desc">استقبال ملفات من جهاز آخر</string>
+    <string name="action_scan_qr">مسح رمز QR</string>
+    <string name="action_about">حول</string>
+    <string name="action_feedback">ملاحظات</string>
+
+    <string name="exit_share_confirm">اضغط مرة أخرى للخروج من المشاركة</string>
+    <string name="snackbar_link_copied">تم نسخ الرابط</string>
+    <string name="snackbar_command_copied">تم نسخ الأمر</string>
+    <string name="snackbar_file_removed">تمت إزالة %1$s</string>
+    <string name="action_undo">تراجع</string>
+    <string name="cd_remove">إزالة</string>
+    <string name="share_empty_title">لا توجد ملفات بعد</string>
+    <string name="share_empty_desc">اسحب الملفات إلى هنا أو اضغط على اختيار الملفات، ثم دع الجهاز الآخر يمسح رمز QR أو يفتح الرابط للتنزيل.</string>
+    <string name="action_select_files">اختيار الملفات</string>
+    <string name="action_add_more_files">إضافة المزيد من الملفات</string>
+
+    <string name="exit_receive_confirm">اضغط مرة أخرى للخروج من الاستقبال</string>
+    <string name="snackbar_no_app_can_open">لا يوجد تطبيق يمكنه فتح %1$s</string>
+    <string name="snackbar_no_file_manager">لم يتم العثور على مدير ملفات</string>
+    <string name="snackbar_file_saved">تم حفظ %1$s في %2$s</string>
+    <plurals name="saved_files_count">
+        <item quantity="zero">لم يتم حفظ أي ملفات في %2$s</item>
+        <item quantity="one">تم حفظ ملف واحد في %2$s</item>
+        <item quantity="two">تم حفظ ملفين في %2$s</item>
+        <item quantity="few">تم حفظ %1$d ملفات في %2$s</item>
+        <item quantity="many">تم حفظ %1$d ملفًا في %2$s</item>
+        <item quantity="other">تم حفظ %1$d ملف في %2$s</item>
+    </plurals>
+    <string name="action_open">فتح</string>
+    <string name="cd_open_save_folder">فتح مجلد الحفظ</string>
+    <string name="menu_open_folder">فتح مجلد %1$s</string>
+    <string name="menu_change_save_folder">تغيير مجلد الحفظ…</string>
+    <string name="receive_empty_title">بانتظار الملفات…</string>
+    <string name="receive_empty_desc">ستظهر هنا الملفات المرسلة من الجهاز الآخر.</string>
+
+    <string name="scan_unrecognized">رمز QR غير معروف</string>
+    <string name="scan_unsupported">مسح رمز QR غير متاح على هذه المنصة</string>
+
+    <string name="remote_title">الملفات البعيدة</string>
+    <string name="remote_downloading">جارٍ التنزيل %1$d/%2$d</string>
+    <plurals name="remote_downloaded_count">
+        <item quantity="zero">لم يتم تنزيل أي ملفات</item>
+        <item quantity="one">تم تنزيل ملف واحد</item>
+        <item quantity="two">تم تنزيل ملفين</item>
+        <item quantity="few">تم تنزيل %1$d ملفات</item>
+        <item quantity="many">تم تنزيل %1$d ملفًا</item>
+        <item quantity="other">تم تنزيل %1$d ملف</item>
+    </plurals>
+    <string name="action_open_in_browser">فتح في المتصفح</string>
+    <string name="remote_empty">لا توجد ملفات متاحة</string>
+    <string name="remote_download_selected">تنزيل المحدد (%1$d)</string>
+    <string name="remote_error_load_failed">تعذّر تحميل الملفات</string>
+    <string name="remote_error_download_failed">تعذّر تنزيل الملفات</string>
+    <string name="remote_error_server">خطأ في الخادم (%1$d)</string>
+
+    <string name="connection_scan_hint">امسح باستخدام كاميرا الجهاز الآخر</string>
+    <string name="connection_same_wifi">يلزم الاتصال بنفس شبكة Wi-Fi</string>
+    <string name="copy_open_on_device">افتح على الجهاز الآخر</string>
+    <string name="cd_copy_link">نسخ الرابط</string>
+    <string name="cd_link_copied">تم نسخ الرابط</string>
+    <string name="firewall_blocked_detail">جدار الحماية يحظر الاتصالات الواردة، لذا لا يمكن للجهاز الآخر فتح الرابط.</string>
+    <string name="firewall_unknown_detail">تعذّرت قراءة قواعد جدار الحماية لتحديد الحالة.</string>
+    <string name="firewall_title">ألا يمكن الاتصال من الجهاز الآخر؟</string>
+    <string name="cd_copy_command">نسخ الأمر</string>
+    <string name="action_allowing">جارٍ السماح…</string>
+    <string name="action_allow_firewall">السماح عبر جدار الحماية</string>
+    <string name="server_error_title">خطأ في الخادم</string>
+    <string name="action_retry">إعادة المحاولة</string>
+    <string name="server_error_no_local_address">لم يتم العثور على عنوان شبكة محلية</string>
+    <string name="server_error_start_failed">تعذّر بدء الخادم</string>
+    <plurals name="file_count_size">
+        <item quantity="zero">لا ملفات · %2$s</item>
+        <item quantity="one">ملف واحد · %2$s</item>
+        <item quantity="two">ملفان · %2$s</item>
+        <item quantity="few">%1$d ملفات · %2$s</item>
+        <item quantity="many">%1$d ملفًا · %2$s</item>
+        <item quantity="other">%1$d ملف · %2$s</item>
+    </plurals>
+
+    <string name="choose_save_folder">اختيار مجلد الحفظ</string>
+</resources>

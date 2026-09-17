@@ -14,6 +14,7 @@ import com.xechoz.sharefile.platform.DesktopAppContainer
 import com.xechoz.sharefile.platform.DesktopAssetProvider
 import com.xechoz.sharefile.platform.DesktopUiScale
 import com.xechoz.sharefile.platform.DesktopWindowState
+import com.xechoz.sharefile.platform.appDisplayName
 import com.xechoz.sharefile.ui.App
 import com.xechoz.sharefile.ui.theme.ShareFileTheme
 import org.jetbrains.skia.Image
@@ -25,6 +26,7 @@ fun main() {
     application {
         val (size, position) = remember { DesktopWindowState.load() }
         val windowState = rememberWindowState(size = size, position = position)
+        val title = remember { appDisplayName() }
         val icon = remember {
             DesktopAssetProvider().bytes("sharefile.png")
                 ?.let { BitmapPainter(Image.makeFromEncoded(it).toComposeImageBitmap()) }
@@ -34,7 +36,7 @@ fun main() {
                 DesktopWindowState.save(windowState)
                 exitApplication()
             },
-            title = "Quick File Share",
+            title = title,
             state = windowState,
             icon = icon,
         ) {

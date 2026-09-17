@@ -10,13 +10,22 @@ internal class Pages(private val assets: AssetProvider) {
 
     private val templates = mutableMapOf<String, String>()
 
-    fun uploadPage(): String = template("upload.html")
+    fun uploadPage(strings: WebStrings): String =
+        render(template("upload.html"), strings)
 
-    fun successPage(saved: List<ReceivedFile>): String =
-        template("success.html").replace(ITEMS, successItems(saved))
+    fun successPage(saved: List<ReceivedFile>, strings: WebStrings): String =
+        render(template("success.html"), strings).replace(ITEMS, successItems(saved))
 
-    fun sharePage(files: List<SharedFile>): String =
-        template("share.html").replace(ITEMS, shareItems(files))
+    fun sharePage(files: List<SharedFile>, strings: WebStrings): String =
+        render(template("share.html"), strings).replace(ITEMS, shareItems(files))
+
+    private fun render(template: String, strings: WebStrings): String {
+        var out = template.replace(LANG, strings.lang).replace(DIR, strings.dir)
+        strings.htmlTokens().forEach { (key, value) ->
+            out = out.replace("{{$key}}", escapeHtml(value))
+        }
+        return out.replace(I18N, strings.jsJson())
+    }
 
     private fun template(name: String): String =
         templates.getOrPut(name) { assets.text("web/$name").orEmpty() }
@@ -44,6 +53,9 @@ internal class Pages(private val assets: AssetProvider) {
 
     private companion object {
         const val ITEMS = "{{items}}"
+        const val I18N = "{{i18n}}"
+        const val LANG = "{{lang}}"
+        const val DIR = "{{dir}}"
     }
 }
 

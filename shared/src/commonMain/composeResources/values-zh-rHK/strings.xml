@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">快速檔案分享</string>
+
+    <string name="action_share">分享</string>
+    <string name="action_receive">接收</string>
+    <string name="action_back">返回</string>
+    <string name="home_tagline">在區域網路內分享與接收檔案</string>
+    <string name="home_subtitle">另一台裝置只需用瀏覽器開啟連結，無需安裝</string>
+    <string name="home_share_desc">從本機傳送檔案</string>
+    <string name="home_receive_desc">接收另一台裝置的檔案</string>
+    <string name="action_scan_qr">掃描 QR Code</string>
+    <string name="action_about">關於</string>
+    <string name="action_feedback">意見回饋</string>
+
+    <string name="exit_share_confirm">再按一次以結束分享</string>
+    <string name="snackbar_link_copied">已複製連結</string>
+    <string name="snackbar_command_copied">已複製指令</string>
+    <string name="snackbar_file_removed">已移除 %1$s</string>
+    <string name="action_undo">復原</string>
+    <string name="cd_remove">移除</string>
+    <string name="share_empty_title">尚無檔案</string>
+    <string name="share_empty_desc">將檔案拖曳到此處或點選「選擇檔案」，接著讓另一台裝置掃描 QR Code 或開啟連結下載。</string>
+    <string name="action_select_files">選擇檔案</string>
+    <string name="action_add_more_files">新增更多檔案</string>
+
+    <string name="exit_receive_confirm">再按一次以結束接收</string>
+    <string name="snackbar_no_app_can_open">沒有應用程式可以開啟 %1$s</string>
+    <string name="snackbar_no_file_manager">找不到檔案管理器</string>
+    <string name="snackbar_file_saved">已將 %1$s 儲存到 %2$s</string>
+    <plurals name="saved_files_count">
+        <item quantity="other">已將 %1$d 個檔案儲存到 %2$s</item>
+    </plurals>
+    <string name="action_open">開啟</string>
+    <string name="cd_open_save_folder">開啟儲存資料夾</string>
+    <string name="menu_open_folder">開啟 %1$s 資料夾</string>
+    <string name="menu_change_save_folder">變更儲存資料夾…</string>
+    <string name="receive_empty_title">正在等待檔案…</string>
+    <string name="receive_empty_desc">從另一台裝置傳送的檔案會顯示在這裡。</string>
+
+    <string name="scan_unrecognized">無法辨識的 QR Code</string>
+    <string name="scan_unsupported">此平台不支援掃描 QR Code</string>
+
+    <string name="remote_title">遠端檔案</string>
+    <string name="remote_downloading">正在下載 %1$d/%2$d</string>
+    <plurals name="remote_downloaded_count">
+        <item quantity="other">已下載 %1$d 個檔案</item>
+    </plurals>
+    <string name="action_open_in_browser">在瀏覽器開啟</string>
+    <string name="remote_empty">沒有可下載的檔案</string>
+    <string name="remote_download_selected">下載所選項目（%1$d）</string>
+    <string name="remote_error_load_failed">載入檔案失敗</string>
+    <string name="remote_error_download_failed">下載檔案失敗</string>
+    <string name="remote_error_server">伺服器錯誤（%1$d）</string>
+
+    <string name="connection_scan_hint">用另一台裝置的相機掃描</string>
+    <string name="connection_same_wifi">需要連線同一個 Wi-Fi</string>
+    <string name="copy_open_on_device">在另一台裝置開啟</string>
+    <string name="cd_copy_link">複製連結</string>
+    <string name="cd_link_copied">已複製連結</string>
+    <string name="firewall_blocked_detail">防火牆正在封鎖傳入連線，因此另一台裝置無法開啟連結。</string>
+    <string name="firewall_unknown_detail">無法讀取防火牆規則以判斷狀態。</string>
+    <string name="firewall_title">另一台裝置無法連線？</string>
+    <string name="cd_copy_command">複製指令</string>
+    <string name="action_allowing">正在允許…</string>
+    <string name="action_allow_firewall">允許通過防火牆</string>
+    <string name="server_error_title">伺服器錯誤</string>
+    <string name="action_retry">重試</string>
+    <string name="server_error_no_local_address">找不到區域網路位址</string>
+    <string name="server_error_start_failed">啟動伺服器失敗</string>
+    <plurals name="file_count_size">
+        <item quantity="other">%1$d 個檔案 · %2$s</item>
+    </plurals>
+
+    <string name="choose_save_folder">選擇儲存資料夾</string>
+</resources>

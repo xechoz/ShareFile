@@ -88,7 +88,7 @@ class DesktopFirewallService : FirewallService {
 
     private fun ufwCheck(port: Int): FirewallStatus {
         val rules = runCatching { File("/etc/ufw/user.rules").readText() }.getOrNull()
-            ?: return FirewallStatus.Unknown("Cannot read /etc/ufw/user.rules")
+            ?: return FirewallStatus.Unknown(FirewallUnknown.UfwRulesUnreadable)
         return if (FirewallRules.ufwAllowsPort(rules, port)) FirewallStatus.Allowed
         else FirewallStatus.Blocked
     }
