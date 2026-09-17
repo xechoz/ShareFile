@@ -76,4 +76,16 @@
     </plurals>
 
     <string name="choose_save_folder">सहेजने वाला फ़ोल्डर चुनें</string>
+    <string name="feedback_message_label">आपका संदेश</string>
+    <string name="feedback_message_placeholder">बग या सुझाव का वर्णन करें…</string>
+    <string name="feedback_type_label">प्रकार</string>
+    <string name="feedback_type_bug">बग</string>
+    <string name="feedback_type_suggestion">सुझाव</string>
+    <string name="feedback_type_other">अन्य</string>
+    <string name="feedback_email_label">ईमेल (वैकल्पिक)</string>
+    <string name="feedback_email_placeholder">you@example.com</string>
+    <string name="feedback_env_label">स्वतः संलग्न</string>
+    <string name="feedback_submit">GitHub पर खोलें</string>
+    <string name="feedback_hint">यह ब्राउज़र में पहले से भरे issue के साथ GitHub खोलता है। सबमिट करने के लिए GitHub खाता आवश्यक है।</string>
+    <string name="feedback_opened">ब्राउज़र में GitHub खोला गया</string>
 </resources>

@@ -73,4 +73,16 @@
     </plurals>
 
     <string name="choose_save_folder">保存フォルダを選択</string>
+    <string name="feedback_message_label">メッセージ</string>
+    <string name="feedback_message_placeholder">不具合や提案を記入してください…</string>
+    <string name="feedback_type_label">種類</string>
+    <string name="feedback_type_bug">不具合</string>
+    <string name="feedback_type_suggestion">提案</string>
+    <string name="feedback_type_other">その他</string>
+    <string name="feedback_email_label">メールアドレス（任意）</string>
+    <string name="feedback_email_placeholder">you@example.com</string>
+    <string name="feedback_env_label">自動で添付されます</string>
+    <string name="feedback_submit">GitHub で開く</string>
+    <string name="feedback_hint">ブラウザで GitHub を開き、内容を入力済みの issue を表示します。送信には GitHub アカウントが必要です。</string>
+    <string name="feedback_opened">ブラウザで GitHub を開きました</string>
 </resources>

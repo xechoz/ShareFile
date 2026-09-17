@@ -82,4 +82,16 @@
     </plurals>
 
     <string name="choose_save_folder">Выбрать папку сохранения</string>
+    <string name="feedback_message_label">Ваше сообщение</string>
+    <string name="feedback_message_placeholder">Опишите проблему или предложение…</string>
+    <string name="feedback_type_label">Тип</string>
+    <string name="feedback_type_bug">Ошибка</string>
+    <string name="feedback_type_suggestion">Предложение</string>
+    <string name="feedback_type_other">Другое</string>
+    <string name="feedback_email_label">Эл. почта (необязательно)</string>
+    <string name="feedback_email_placeholder">you@example.com</string>
+    <string name="feedback_env_label">Добавляется автоматически</string>
+    <string name="feedback_submit">Открыть на GitHub</string>
+    <string name="feedback_hint">Откроет GitHub в браузере с уже заполненной задачей. Для отправки нужна учётная запись GitHub.</string>
+    <string name="feedback_opened">GitHub открыт в браузере</string>
 </resources>

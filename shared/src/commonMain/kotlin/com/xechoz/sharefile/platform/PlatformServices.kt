@@ -10,6 +10,8 @@ interface PlatformServices {
 
     val downloadFolderName: String
 
+    val platformLabel: String
+
     fun openUrl(url: String)
 
     fun openFile(file: ReceivedFile): Boolean

@@ -7,6 +7,36 @@ plugins {
     alias(libs.plugins.compose.multiplatform)
 }
 
+val appVersion = providers.gradleProperty("app.version").get()
+
+abstract class GenerateAppBuildInfo : DefaultTask() {
+    @get:Input
+    abstract val version: Property<String>
+
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @TaskAction
+    fun generate() {
+        val dir = outputDir.get().asFile.resolve("com/xechoz/sharefile/platform")
+        dir.mkdirs()
+        dir.resolve("AppBuildInfo.kt").writeText(
+            """
+            package com.xechoz.sharefile.platform
+
+            object AppBuildInfo {
+                const val VERSION = "${version.get()}"
+            }
+            """.trimIndent() + "\n",
+        )
+    }
+}
+
+val generateAppBuildInfo by tasks.registering(GenerateAppBuildInfo::class) {
+    version.set(appVersion)
+    outputDir.set(layout.buildDirectory.dir("generated/appBuildInfo"))
+}
+
 kotlin {
     android {
         namespace = "com.xechoz.sharefile.shared"
@@ -28,6 +58,7 @@ kotlin {
 
     sourceSets {
         getByName("commonMain") {
+            kotlin.srcDir(generateAppBuildInfo.map { it.outputDir })
             dependencies {
                 implementation(compose.runtime)
                 implementation(compose.foundation)

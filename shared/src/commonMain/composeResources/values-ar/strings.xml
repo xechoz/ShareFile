@@ -88,4 +88,16 @@
     </plurals>
 
     <string name="choose_save_folder">اختيار مجلد الحفظ</string>
+    <string name="feedback_message_label">رسالتك</string>
+    <string name="feedback_message_placeholder">صِف المشكلة أو الاقتراح…</string>
+    <string name="feedback_type_label">النوع</string>
+    <string name="feedback_type_bug">خطأ</string>
+    <string name="feedback_type_suggestion">اقتراح</string>
+    <string name="feedback_type_other">أخرى</string>
+    <string name="feedback_email_label">البريد الإلكتروني (اختياري)</string>
+    <string name="feedback_email_placeholder">you@example.com</string>
+    <string name="feedback_env_label">يُرفَق تلقائيًا</string>
+    <string name="feedback_submit">فتح على GitHub</string>
+    <string name="feedback_hint">يفتح هذا GitHub في المتصفح مع issue معبّأ مسبقًا. تحتاج إلى حساب GitHub للإرسال.</string>
+    <string name="feedback_opened">تم فتح GitHub في المتصفح</string>
 </resources>

@@ -76,4 +76,16 @@
     </plurals>
 
     <string name="choose_save_folder">选择保存文件夹</string>
+    <string name="feedback_message_label">你的意见</string>
+    <string name="feedback_message_placeholder">描述你遇到的问题或建议…</string>
+    <string name="feedback_type_label">类型</string>
+    <string name="feedback_type_bug">问题</string>
+    <string name="feedback_type_suggestion">建议</string>
+    <string name="feedback_type_other">其他</string>
+    <string name="feedback_email_label">邮箱（选填）</string>
+    <string name="feedback_email_placeholder">you@example.com</string>
+    <string name="feedback_env_label">将自动附带</string>
+    <string name="feedback_submit">在 GitHub 上打开</string>
+    <string name="feedback_hint">这将在浏览器中打开 GitHub 并预填好 issue，提交需要 GitHub 账号。</string>
+    <string name="feedback_opened">已在浏览器中打开 GitHub</string>
 </resources>

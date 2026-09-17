@@ -22,6 +22,10 @@ class DesktopPlatformServices(
     override val downloadFolderName: String
         get() = downloads.directory.name
 
+    override val platformLabel: String =
+        "${System.getProperty("os.name")} ${System.getProperty("os.version")} " +
+            "(${System.getProperty("os.arch")})"
+
     override fun openUrl(url: String) {
         runCatching { Desktop.getDesktop().browse(URI(url)) }
     }

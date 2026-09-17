@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.xechoz.sharefile.platform.AppContainer
 import com.xechoz.sharefile.platform.LocalAppContainer
+import com.xechoz.sharefile.ui.feedback.FeedbackScreen
 import com.xechoz.sharefile.ui.layout.ProvideWindowLayout
 import com.xechoz.sharefile.ui.receive.ReceiveScreen
 import com.xechoz.sharefile.ui.remote.RemoteFilesScreen
@@ -15,13 +16,13 @@ import com.xechoz.sharefile.ui.scan.ScanScreen
 import com.xechoz.sharefile.ui.share.ShareScreen
 
 private const val AUTHOR_URL = "https://github.com/xechoz"
-private const val FEEDBACK_URL = "https://github.com/xechoz/ShareFile/issues"
 
 sealed interface Screen {
     data object Home : Screen
     data object Share : Screen
     data object Receive : Screen
     data object Scan : Screen
+    data object Feedback : Screen
     data class RemoteFiles(val url: String) : Screen
 }
 
@@ -38,7 +39,7 @@ fun App(container: AppContainer) {
                     onReceive = { screen = Screen.Receive },
                     onScan = { screen = Screen.Scan },
                     onAbout = { container.platform.openUrl(AUTHOR_URL) },
-                    onFeedback = { container.platform.openUrl(FEEDBACK_URL) },
+                    onFeedback = { screen = Screen.Feedback },
                 )
 
                 Screen.Share -> ShareScreen(
@@ -56,6 +57,10 @@ fun App(container: AppContainer) {
                         container.platform.openUrl(url)
                         screen = Screen.Home
                     },
+                )
+
+                Screen.Feedback -> FeedbackScreen(
+                    onBack = { screen = Screen.Home },
                 )
 
                 is Screen.RemoteFiles -> RemoteFilesScreen(

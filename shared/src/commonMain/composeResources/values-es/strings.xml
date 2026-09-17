@@ -76,4 +76,16 @@
     </plurals>
 
     <string name="choose_save_folder">Elegir carpeta de guardado</string>
+    <string name="feedback_message_label">Tu mensaje</string>
+    <string name="feedback_message_placeholder">Describe el error o la sugerencia…</string>
+    <string name="feedback_type_label">Tipo</string>
+    <string name="feedback_type_bug">Error</string>
+    <string name="feedback_type_suggestion">Sugerencia</string>
+    <string name="feedback_type_other">Otro</string>
+    <string name="feedback_email_label">Correo electrónico (opcional)</string>
+    <string name="feedback_email_placeholder">tu@ejemplo.com</string>
+    <string name="feedback_env_label">Se adjunta automáticamente</string>
+    <string name="feedback_submit">Abrir en GitHub</string>
+    <string name="feedback_hint">Esto abre GitHub en tu navegador con una incidencia ya rellenada. Necesitas una cuenta de GitHub para enviarla.</string>
+    <string name="feedback_opened">GitHub abierto en tu navegador</string>
 </resources>

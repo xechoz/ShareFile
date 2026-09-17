@@ -73,4 +73,16 @@
     </plurals>
 
     <string name="choose_save_folder">저장 폴더 선택</string>
+    <string name="feedback_message_label">메시지</string>
+    <string name="feedback_message_placeholder">버그나 제안을 설명해 주세요…</string>
+    <string name="feedback_type_label">유형</string>
+    <string name="feedback_type_bug">버그</string>
+    <string name="feedback_type_suggestion">제안</string>
+    <string name="feedback_type_other">기타</string>
+    <string name="feedback_email_label">이메일(선택)</string>
+    <string name="feedback_email_placeholder">you@example.com</string>
+    <string name="feedback_env_label">자동으로 첨부됨</string>
+    <string name="feedback_submit">GitHub에서 열기</string>
+    <string name="feedback_hint">브라우저에서 미리 채워진 issue와 함께 GitHub를 엽니다. 제출하려면 GitHub 계정이 필요합니다.</string>
+    <string name="feedback_opened">브라우저에서 GitHub를 열었습니다</string>
 </resources>

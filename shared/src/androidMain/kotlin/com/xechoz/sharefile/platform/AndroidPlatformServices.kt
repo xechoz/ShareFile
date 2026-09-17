@@ -19,6 +19,10 @@ class AndroidPlatformServices(
 
     override val downloadFolderName: String = "Downloads"
 
+    override val platformLabel: String =
+        "Android ${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT}), " +
+            "${Build.MANUFACTURER} ${Build.MODEL}"
+
     override fun openUrl(url: String) {
         activity.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
     }

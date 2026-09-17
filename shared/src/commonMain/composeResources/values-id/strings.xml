@@ -73,4 +73,16 @@
     </plurals>
 
     <string name="choose_save_folder">Pilih folder penyimpanan</string>
+    <string name="feedback_message_label">Pesan Anda</string>
+    <string name="feedback_message_placeholder">Jelaskan bug atau saran…</string>
+    <string name="feedback_type_label">Jenis</string>
+    <string name="feedback_type_bug">Bug</string>
+    <string name="feedback_type_suggestion">Saran</string>
+    <string name="feedback_type_other">Lainnya</string>
+    <string name="feedback_email_label">Email (opsional)</string>
+    <string name="feedback_email_placeholder">anda@contoh.com</string>
+    <string name="feedback_env_label">Dilampirkan otomatis</string>
+    <string name="feedback_submit">Buka di GitHub</string>
+    <string name="feedback_hint">Ini membuka GitHub di browser dengan issue yang sudah terisi. Anda perlu akun GitHub untuk mengirim.</string>
+    <string name="feedback_opened">GitHub dibuka di browser</string>
 </resources>
